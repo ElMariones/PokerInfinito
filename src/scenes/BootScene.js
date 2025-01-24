@@ -17,10 +17,11 @@ export default class BootScene extends Phaser.Scene {
         }
       }
     
-      // 2) Play button
+      // 2) Images
       this.load.image('playButton', `${baseURL}images/play.png`);
       this.load.image('submitBtn', `${baseURL}images/submit.png`);
       this.load.image('shuffleBtn', `${baseURL}images/shuffle.png`);
+      this.load.image('rug', `${baseURL}images/rug.png`);
     
       // 3) Audio files
       this.load.audio('select', `${baseURL}audio/select.wav`);

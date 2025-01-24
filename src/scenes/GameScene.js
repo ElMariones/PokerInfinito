@@ -17,6 +17,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+    const gameWidth = this.cameras.main.width;
+    const gameHeight = this.cameras.main.height;
+
+    const background = this.add.image(centerX, centerY, 'rug');
+    background.setDisplaySize(gameWidth, gameHeight);
+    
     // Create & shuffle deck
     this.deck = createDeck();
     shuffle(this.deck);
