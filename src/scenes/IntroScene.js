@@ -1,5 +1,11 @@
 import Phaser from 'phaser';
 
+// Import audio files
+import selectSound from '../../assets/audio/select.mp3';
+import deselectSound from '../../assets/audio/deselect.mp3';
+import shuffleSound from '../../assets/audio/shuffle.mp3';
+import submitSound from '../../assets/audio/submit.mp3';
+
 export default class IntroScene extends Phaser.Scene {
   constructor() {
     super('IntroScene');
@@ -45,12 +51,21 @@ export default class IntroScene extends Phaser.Scene {
           console.log('AudioContext resumed successfully');
         });
       }
+      // Load audio files dynamically
+      this.load.audio('select', selectSound);
+      this.load.audio('deselect', deselectSound);
+      this.load.audio('shuffle', shuffleSound);
+      this.load.audio('submit', submitSound);
 
-      // Play the "select" sound
-      this.sound.play('select');
+      // Wait until all audio is loaded
+      this.load.once('complete', () => {
+        // Play the "select" sound and move to GameScene
+        this.sound.play('select');
+        this.scene.start('GameScene');
+      });
 
-      // Move to the GameScene
-      this.scene.start('GameScene');
+      // Start loading audio
+      this.load.start();
     });
   }
 }
