@@ -1,6 +1,5 @@
 // Get the base URL dynamically
-const isGitHubPages = window.location.hostname.includes('github.io');
-const baseURL = isGitHubPages ? '/PokerInfinito/assets/cards/' : '/assets/cards/';
+const baseURL = '/PokerInfinito/assets/cards/';
 
 // Define suits and ranks
 const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
