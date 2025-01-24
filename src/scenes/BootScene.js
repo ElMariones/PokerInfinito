@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import cards from '../utils/cards.js';
+import cards from '../cards.js';
 
 // Import additional assets
 import playButton from '../../assets/images/play.png';
