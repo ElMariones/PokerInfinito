@@ -37,6 +37,14 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create() {
+        // Resume the audio context on user interaction
+        this.input.once('pointerdown', () => {
+          if (this.sound.context.state === 'suspended') {
+            this.sound.context.resume().then(() => {
+              console.log('AudioContext resumed');
+            });
+          }
+        });
     // Start the IntroScene after preloading assets
     this.scene.start('IntroScene');
   }

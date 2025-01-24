@@ -13,6 +13,10 @@ let config = {
     width: 1024,
     height: 768,
     parent: 'juego',
+    audio: {
+        disableWebAudio: false, // Use Web Audio API
+        noAudio: false,         // Ensure audio is enabled
+      },
     scale: {
         //mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
