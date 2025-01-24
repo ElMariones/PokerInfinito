@@ -18,7 +18,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load all card images in a loop
+    // Load all card images dynamically
     Object.entries(cards).forEach(([key, path]) => {
       this.load.image(key, path);
     });
@@ -37,14 +37,6 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create() {
-        // Resume the audio context on user interaction
-        this.input.once('pointerdown', () => {
-          if (this.sound.context.state === 'suspended') {
-            this.sound.context.resume().then(() => {
-              console.log('AudioContext resumed');
-            });
-          }
-        });
     // Start the IntroScene after preloading assets
     this.scene.start('IntroScene');
   }
