@@ -1,6 +1,6 @@
 import BootScene from './scenes/BootScene.js';
 import IntroScene from './scenes/IntroScene.js';
-//import AudioLoader from './scenes/AudioLoader.js';
+// import AudioLoader from './scenes/AudioLoader.js';
 import GameScene from './scenes/GameScene.js';
 import UIScene from './scenes/UIScene.js';
 import Phaser from 'phaser';
@@ -11,15 +11,23 @@ import Phaser from 'phaser';
  */
 let config = {
     type: Phaser.AUTO,
+    // “Virtual” resolution. The actual size is scaled to fit the container.
     width: 1024,
     height: 768,
+
+    // Attach the game canvas to <div id="juego">
     parent: 'juego',
+
+    // Configure scaling to fit various screen sizes.
     scale: {
-        //mode: Phaser.Scale.FIT,  
-        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
+        mode: Phaser.Scale.FIT,             // Maintains aspect ratio & fits in parent
+        autoCenter: Phaser.Scale.CENTER_BOTH // Center horizontally & vertically
     },
-    backgroundColor: '#006400', // fallback green if images don’t cover background
+    
+    backgroundColor: '#006400', // fallback color if images don't cover background
+
     scene: [BootScene, IntroScene, GameScene, UIScene],
 };
 
+// Create the Phaser game using the config above
 new Phaser.Game(config);
