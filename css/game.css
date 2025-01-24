@@ -1,5 +1,10 @@
 h1 {
   text-align: center;
+  color: white; /* Text color */
+  text-shadow: 2px 2px 4px black; /* Shadow for text */
+  font-size: 3em; /* Adjust as needed */
+  font-weight: bold;
+  -webkit-text-stroke: 1px black; /* Black border around the text */
 }
 
 body {
