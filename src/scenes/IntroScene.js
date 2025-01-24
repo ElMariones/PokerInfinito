@@ -1,11 +1,5 @@
 import Phaser from 'phaser';
 
-// Import audio files
-import selectSound from '../../assets/audio/select.mp3';
-import deselectSound from '../../assets/audio/deselect.mp3';
-import shuffleSound from '../../assets/audio/shuffle.mp3';
-import submitSound from '../../assets/audio/submit.mp3';
-
 export default class IntroScene extends Phaser.Scene {
   constructor() {
     super('IntroScene');
@@ -45,27 +39,15 @@ export default class IntroScene extends Phaser.Scene {
 
     // Start the game and resume the audio context on button click
     playBtn.on('pointerdown', () => {
-      // Resume the AudioContext if needed
+      // Resume the AudioContext (in case it was suspended)
       if (this.sound.context.state === 'suspended') {
         this.sound.context.resume().then(() => {
           console.log('AudioContext resumed successfully');
         });
       }
-      // Load audio files dynamically
-      this.load.audio('select', selectSound);
-      this.load.audio('deselect', deselectSound);
-      this.load.audio('shuffle', shuffleSound);
-      this.load.audio('submit', submitSound);
 
-      // Wait until all audio is loaded
-      this.load.once('complete', () => {
-        // Play the "select" sound and move to GameScene
-        this.sound.play('select');
-        this.scene.start('GameScene');
-      });
-
-      // Start loading audio
-      this.load.start();
+      // Transition to the AudioLoader scene
+      this.scene.start('AudioLoader');
     });
   }
 }
