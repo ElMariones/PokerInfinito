@@ -1,22 +1,22 @@
 {
-    "name": "plantillaphaser",
+    "name": "PokerInfinito",
     "version": "1.0.0",
-    "description": "Plantilla para juegos con Phaser",
+    "description": "Prueba con Phaser",
     "scripts": {
         "start": "npx vite",
         "build": "npx vite build --outDir docs/"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/cleongh/plantillaphaser.git"
+        "url": "git+https://github.com/ElMariones/PokerInfinito.git"
     },
     "keywords": [],
-    "author": "Carlos León <cleon@ucm.es>",
+    "author": "Mario",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/cleongh/plantillaphaser/issues"
+        "url": "https://github.com/ElMariones/PokerInfinito/issues"
     },
-    "homepage": "https://github.com/cleongh/plantillaphaser#readme",
+    "homepage": "https://github.com/ElMariones/PokerInfinito#readme",
     "type": "module",
     "devDependencies": {
         "vite": "5.4.6"

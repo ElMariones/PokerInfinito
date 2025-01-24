@@ -1,6 +1,7 @@
-import Boot from './boot.js';
-import End from './end.js';
-import Level from './level.js';
+import BootScene from './scenes/BootScene.js';
+import IntroScene from './scenes/IntroScene.js';
+import GameScene from './scenes/GameScene.js';
+import UIScene from './scenes/UIScene.js';
 import Phaser from 'phaser';
 
 /**
@@ -9,22 +10,15 @@ import Phaser from 'phaser';
  */
 let config = {
     type: Phaser.AUTO,
-    width: 1000,
-    height: 500,
+    width: 1024,
+    height: 768,
     parent: 'juego',
     scale: {
         //mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
-    pixelArt: true,
-    scene: [Boot, Level, End],
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 400 },
-            debug: false
-        }
-    }
+    backgroundColor: '#006400', // fallback green if images don’t cover background
+    scene: [BootScene, IntroScene, GameScene, UIScene],
 };
 
 new Phaser.Game(config);
