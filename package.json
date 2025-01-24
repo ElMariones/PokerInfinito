@@ -1,0 +1,27 @@
+{
+    "name": "plantillaphaser",
+    "version": "1.0.0",
+    "description": "Plantilla para juegos con Phaser",
+    "scripts": {
+        "start": "npx vite",
+        "build": "npx vite build --outDir docs/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cleongh/plantillaphaser.git"
+    },
+    "keywords": [],
+    "author": "Carlos León <cleon@ucm.es>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cleongh/plantillaphaser/issues"
+    },
+    "homepage": "https://github.com/cleongh/plantillaphaser#readme",
+    "type": "module",
+    "devDependencies": {
+        "vite": "5.4.6"
+    },
+    "dependencies": {
+        "phaser": "3.85.2"
+    }
+}
