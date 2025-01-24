@@ -7,10 +7,10 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import rug from '../../assets/images/rug.png';
 
-import selectSound from '../../assets/audio/select.wav';
-import deselectSound from '../../assets/audio/deselect.wav';
-import shuffleSound from '../../assets/audio/shuffle.wav';
-import submitSound from '../../assets/audio/submit.wav';
+import selectSound from '../../assets/audio/select.mp3';
+import deselectSound from '../../assets/audio/deselect.mp3';
+import shuffleSound from '../../assets/audio/shuffle.mp3';
+import submitSound from '../../assets/audio/submit.mp3';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
