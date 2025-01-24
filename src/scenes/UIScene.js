@@ -45,7 +45,7 @@ export default class UIScene extends Phaser.Scene {
       // Pressed state
       this.submitButton.setTint(0x333333);
       // Play submit sound
-      this.gameScene.sound.play('submit');
+      //this.gameScene.sound.play('submit');
       // Call GameScene's method
       this.gameScene.onSubmitHand();
     });
@@ -72,7 +72,7 @@ export default class UIScene extends Phaser.Scene {
       // Pressed state
       this.shuffleButton.setTint(0x333333);
       // Shuffle sound
-      this.gameScene.sound.play('shuffle');
+      //this.gameScene.sound.play('shuffle');
       // Shuffle the player's current 10 cards with penalty
       this.gameScene.score -= 10;
       this.gameScene.shuffleAnimation(); // We'll define below

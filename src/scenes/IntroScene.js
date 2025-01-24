@@ -47,7 +47,8 @@ export default class IntroScene extends Phaser.Scene {
       }
 
       // Transition to the AudioLoader scene
-      this.scene.start('AudioLoader');
+      // this.scene.start('AudioLoader');
+      this.scene.start('GameScene');
     });
   }
 }

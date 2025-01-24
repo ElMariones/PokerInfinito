@@ -25,7 +25,7 @@ export default class GameScene extends Phaser.Scene {
 
     const background = this.add.image(centerX, centerY, 'rug');
     background.setDisplaySize(gameWidth, gameHeight);
-    
+
     // Create & shuffle deck
     this.deck = createDeck();
     shuffle(this.deck);
@@ -153,7 +153,7 @@ export default class GameScene extends Phaser.Scene {
       this.selectedCards = this.selectedCards.filter(c => c !== card);
       sprite.setScale(0.5);
       sprite.clearTint();
-      this.sound.play('deselect');
+      //this.sound.play('deselect');
     } else {
       // Allow up to 5
       if (this.selectedCards.length < 5) {
@@ -163,7 +163,7 @@ export default class GameScene extends Phaser.Scene {
         // grayscale tint
         sprite.setTint(0x808080);
         // Play the "select" sound
-        this.sound.play('select');
+        //this.sound.play('select');
       }
     }
   }
