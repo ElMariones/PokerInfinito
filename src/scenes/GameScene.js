@@ -67,7 +67,7 @@ export default class GameScene extends Phaser.Scene {
     // Must have exactly 5 selected cards
     if (this.selectedCards.length !== 5) {
       // Show a short message telling the player to select 5 cards
-      this.showResultMessage('You must select 5 cards to play');
+      this.showResultMessage('Selecciona 5 cartas para jugar');
       return;
     }
 
