@@ -15,7 +15,7 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ## Mecánicas
 
-**Dos secciones**: El mapa y las batallas de cartas
+**Dos secciones**: El mapa y las Batallas de Póker
 
 ### Mapa
 
@@ -24,11 +24,14 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - Solo tiene una tecla para interactuar con gente, puertas o la tienda.  
 - El mapa funciona como medio a las batallas de cartas que presentan gran parte de las mecánicas del juego.
 
-### Partida de Cartas
+### Batallas de Póker
 
-- Seleccionar una o más cartas (máximo 5 para una mano).  
-- Barajar cartas (shuffle).  
-- Pedir ayuda.  
+- Al retar a un campeón en un bar, aparece la interfaz de juego.  
+- Se reparten **10 cartas** al jugador. Este debe elegir **5** para formar su mano.  
+- El contrincante establece el **Objetivo de Puntos** (ej.: 300 puntos en 3 rondas).  
+- El jugador juega **X rondas** (definidas por el retador).
+- En cada ronda puede (opcionalmente) barajar toda su mano (*shuffle*), pagando monedas. El precio del shuffle aumenta por cada uso.
+- Botón de ayuda para conocer las reglas y puntuaciones.  
 - Ordenar cartas por color o número.  
 - Etc...
 
@@ -36,25 +39,8 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ## Objetivo Narrativo
 
-- Derrotar a los 4 campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).  
+- Derrotar a los campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).  
 - Entrar al Casino Final, enfrentarse al Jefe y resolver el misterio familiar o personal de Dante.
-
----
-
-## Exploración
-
-- Vista 2D (o top-down) por la calle principal donde están los 4 bares.  
-- El jugador puede entrar a cada bar en el orden que prefiera (o en un orden guiado si lo deseas).  
-- Una vez consiga los 4 objetos, se desbloqueará el **Casino VIP**.
-
----
-
-## Batallas de Póker
-
-- Al retar a un campeón en un bar, aparece la interfaz de juego.  
-- Se reparten **10 cartas** al jugador. Este debe elegir **5** para formar su mano.  
-- El contrincante establece el **Objetivo de Puntos** (ej.: 300 puntos en 3 rondas).  
-- El jugador juega **X rondas** (definidas por el retador). En cada ronda puede (opcionalmente) barajar toda su mano (*shuffle*), pagando monedas.
 
 ---
 
@@ -65,9 +51,9 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ## Gasto de Monedas
 
-- **Shuffle**: Cada vez que barajas (cambias por completo las 10 cartas) pagas un coste definido (ej. 30 monedas).  
+- **Shuffle**: Cada vez que barajas (cambias por completo las 10 cartas) pagas un coste definido (ej. 30 monedas). Este coste se va incrementando.  
 - **Tienda**:
-  - Compra de **modificadores** (ej. +10 puntos en la siguiente mano, +1 ronda extra, etc.).  
+  - Compra de **modificadores** (ej. +10 puntos en la siguiente mano, +1 ronda extra, +1 tamaño de mano, etc.).  
   - Compra de **cartas especiales** (posibles comodines o restricciones únicas).
 
 ---
@@ -81,7 +67,7 @@ Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina p
 - **Póker (4 iguales)**: 90 puntos  
 - **Full House (3+2)**: 80 puntos  
 - **Color (Flush)**: 70 puntos  
-- **Escalera (Straight)**: 60 puntos  
+- **Escalera**: 60 puntos  
 - **Trío (3 iguales)**: 50 puntos  
 - **Doble Pareja**: 40 puntos  
 - **Pareja**: 30 puntos  
@@ -96,10 +82,10 @@ Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina p
 3. **Batalla de Póker**:  
    - Se muestran las reglas, rondas y objetivo de puntos.  
    - Rondas sucesivas de selección de 5 cartas de la mano de 10.  
-   - Posible uso de **Tienda** o **Shuffle** durante el enfrentamiento (dependiendo de si se permite).  
+   - Posible uso de **Ayuda** o **Shuffle** durante el enfrentamiento (dependiendo de si se permite).  
 4. **Resultado**:  
    - Si alcanza o supera la meta, consigue objeto clave y monedas.  
-   - Si no, puede volver a intentarlo pagando una pequeña tarifa o buscando más monedas en otros bares (si no has derrotado a los demás).  
+   - Si no, pierde monedas.  
 5. **Progreso**:  
    - Repite en los 4 bares hasta tener todos los objetos necesarios.  
 6. **Acceso al Casino**:  
