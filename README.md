@@ -6,34 +6,9 @@
 
 ## Historia
 
-En el corazón de un pequeño pueblo conocido como Hightable, donde los restaurantes y bares son el alma de la comunidad, existe una tradición no escrita: el dominio del juego de cartas lo es todo. Aquí, cada establecimiento tiene su propio "campeón", alguien que ha perfeccionado su estilo de juego y defiende su territorio con honor.
+En el pueblo de Hightable, los bares y restaurantes no solo sirven comida y bebida: son arenas de batalla donde los mejores jugadores de cartas defienden su territorio con orgullo. Dante Holloway, marcado por la misteriosa desaparición de su padre tras recibir una carta con el símbolo del legendario Casino Ébano, recibe la misma invitación. Para descubrir la verdad, deberá derrotar a los campeones de cada local, desde el letal "Monarca" hasta la enigmática "Bruja".
 
-El protagonista, Dante Holloway, creció viendo a su padre apostar en las mesas clandestinas del pueblo, con el sueño de algún día llegar al Casino Ébano, el lugar más exclusivo y misterioso de la región. Sin embargo, su padre desapareció una noche después de recibir una carta con un símbolo dorado: la marca del casino.
-
-Años después, Dante recibe la misma carta. Es una invitación, pero con una condición: sólo aquellos que han derrotado a los grandes jugadores del pueblo pueden entrar. Si quiere descubrir qué le pasó a su padre y desvelar los secretos del Casino Ébano, deberá convertirse en el mejor jugador del pueblo.
-
-El Desafío de los Bares y Restaurantes
-Cada local tiene su propio campeón con un estilo de juego único, lo que obliga a Dante a adaptarse y aprender nuevas estrategias. Algunos rivales incluyen:
-
-"El Asador del Rey" - Samuel "El Monarca"
-
-Un exjugador profesional que se retiró para abrir una parrilla. Juega con un estilo conservador pero letal. Su lema: "La paciencia cocina la mejor jugada".
-"La Taberna del Olvido" - Helena "La Bruja"
-
-Una barman excéntrica con un estilo de juego impredecible. Usa faroles y trucos psicológicos para hacer que sus oponentes duden de sí mismos.
-"El Puerto Azul" - Marco "El Náufrago"
-
-Un marinero retirado que apuesta todo o nada. Su estrategia es el riesgo absoluto, confiando en que la suerte favorece a los audaces.
-"Rincón del Bandido" - Los Hermanos Blackwood
-
-Dos gemelos que juegan en equipo, usando códigos secretos y tácticas para manipular el juego a su favor.
-"El Último Trago" - Donovan "El Sepulturero"
-
-Un jugador que nunca sonríe, experto en el juego mental. Nadie ha visto su mano temblar ni una sola vez.
-El Gran Desafío: Casino Ébano
-Cuando Dante vence a todos los campeones del pueblo, finalmente recibe la llave de entrada al Casino Ébano. Allí, descubre que su padre no desapareció… sino que se convirtió en el Gran Crupier, la última prueba antes de conocer la verdad detrás del Casino.
-
-Ahora, Dante debe enfrentarse a su propio padre en un duelo de cartas definitivo. Si gana, descubrirá qué secreto esconde el casino. Si pierde… podría quedar atrapado en sus redes para siempre.
+Cada victoria lo acerca más al enigmático Casino Ébano, donde la última prueba lo enfrentará a su propio padre, ahora convertido en el Gran Crupier. En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. Si pierde… quedará atrapado en sus sombras para siempre.
 
 ## Mecánicas
 
