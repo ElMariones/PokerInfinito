@@ -1,4 +1,4 @@
-# Plantilla para juegos en Phaser
+# All In: La Ultima Mano
 
 ## Instalación
 
