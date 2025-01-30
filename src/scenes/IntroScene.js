@@ -37,7 +37,7 @@ export default class IntroScene extends Phaser.Scene {
       playBtn.clearTint();
     });
 
-    // Start the game and resume the audio context on button click
+    // Start the MAP scene (instead of GameScene) on button click
     playBtn.on('pointerdown', () => {
       // Resume the AudioContext (in case it was suspended)
       if (this.sound.context.state === 'suspended') {
@@ -46,9 +46,8 @@ export default class IntroScene extends Phaser.Scene {
         });
       }
 
-      // Transition to the AudioLoader scene
-      // this.scene.start('AudioLoader');
-      this.scene.start('GameScene');
+      // Transition to the MapScene
+      this.scene.start('MapScene');
     });
   }
 }

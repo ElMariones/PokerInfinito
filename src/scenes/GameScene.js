@@ -1,4 +1,4 @@
-import Phaser from 'phaser'; 
+import Phaser from 'phaser';  
 import { createDeck, shuffle } from '../utils/Deck.js';
 import { drawCards } from '../utils/HandManager.js';
 import { evaluateHand } from '../utils/PokerScoring.js';
@@ -12,6 +12,21 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
+
+    // We'll store these after init()
+    this.pointsNeeded = 0;
+    this.maxRounds = 0;
+  }
+
+  /**
+   * Called when we do: this.scene.start('GameScene', { pointsNeeded, rounds })
+   */
+  init(data) {
+    // Read the data from the MapScene
+    this.pointsNeeded = data.pointsNeeded || 300;
+    this.maxRounds = data.rounds || 5;
+    this.score = 0;
+    this.roundNumber = 1;
   }
 
   create() {
@@ -31,13 +46,16 @@ export default class GameScene extends Phaser.Scene {
     // Deal initial hand
     this.dealNewHand();
 
-    // Launch the UI Scene (only once)
+    // --- LAUNCH UI SCENE ---
+    // If it's not already active, launch it. The UI scene shows Submit/Shuffle buttons.
     if (!this.scene.isActive('UIScene')) {
       this.scene.launch('UIScene');
     }
+    // Bring it on top in case it's behind
+    this.scene.bringToTop('UIScene');
   }
 
-  // Called by UIScene's Shuffle button
+  // Called by the UI scene’s "Shuffle" button
   shuffleAnimation() {
     const duration = 500;
 
@@ -62,15 +80,15 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
-  // Called by UIScene's Submit button
+  // Called by the UI scene’s "Submit" button
   onSubmitHand() {
     // Must have exactly 5 selected cards
     if (this.selectedCards.length !== 5) {
-      // Show a short message telling the player to select 5 cards
       this.showResultMessage('Selecciona 5 cartas para jugar');
       return;
     }
 
+    // Evaluate
     const result = evaluateHand(this.selectedCards);
     this.score += result.score;
 
@@ -82,9 +100,8 @@ export default class GameScene extends Phaser.Scene {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
 
-    // Hide all *unselected* cards from view
+    // Hide unselected cards
     this.cardSprites.forEach(sprite => {
-      // If this sprite's card is not in selectedCards, hide it
       const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
       if (!isSelected) {
         sprite.setVisible(false);
@@ -92,24 +109,17 @@ export default class GameScene extends Phaser.Scene {
     });
 
     // Animate the 5 selected cards to the center
-    // We'll put them in a row in the center, smaller scale so they're fully visible
     const newScale = 0.27;
-    const spacing = 170; // space between cards in the center
+    const spacing = 170;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
     const startX = centerX - totalWidth / 2;
 
-    // Before tweening them to the center, clear any "selected" tint
     this.selectedCards.forEach((card, index) => {
       const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-
-      // Remove the gray selection tint and set them to the new scale right away
       sprite.clearTint();
       sprite.setScale(newScale);
-
-      // Disable input on the sprite so it can't be clicked in the center
       sprite.disableInteractive();
 
-      // Tween them into their final position in the center
       this.tweens.add({
         targets: sprite,
         x: startX + index * spacing,
@@ -119,45 +129,52 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    // After the tween finishes, highlight winning cards and then show the result message
+    // After tween finishes, highlight winning cards and show the result
     this.time.delayedCall(500, () => {
       this.highlightWinningCards(result);
 
-      // Wait 2 seconds to show the result and deal a new hand
+      // Wait 1 second to show the result and deal a new hand or end
       this.time.delayedCall(1000, () => {
         this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
-        
-        // We can wait a bit more before dealing a new hand so the player can see the message:
+
         this.time.delayedCall(1000, () => {
           this.roundNumber++;
-          this.dealNewHand();
+
+          // Check if we still have rounds left
+          if (this.roundNumber <= this.maxRounds) {
+            // Next round
+            this.dealNewHand();
+          } else {
+            // All rounds done, check if we reached or exceeded the target
+            if (this.score >= this.pointsNeeded) {
+              // Win → go back to MapScene
+              this.scene.stop('UIScene');
+              this.scene.start('MapScene');
+            } else {
+              // Lose → back to IntroScene
+              this.scene.stop('UIScene');
+              this.scene.start('IntroScene');
+            }
+          }
         });
       });
     });
   }
 
-  /**
-   * Highlights the “winning” cards in gold with a simple white shadow behind them.
-   */
   highlightWinningCards(result) {
-    // Array of card objects that form the best combo
     const winners = result.winningCards || [];
-
     winners.forEach(card => {
-      // Find the sprite that matches this card
       const sprite = this.cardSprites.find(s => s.texture.key === card.key);
       if (!sprite) return;
 
-      // Gold tint on the main sprite
+      // Gold tint
       sprite.setTint(0xffd700);
 
-      // Optional: create a white "shadow" sprite behind it
+      // Optional shadow
       const shadow = this.add.image(sprite.x, sprite.y, card.key)
-        .setScale(sprite.scale * 1.05)   // slightly bigger
-        .setTint(0xffffff)              // white
-        .setAlpha(0.5);                 // translucent
-
-      // Put shadow behind
+        .setScale(sprite.scale * 1.05)
+        .setTint(0xffffff)
+        .setAlpha(0.5);
       shadow.depth = sprite.depth - 1;
     });
   }
@@ -170,7 +187,6 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.selectedCards = [];
-
     // Destroy old sprites
     this.cardSprites.forEach(s => s.destroy());
     this.cardSprites = [];
@@ -215,13 +231,13 @@ export default class GameScene extends Phaser.Scene {
   }
 
   toggleCardSelection(card, sprite) {
-    // If card is already in selectedCards, unselect it
     if (this.selectedCards.includes(card)) {
+      // Unselect
       this.selectedCards = this.selectedCards.filter(c => c !== card);
       sprite.setScale(0.5);
       sprite.clearTint();
     } else {
-      // Select if fewer than 5 selected
+      // Select if fewer than 5
       if (this.selectedCards.length < 5) {
         this.selectedCards.push(card);
         sprite.setScale(0.6);
