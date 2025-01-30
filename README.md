@@ -4,7 +4,7 @@
 
 ## Details
 
-## Story
+## Historia
 
 En el corazón de un pequeño pueblo conocido como Hightable, donde los restaurantes y bares son el alma de la comunidad, existe una tradición no escrita: el dominio del juego de cartas lo es todo. Aquí, cada establecimiento tiene su propio "campeón", alguien que ha perfeccionado su estilo de juego y defiende su territorio con honor.
 
@@ -34,6 +34,18 @@ El Gran Desafío: Casino Ébano
 Cuando Dante vence a todos los campeones del pueblo, finalmente recibe la llave de entrada al Casino Ébano. Allí, descubre que su padre no desapareció… sino que se convirtió en el Gran Crupier, la última prueba antes de conocer la verdad detrás del Casino.
 
 Ahora, Dante debe enfrentarse a su propio padre en un duelo de cartas definitivo. Si gana, descubrirá qué secreto esconde el casino. Si pierde… podría quedar atrapado en sus redes para siempre.
+
+## Mecánicas
+
+Dos secciones: El mapa y las batallas de cartas
+
+### Mapa
+
+Mapa 2D, up-view (estilo Pokemon). El jugador puede moverse arriba, abajo, izquierda y derecha. Solo tiene una tecla para interactuar con gente, puertas o la tienda. El mapa funciona como medio a las batallas de cartas que presentan gran parte de las mecánicas del juego.
+
+### Partida de Cartas
+
+Seleccionar una o más cartas (máximo 5 para una mano). Barajar cartas. Pedir ayuda. Ordenar cartas por color o numero. Etc...
 
 ## Instalación
 
