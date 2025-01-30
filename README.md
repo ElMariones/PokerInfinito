@@ -1,5 +1,7 @@
 # All In: La Ultima Mano
 
+![macaco_macaco_generate_a_pixel_art_title_for_a_card_game_with_0810ca01-5e59-4d3d-8e44-e5ff481cf843_3 (1)](https://github.com/user-attachments/assets/390034cc-580a-4b57-9b9e-5aa8255eb484)
+
 ## Historia
 
 En el pueblo de Hightable, los bares y restaurantes no solo sirven comida y bebida: son arenas de batalla donde los mejores jugadores de cartas defienden su territorio con orgullo.  
