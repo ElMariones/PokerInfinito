@@ -47,58 +47,61 @@ Mapa 2D, up-view (estilo Pokemon). El jugador puede moverse arriba, abajo, izqui
 
 Seleccionar una o más cartas (máximo 5 para una mano). Barajar cartas. Pedir ayuda. Ordenar cartas por color o numero. Etc...
 
-## Instalación
+## Objetivo Narrativo
 
-El repositorio está publicado como plantilla, de forma que se puede crear un nuevo proyecto propio en GitHub simplemente pulsando el botón `Use this template` (arriba a la derecha). Después, solo hay que clonar el repositorio propio y trabajar sobre él.
+Derrotar a los 4 campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).
+Entrar al Casino Final, enfrentarse al Jefe y resolver el misterio familiar o personal de Dante.
 
-## Clonar
 
-También se puede clonar el repositorio:
+## Exploración:
 
-```
-git clone https://github.com/cleongh/plantillaphaser
-```
+Vista 2D (o top-down) por la calle principal donde están los 4 bares.
+El jugador puede entrar a cada bar en el orden que prefiera (o en un orden guiado si lo deseas).
+Una vez consiga los 4 objetos, se desbloqueará el Casino VIP.
 
-Podemos modificar el archivo `package.json` para configurar nuestro proyecto (nombre, autor...)
+## Batallas de Póker:
 
-Para iniciar el proyecto (sólo 1 vez) instalamos las dependencias automáticamente (`vite`, `phaser`):
+Al retar a un campeón en un bar, aparece la interfaz de juego.
+Se reparten 10 cartas al jugador. Este debe elegir 5 para formar su mano.
+El contrincante establece el Objetivo de Puntos (ej.: 300 puntos en 3 rondas).
+El jugador juega X rondas (definidas por el retador). En cada ronda puede (opcionalmente) barajar toda su mano (shuffle), pagando monedas.
 
-```
-npm install
-```
+# Sistema de Monedas:
 
-## Uso
+Ganas monedas según la diferencia de puntos por encima del objetivo.
+Ejemplo: El enemigo pide 300 puntos en 3 rondas, y terminas con 450 → Ganas 150 monedas.
 
-Cada vez que queramos usarlo, tenemos que arrancar el servidor de desarrollo que monitorizará los cambios, procesará el contenido y cambiará la página. Usa [Vite](https://es.vitejs.dev/).
+## Gasto de Monedas:
+Shuffle: Cada vez que barajas (cambias por completo las 10 cartas) pagas un coste definido (ej. 30 monedas).
+Tienda:
+Compra de modificadores (ej. +10 puntos en la siguiente mano, +1 ronda extra, etc.).
+Compra de cartas especiales (posibles comodines o restricciones únicas).
 
-Para arrancar el servidor de desarrollo:
+# Mecánica de Puntuación de Manos
+A continuación, se presenta una lógica de puntuación para cada tipo de mano, con su nombre y valor base. Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina para formar la mejor jugada. Para explicar la lógica, incluimos un pseudocódigo adaptado de lo que podrías usar en tu sistema:
 
-```
-npm start
-```
+Escalera de Color: 100 puntos
+Póker (4 iguales): 90 puntos
+Full House (3+2): 80 puntos
+Color (Flush): 70 puntos
+Escalera (Straight): 60 puntos
+Trío (3 iguales): 50 puntos
+Doble Pareja: 40 puntos
+Pareja: 30 puntos
+Carta Alta: 10 puntos
 
-Con esto, solo tenemos que programar y guardar los archivos, Vite se encargará del resto.
-
-## Distribución
-
-El repositorio tiene una acción de GitHub (*GitHub Action*) que genera una versión de *release* y la publica en GitHub Pages. De este modo, cada vez que se hace `push`, se construye y publica en la página pública.
-
-Se publica el contenido de la rama *main*.
-
-Si no se está usando GitHub, o se quiere publicar a mano, podemos crear una *build* de *release*. Vite optimizará los archivos y, con la configuración que hay en `package.json`, generará en la carpeta `docs/` una versión "pública" de nuestro proyecto.
-
-```sh
-npm run build
-```
-
-<!-- ### En GitHub -->
-
-<!-- Está todo configurado para que se active "GitHub Pages", y se use, en la rama principal (se suele llamar `main`), la carpeta `docs/`. Simplemente hay que activarlo en "Settings" → "Pages" → "Build and deployment". -->
-
-## VSCode
-
-En la carpeta `.vscode/` hay una configuración para usar Visual Studio Code, tanto para construir el *release* (`npm run build`) como para ejecutar y depurar. Simplemente hay que ejecutar "Run" → "Start debugging..." (or presionar `F5`).
-
-## TypeScript
-
-TypeScript está automáticamente habilitado (gracias a Vite). Para usarlo, simplemente hay que crear archivos con extensión `.ts`.
+## Flujo de Juego General
+Inicio: El jugador conoce la historia de Dante Holloway y su búsqueda.
+Exploración: Se mueve por la calle, puede entrar a uno de los 4 bares en cualquier orden.
+Batalla de Póker:
+Se muestran las reglas, rondas y objetivo de puntos.
+Rondas sucesivas de selección de 5 cartas de la mano de 10.
+Posible uso de Tienda o Shuffle durante el enfrentamiento (dependiendo de si se permite).
+Resultado:
+Si alcanza o supera la meta, consigue objeto clave y monedas.
+Si no, puede volver a intentarlo pagando una pequeña tarifa o buscando más monedas en otros bares (si no has derrotado a los demás).
+Progreso:
+Repite en los 4 bares hasta tener todos los objetos necesarios.
+Acceso al Casino:
+Enfrenta la Batalla Final con el Jefe.
+Descubre la resolución de la historia.
