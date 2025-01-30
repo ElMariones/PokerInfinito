@@ -1,6 +1,7 @@
 import BootScene from './scenes/BootScene.js';
 import IntroScene from './scenes/IntroScene.js';
 // import AudioLoader from './scenes/AudioLoader.js';
+import MapScene from './scenes/MapScene.js';
 import GameScene from './scenes/GameScene.js';
 import UIScene from './scenes/UIScene.js';
 import Phaser from 'phaser';
@@ -26,7 +27,7 @@ let config = {
     
     backgroundColor: '#006400', // fallback color if images don't cover background
 
-    scene: [BootScene, IntroScene, GameScene, UIScene],
+    scene: [BootScene, IntroScene, MapScene, GameScene, UIScene],
 };
 
 // Create the Phaser game using the config above
