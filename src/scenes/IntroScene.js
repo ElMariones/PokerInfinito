@@ -10,17 +10,19 @@ export default class IntroScene extends Phaser.Scene {
     const centerY = this.cameras.main.height / 2;
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
+    
+    // Background
+    const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug')
+    .setOrigin(0, 0);
 
-    // Add the background image and scale it to fit the screen
-    const background = this.add.image(centerX, centerY, 'rug');
-    background.setDisplaySize(gameWidth, gameHeight);
-
-    // Title
-    this.add.text(centerX, centerY - 200, 'Poker Infinito', {
+    // Title with custom font
+    this.add.text(centerX, centerY - 200, 'all in: la ultima mano', {
+      fontFamily: 'MarioKart',  // Apply the custom font
       fontSize: '42px',
       color: '#ffffff',
       fontStyle: 'bold',
     }).setOrigin(0.5);
+
 
     // Play Button
     const playBtn = this.add.image(centerX, centerY, 'playButton').setOrigin(0.5);
