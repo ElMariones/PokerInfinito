@@ -44,11 +44,6 @@ import tenOfDiamonds from '../assets/cards/10_of_diamonds.png';
 import tenOfHearts from '../assets/cards/10_of_hearts.png';
 import tenOfSpades from '../assets/cards/10_of_spades.png';
 
-import jackOfClubs from '../assets/cards/jack_of_clubs.png';
-import jackOfDiamonds from '../assets/cards/jack_of_diamonds.png';
-import jackOfHearts from '../assets/cards/jack_of_hearts.png';
-import jackOfSpades from '../assets/cards/jack_of_spades.png';
-
 import queenOfClubs from '../assets/cards/queen_of_clubs.png';
 import queenOfDiamonds from '../assets/cards/queen_of_diamonds.png';
 import queenOfHearts from '../assets/cards/queen_of_hearts.png';
@@ -107,16 +102,12 @@ export const cards = {
   '9_of_hearts': nineOfHearts,
   '9_of_spades': nineOfSpades,
 
+  // Face cards
+
   '10_of_clubs': tenOfClubs,
   '10_of_diamonds': tenOfDiamonds,
   '10_of_hearts': tenOfHearts,
   '10_of_spades': tenOfSpades,
-
-  // Face cards
-  'jack_of_clubs': jackOfClubs,
-  'jack_of_diamonds': jackOfDiamonds,
-  'jack_of_hearts': jackOfHearts,
-  'jack_of_spades': jackOfSpades,
 
   'queen_of_clubs': queenOfClubs,
   'queen_of_diamonds': queenOfDiamonds,

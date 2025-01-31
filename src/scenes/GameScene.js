@@ -36,8 +36,9 @@ export default class GameScene extends Phaser.Scene {
     const gameHeight = this.cameras.main.height;
 
     // Background
-    const background = this.add.image(centerX, centerY, 'rug');
-    background.setDisplaySize(gameWidth, gameHeight);
+    const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug')
+    .setOrigin(0, 0);
+
 
     // Create & shuffle deck
     this.deck = createDeck();
@@ -109,7 +110,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     // Animate the 5 selected cards to the center
-    const newScale = 0.27;
+    const newScale = 0.8;
     const spacing = 170;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
     const startX = centerX - totalWidth / 2;
@@ -197,8 +198,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   displayHand() {
-    const cardScale = 0.5;
-    const cardSpacing = 80;
+    const cardScale = 0.9;
+    const cardSpacing = 95;
     const totalWidth = (this.playerHand.length - 1) * cardSpacing;
     const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
     const posY = this.cameras.main.height - 150;
@@ -234,13 +235,13 @@ export default class GameScene extends Phaser.Scene {
     if (this.selectedCards.includes(card)) {
       // Unselect
       this.selectedCards = this.selectedCards.filter(c => c !== card);
-      sprite.setScale(0.5);
+      sprite.setScale(1.1);
       sprite.clearTint();
     } else {
       // Select if fewer than 5
       if (this.selectedCards.length < 5) {
         this.selectedCards.push(card);
-        sprite.setScale(0.6);
+        sprite.setScale(0.8);
         sprite.setTint(0x808080);
       }
     }
