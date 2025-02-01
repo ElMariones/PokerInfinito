@@ -1,4 +1,4 @@
-import Phaser from 'phaser';  
+import Phaser from 'phaser';
 import { createDeck, shuffle } from '../utils/Deck.js';
 import { drawCards } from '../utils/HandManager.js';
 import { evaluateHand } from '../utils/PokerScoring.js';
@@ -30,38 +30,40 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const centerX = this.cameras.main.width / 2;
-    const centerY = this.cameras.main.height / 2;
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
 
     // Background
-    const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug')
-    .setOrigin(0, 0);
+    this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug').setOrigin(0, 0);
 
-
-    // Create & shuffle deck
-    this.deck = createDeck();
+    // --- Create & shuffle deck (48 cards total) ---
+    let fullDeck = createDeck();      // This is normally 52 cards
+    this.deck = fullDeck.slice(0,48); // Keep only first 48
     shuffle(this.deck);
 
-    // Deal initial hand
+    // Deal initial hand of 10
     this.dealNewHand();
 
     // --- LAUNCH UI SCENE ---
-    // If it's not already active, launch it. The UI scene shows Submit/Shuffle buttons.
     if (!this.scene.isActive('UIScene')) {
       this.scene.launch('UIScene');
     }
-    // Bring it on top in case it's behind
     this.scene.bringToTop('UIScene');
   }
 
   // Called by the UI scene’s "Shuffle" button
   shuffleAnimation() {
+    // If no cards selected, do nothing (extra safety check)
+    if (this.selectedCards.length === 0) return;
+
     const duration = 500;
 
-    // Animate cards scattering randomly
-    this.cardSprites.forEach(sprite => {
+    // Animate only the selected card sprites
+    const selectedSprites = this.cardSprites.filter(sprite => 
+      this.selectedCards.some(card => card.key === sprite.texture.key)
+    );
+
+    selectedSprites.forEach(sprite => {
       const randX = this.cameras.main.width / 2 + (Math.random() * 200 - 100);
       const randY = this.cameras.main.height / 2 + (Math.random() * 200 - 100);
 
@@ -75,10 +77,44 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    // After animation, replace with new cards
+    // After the scatter-yoyo animation, replace the selected cards
     this.time.delayedCall(duration * 2, () => {
-      this.dealNewHand();
+      this.replaceSelectedCards();
     });
+  }
+
+  /**
+   * Removes the selected cards from the player's hand and draws the same number
+   * (or fewer if deck doesn't have enough) from the deck to replace them.
+   */
+  replaceSelectedCards() {
+    // 1) Remove selected cards from player's hand
+    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));
+
+    // 2) Figure out how many to draw
+    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
+
+    // 3) Draw that many from the deck
+    const newCards = drawCards(this.deck, toDraw);
+
+    // 4) Add new cards to player's hand
+    this.playerHand.push(...newCards);
+
+    // Clear selected cards
+    this.selectedCards = [];
+
+    // Re-display the hand
+    this.cardSprites.forEach(s => s.destroy());
+    this.cardSprites = [];
+    this.displayHand();
+
+    // Check if deck is empty and we haven't reached points -> lose
+    if (this.deck.length === 0 && this.score < this.pointsNeeded) {
+      this.showResultMessage("No hay más cartas en el mazo. ¡Has perdido!");
+      // Option: stop UI scene and go to IntroScene
+      this.scene.stop('UIScene');
+      this.scene.start('IntroScene');
+    }
   }
 
   // Called by the UI scene’s "Submit" button
@@ -144,7 +180,7 @@ export default class GameScene extends Phaser.Scene {
           // Check if we still have rounds left
           if (this.roundNumber <= this.maxRounds) {
             // Next round
-            this.dealNewHand();
+            this.replaceUsedCards();
           } else {
             // All rounds done, check if we reached or exceeded the target
             if (this.score >= this.pointsNeeded) {
@@ -171,7 +207,7 @@ export default class GameScene extends Phaser.Scene {
       // Gold tint
       sprite.setTint(0xffd700);
 
-      // Optional shadow
+      // Optional shadow effect
       const shadow = this.add.image(sprite.x, sprite.y, card.key)
         .setScale(sprite.scale * 1.05)
         .setTint(0xffffff)
@@ -181,20 +217,71 @@ export default class GameScene extends Phaser.Scene {
   }
 
   dealNewHand() {
-    // If deck is nearly empty, recreate & shuffle
-    if (this.deck.length < 10) {
-      this.deck = createDeck();
-      shuffle(this.deck);
+    // If the deck doesn't have 10 cards left, and we haven't reached points, it's a loss:
+    if (this.deck.length < 10 && this.score < this.pointsNeeded) {
+      this.showResultMessage("No hay suficientes cartas para otra ronda. ¡Has perdido!");
+      this.scene.stop('UIScene');
+      this.scene.start('IntroScene');
+      return;
     }
 
     this.selectedCards = [];
-    // Destroy old sprites
+    
+    // Destroy old card sprites
     this.cardSprites.forEach(s => s.destroy());
     this.cardSprites = [];
 
     // Draw new 10 cards
     this.playerHand = drawCards(this.deck, 10);
+
+    // Show them on the table
     this.displayHand();
+
+    // Since no card is selected initially, notify the UI
+    this.events.emit('cards-changed', 0);
+  }
+
+  replaceUsedCards() {
+    // 1) Remove selected from hand
+    this.playerHand = this.playerHand.filter(c => !this.selectedCards.includes(c));
+    this.selectedCards = [];
+
+    // 2) Draw up to 5 new from deck
+    const toDraw = Math.min(5, this.deck.length);
+    const newCards = drawCards(this.deck, toDraw);
+    this.playerHand.push(...newCards);
+
+    // Re-display the updated hand
+    this.cardSprites.forEach(s => s.destroy());
+    this.cardSprites = [];
+    this.displayHand();
+
+    // Next round
+    this.roundNumber++;
+
+    // If no cards left in deck and not enough points => lose
+    if (this.deck.length === 0 && this.score < this.pointsNeeded) {
+      this.showResultMessage("No hay más cartas. ¡Has perdido!");
+      this.time.delayedCall(2000, () => {
+        this.scene.stop('UIScene');
+        this.scene.start('IntroScene');
+      });
+      return;
+    }
+
+    // If we've reached or exceeded total rounds
+    if (this.roundNumber > this.maxRounds) {
+      // Check if we won or lost
+      if (this.score >= this.pointsNeeded) {
+        // Win
+        this.scene.stop('UIScene');
+        this.scene.start('MapScene');
+      } else {
+        // Lose
+        this.scene.stop('UIScene');
+        this.scene.start('IntroScene');
+      }
+    }
   }
 
   displayHand() {
@@ -215,36 +302,42 @@ export default class GameScene extends Phaser.Scene {
           sprite.setScale(cardScale * 1.05);
         }
       });
-
       sprite.on('pointerout', () => {
         if (!this.selectedCards.includes(card)) {
           sprite.setScale(cardScale);
           sprite.clearTint();
         }
       });
-
       sprite.on('pointerdown', () => {
         this.toggleCardSelection(card, sprite);
       });
 
       this.cardSprites.push(sprite);
     });
+
+    // Emit that 0 are selected initially (fresh display)
+    this.events.emit('cards-changed', 0);
   }
 
   toggleCardSelection(card, sprite) {
+    const maxSelectable = 5; // Up to 5 cards to submit or shuffle
+
     if (this.selectedCards.includes(card)) {
       // Unselect
       this.selectedCards = this.selectedCards.filter(c => c !== card);
-      sprite.setScale(1.1);
+      sprite.setScale(0.9);
       sprite.clearTint();
     } else {
-      // Select if fewer than 5
-      if (this.selectedCards.length < 5) {
+      // Select if fewer than the max allowed
+      if (this.selectedCards.length < maxSelectable) {
         this.selectedCards.push(card);
         sprite.setScale(0.8);
         sprite.setTint(0x808080);
       }
     }
+
+    // Emit event so UIScene can enable/disable shuffle button
+    this.events.emit('cards-changed', this.selectedCards.length);
   }
 
   showResultMessage(msg) {
