@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser from 'phaser'; 
 import cards from '../cards.js';
 
 // Import additional assets
@@ -14,6 +14,10 @@ import npc1 from '../../assets/images/npc1.png';
 import npc2 from '../../assets/images/npc2.png';
 import npc3 from '../../assets/images/npc3.png';
 
+// NEW: Sort button skins
+import sortNum from '../../assets/images/sortnum.png';
+import sortColor from '../../assets/images/sortcolor.png';
+
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
@@ -28,11 +32,18 @@ export default class BootScene extends Phaser.Scene {
       this.load.image(key, path);
     });
 
+    //effects fx
+    this.load.plugin('rexhorrifipipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexhorrifipipelineplugin.min.js', true); 
+    
     // Load other images
     this.load.image('playButton', playButton);
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+
+    // NEW: Load sort button images
+    this.load.image('sortNum', sortNum);
+    this.load.image('sortColor', sortColor);
 
     // NEW: Load map, player, and NPC images
     this.load.image('background', background);
