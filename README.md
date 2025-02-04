@@ -33,7 +33,7 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - En cada ronda puede (opcionalmente) barajar toda su mano (*shuffle*), pagando monedas. El precio del shuffle aumenta por cada uso.
 - Botón de ayuda para conocer las reglas y puntuaciones.  
 - Ordenar cartas por color o número.  
-- Etc...
+- La dificultad de las batallas irá aumentando conforme el jugador vaya avanzando en las batallas. No solo con el aumento del **objetivo de puntos**, si no con diferentes desafíos planteados por los campeones de cada bar.
 
 ---
 
@@ -47,7 +47,7 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - Al interactuar con un personaje entraremos en el modo diálogo.
 - Se verá un dibujo del personaje con el que hablemos junto a un bocadillo con el texto.
 - Cuando presionemos la E avanzará el dialogo hasta que llegue al final
-- Cuando finalice el diálogo dará comienzo la batalla de poker
+- Cuando finalice el diálogo dará comienzo la batalla de cartas
   
 ---
 
