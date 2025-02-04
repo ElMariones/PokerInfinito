@@ -243,7 +243,7 @@ export default class GameScene extends Phaser.Scene {
     this.roundNumber++;
 
     // Show the sort button again.
-    his.events.emit('toggle-sort-button', true);
+    this.events.emit('toggle-sort-button', true);
 
     if (this.deck.length === 0 && this.score < this.pointsNeeded) {
       this.showResultMessage("No hay más cartas. ¡Has perdido!");
