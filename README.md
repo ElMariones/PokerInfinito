@@ -24,7 +24,7 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - Solo tiene una tecla para interactuar con gente, puertas o la tienda.  
 - El mapa funciona como medio a las batallas de cartas que presentan gran parte de las mecánicas del juego.
 
-### Batallas de Póker
+### Batallas de Cartas
 
 - Al retar a un campeón en un bar, aparece la interfaz de juego.  
 - Se reparten **10 cartas** al jugador. Este debe elegir **5** para formar su mano.  
