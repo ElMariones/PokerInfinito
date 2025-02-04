@@ -42,6 +42,13 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - Derrotar a los campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).  
 - Entrar al Casino Final, enfrentarse al Jefe y resolver el misterio familiar o personal de Dante.
 
+### Diálogos
+
+- Al interactuar con un personaje entraremos en el modo diálogo.
+- Se verá un dibujo del personaje con el que hablemos junto a un bocadillo con el texto.
+- Cuando presionemos la E avanzará el dialogo hasta que llegue al final
+- Cuando finalice el diálogo dará comienzo la batalla de poker
+  
 ---
 
 # Sistema de Monedas
