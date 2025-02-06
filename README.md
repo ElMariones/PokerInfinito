@@ -4,18 +4,18 @@
 
 ## Historia
 
-En el pueblo de Hightable, los bares y restaurantes no solo sirven comida y bebida: son arenas de batalla donde los mejores jugadores de cartas defienden su territorio con orgullo.  
-Dante Holloway, marcado por la misteriosa desaparición de su padre tras recibir una carta con el símbolo del legendario Casino Ébano, recibe la misma invitación.  
-Para descubrir la verdad, deberá derrotar a los campeones de cada local, desde el letal "Monarca" hasta la enigmática "Bruja".
+En el pueblo de Hightable, los bares y restaurantes no solo sirven comida y bebida: son arenas de batalla donde los mejores jugadores de cartas defienden su territorio con orgullo como representantes del casino.  
+Dante Holloway, marcado por la misteriosa desaparición de su padre tras recibir una carta con el símbolo del legendario Casino Ébano, encuentra la misma invitación en su casa años más tarde.  
+Para descubrir la verdad, deberá derrotar a los campeones de cada local, desde el letal "Monarca", la enigmática "Bruja", hasta los hermanos "Blackwood".
 
 Cada victoria lo acerca más al enigmático Casino Ébano, donde la última prueba lo enfrentará a su propio padre, ahora convertido en el Gran Crupier.  
-En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. Si pierde… quedará atrapado en sus sombras para siempre.
+En este juego, el riesgo es absoluto: si gana, logrará librar a su padre de su eterna esclavitud como crupier. Si pierde… se convertirá en el nuevo Crupier perpetuo del casino.
 
 ---
 
 ## Caracteríasticas principales
 
-- Se maneja a Dante por el mapa para combatir con los jefes de cada bar para poder derrotar al jefe del casino.
+- Se maneja a Dante por el mapa para combatir con los jefes de cada restaurante para poder acceder al casino y ver lo que conlleva en él.
 - Los duelos son batallas de cartas las cuales se superan obteniendo una ciega mayor a la impuesta por el jefe
 - Derrotar a los campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).  
 - Entrar al Casino Final, enfrentarse al Jefe y resolver el misterio familiar o personal de Dante.
