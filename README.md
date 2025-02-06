@@ -103,12 +103,12 @@ Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina p
   
 ---
 
-# Sistema de Monedas
+## Sistema de Monedas
 
 - **Ganas monedas** según la diferencia de puntos por encima del objetivo.  
 - Ejemplo: El enemigo pide 300 puntos en 3 rondas, y terminas con 450 → Ganas 150 monedas.
 
-## Gasto de Monedas
+### Gasto de Monedas
 
 - **Shuffle**: Cada vez que barajas (cambias por completo las 10 cartas) pagas un coste definido (ej. 30 monedas). Este coste se va incrementando.  
 - **Tienda**:
