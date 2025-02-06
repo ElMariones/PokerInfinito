@@ -13,6 +13,20 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ---
 
+##Caracteríasticas principales
+
+- Se maneja a Dante por el mapa para combatir con los jefes de cada bar para poder derrotar al jefe del casino.
+- Los duelos son batallas de cartas las cuales se superan obteniendo una ciega mayor a la impuesta por el jefe
+- Derrotar a los campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).  
+- Entrar al Casino Final, enfrentarse al Jefe y resolver el misterio familiar o personal de Dante.
+- Tiene un estilo pixelart.
+
+---
+
+##Cores Loops
+
+---
+
 ## Mecánicas
 
 **Dos secciones**: El mapa y las Batallas de Póker
@@ -36,11 +50,6 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - La dificultad de las batallas irá aumentando conforme el jugador vaya avanzando en las batallas. No solo con el aumento del **objetivo de puntos**, si no con diferentes desafíos planteados por los campeones de cada bar.
 
 ---
-
-## Objetivo Narrativo
-
-- Derrotar a los campeones de los bares para conseguir un objeto único de cada uno (llave, pase, ficha personalizada, etc.).  
-- Entrar al Casino Final, enfrentarse al Jefe y resolver el misterio familiar o personal de Dante.
 
 ### Diálogos
 
