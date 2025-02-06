@@ -23,7 +23,7 @@ En este juego, el riesgo es absoluto: si gana, logrará librar a su padre de su 
 
 ---
 
-## Cores Loops
+## Core Loops
 
 ---
 
