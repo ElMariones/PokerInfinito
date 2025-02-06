@@ -27,9 +27,26 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ---
 
-## Mecánicas
+## Flujo de Juego General
 
-**Dos secciones**: El mapa y las Batallas de Póker
+1. **Inicio**: El jugador conoce la historia de Dante Holloway y su búsqueda.  
+2. **Exploración**: Se mueve por la calle, puede entrar a uno de los 4 bares en cualquier orden.  
+3. **Batalla de Póker**:  
+   - Se muestran las reglas, rondas y objetivo de puntos.  
+   - Rondas sucesivas de selección de 5 cartas de la mano de 10.  
+   - Posible uso de **Ayuda** o **Shuffle** durante el enfrentamiento (dependiendo de si se permite).  
+4. **Resultado**:  
+   - Si alcanza o supera la meta, consigue objeto clave y monedas.  
+   - Si no, pierde monedas.  
+5. **Progreso**:  
+   - Repite en los 4 bares hasta tener todos los objetos necesarios.  
+6. **Acceso al Casino**:  
+   - Enfrenta la **Batalla Final** con el Jefe.  
+   - Descubre la **resolución de la historia**.
+
+  ---
+
+## Mecánicas
 
 ### Mapa
 
@@ -48,6 +65,32 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 - Botón de ayuda para conocer las reglas y puntuaciones.  
 - Ordenar cartas por color o número.  
 - La dificultad de las batallas irá aumentando conforme el jugador vaya avanzando en las batallas. No solo con el aumento del **objetivo de puntos**, si no con diferentes desafíos planteados por los campeones de cada bar.
+
+### Tienda
+
+- El jugador podrá comprar todo tipo de bonus, cartas, etc.
+- Estará disponible en el mapa para el jugador.
+- Cambiarán las opciones de compra cada vez que se derrote a un enemigo de un bar,
+
+### Eventos
+
+- Se encontrarán repartidos por todo el mapa.
+- No siempre serán bonus. Alguno podrá ser una batalla de cartas, un regalo o el robo de una carta.
+
+### Puntuación de manos
+
+A continuación, se presenta una lógica de puntuación para cada tipo de mano, con su nombre y valor base.  
+Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina para formar la mejor jugada.
+
+- **Escalera de Color**: 100 puntos  
+- **Póker (4 iguales)**: 90 puntos  
+- **Full House (3+2)**: 80 puntos  
+- **Color (Flush)**: 70 puntos  
+- **Escalera**: 60 puntos  
+- **Trío (3 iguales)**: 50 puntos  
+- **Doble Pareja**: 40 puntos  
+- **Pareja**: 30 puntos  
+- **Carta Alta**: 10 puntos  
 
 ---
 
@@ -73,37 +116,3 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
   - Compra de **cartas especiales** (posibles comodines o restricciones únicas).
 
 ---
-
-# Mecánica de Puntuación de Manos
-
-A continuación, se presenta una lógica de puntuación para cada tipo de mano, con su nombre y valor base.  
-Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina para formar la mejor jugada.
-
-- **Escalera de Color**: 100 puntos  
-- **Póker (4 iguales)**: 90 puntos  
-- **Full House (3+2)**: 80 puntos  
-- **Color (Flush)**: 70 puntos  
-- **Escalera**: 60 puntos  
-- **Trío (3 iguales)**: 50 puntos  
-- **Doble Pareja**: 40 puntos  
-- **Pareja**: 30 puntos  
-- **Carta Alta**: 10 puntos  
-
----
-
-## Flujo de Juego General
-
-1. **Inicio**: El jugador conoce la historia de Dante Holloway y su búsqueda.  
-2. **Exploración**: Se mueve por la calle, puede entrar a uno de los 4 bares en cualquier orden.  
-3. **Batalla de Póker**:  
-   - Se muestran las reglas, rondas y objetivo de puntos.  
-   - Rondas sucesivas de selección de 5 cartas de la mano de 10.  
-   - Posible uso de **Ayuda** o **Shuffle** durante el enfrentamiento (dependiendo de si se permite).  
-4. **Resultado**:  
-   - Si alcanza o supera la meta, consigue objeto clave y monedas.  
-   - Si no, pierde monedas.  
-5. **Progreso**:  
-   - Repite en los 4 bares hasta tener todos los objetos necesarios.  
-6. **Acceso al Casino**:  
-   - Enfrenta la **Batalla Final** con el Jefe.  
-   - Descubre la **resolución de la historia**.
