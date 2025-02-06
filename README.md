@@ -13,7 +13,7 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ---
 
-##Caracteríasticas principales
+## Caracteríasticas principales
 
 - Se maneja a Dante por el mapa para combatir con los jefes de cada bar para poder derrotar al jefe del casino.
 - Los duelos son batallas de cartas las cuales se superan obteniendo una ciega mayor a la impuesta por el jefe
@@ -23,7 +23,7 @@ En este juego, el riesgo es absoluto: si gana, conocerá el secreto del casino. 
 
 ---
 
-##Cores Loops
+## Cores Loops
 
 ---
 
