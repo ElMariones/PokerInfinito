@@ -13,6 +13,10 @@ import player from '../../assets/images/player.png';
 import npc1 from '../../assets/images/npc1.png';
 import npc2 from '../../assets/images/npc2.png';
 import npc3 from '../../assets/images/npc3.png';
+import placeholder from '../../assets/images/downloadPlace.png';
+import placeholder1 from '../../assets/images/placeholder.jpeg';
+import placeholder2 from '../../assets/images/placeholder3.jpeg';
+
 
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
@@ -40,6 +44,9 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    this.load.image('placeholder', placeholder);
+    this.load.image('placeholder1', placeholder1);
+    this.load.image('placeholder2', placeholder2);
 
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);

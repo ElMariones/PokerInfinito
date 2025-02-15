@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 export default class MapScene extends Phaser.Scene {
   constructor() {
     super('MapScene');
@@ -14,7 +12,6 @@ export default class MapScene extends Phaser.Scene {
       .setDisplaySize(width, height);
 
     // 2) Create player as a simple image
-    //    No physics, no animation—just an image
     this.player = this.add.image(100, 200, 'player').setScale(0.1);
 
     // 3) WASD controls (plus E for interact)
@@ -40,47 +37,27 @@ export default class MapScene extends Phaser.Scene {
     });
   }
 
-  update() {
-    // Manual top-down movement
-    const speed = 3;
-
-    if (this.cursors.up.isDown) {
-      this.player.y -= speed;
-    } else if (this.cursors.down.isDown) {
-      this.player.y += speed;
-    }
-
-    if (this.cursors.left.isDown) {
-      this.player.x -= speed;
-    } else if (this.cursors.right.isDown) {
-      this.player.x += speed;
-    }
-
-    // Note: There's no collision or boundary check here;
-    // you'd add clamp logic if you want to prevent out-of-bounds movement.
-  }
-
   tryInteract() {
     // Check if player is close enough to an NPC
     const interactDistance = 50;
-
+  
     this.npcArray.forEach(npc => {
       const dist = Phaser.Math.Distance.Between(
         this.player.x, this.player.y,
         npc.x, npc.y
       );
-
+  
       if (dist < interactDistance) {
-        // Identify which NPC we are near, then start GameScene
+        // Placeholder for cutscene trigger
         if (npc === this.npc1) {
-          // NPC1: 300 points in 5 rounds
-          this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });
-        } else if (npc === this.npc2) {
-          // NPC2: 400 points in 5 rounds
-          this.scene.start('GameScene', { pointsNeeded: 400, rounds: 5 });
-        } else if (npc === this.npc3) {
-          // NPC3: 400 points in 4 rounds
-          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
+          this.startCutscene(
+            [
+              { image: 'placeholder', text: 'Hello, adventurer!' }
+            ], 
+            () => {
+              this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });
+            }
+          );
         }
       }
     });
