@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 export default class MapScene extends Phaser.Scene {
   constructor() {
     super('MapScene');
@@ -37,6 +39,23 @@ export default class MapScene extends Phaser.Scene {
     });
   }
 
+  update() {
+    // Manual top-down movement
+    const speed = 3;
+
+    if (this.cursors.up.isDown) {
+      this.player.y -= speed;
+    } else if (this.cursors.down.isDown) {
+      this.player.y += speed;
+    }
+
+    if (this.cursors.left.isDown) {
+      this.player.x -= speed;
+    } else if (this.cursors.right.isDown) {
+      this.player.x += speed;
+    }
+  }
+
   tryInteract() {
     // Check if player is close enough to an NPC
     const interactDistance = 50;
@@ -48,57 +67,108 @@ export default class MapScene extends Phaser.Scene {
       );
   
       if (dist < interactDistance) {
-        // Placeholder for cutscene trigger
+        // NPC1 cutscene example
         if (npc === this.npc1) {
           this.startCutscene(
             [
-              { image: 'placeholder', text: 'Hello, adventurer!' }
+              { image: 'placeholder', text: 'Hello, adventurer!' },
+              { image: 'placeholder1', text: 'I have an important task for you!' },
+              { image: 'placeholder2', text: 'Are you ready to begin the challenge?' }
             ], 
             () => {
               this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });
+            }
+          );
+        } 
+        // NPC2 and NPC3 cutscenes can follow the same pattern
+        else if (npc === this.npc2) {
+          this.startCutscene(
+            [
+              { image: 'npc2Image', text: 'Greetings, traveler!' },
+              { image: 'npc2Image', text: 'There’s a challenge awaiting you...' },
+              { image: 'npc2Image', text: 'Shall we begin?' }
+            ], 
+            () => {
+              this.scene.start('GameScene', { pointsNeeded: 400, rounds: 5 });
+            }
+          );
+        } 
+        else if (npc === this.npc3) {
+          this.startCutscene(
+            [
+              { image: 'npc3Image', text: 'Hi there!' },
+              { image: 'npc3Image', text: 'I have something exciting for you...' },
+              { image: 'npc3Image', text: 'Are you up for the challenge?' }
+            ], 
+            () => {
+              this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
             }
           );
         }
       }
     });
   }
-
-
-startCutscene(cutsceneSteps, callback) {
-  this.currentCutsceneStep = 0;
-
-  // Fade out current scene and start the cutscene once fade is complete
-  this.cameras.main.fadeOut(500, 0, 0, 0);
-
-  // Wait for the fadeOut to complete before starting the cutscene
-  this.cameras.main.once('camerafadeoutcomplete', () => {
-    this.showCutsceneStep(cutsceneSteps);
-  });
-
-  // Skip key: Press "E" to skip through steps
-  this.input.keyboard.on('keydown-E', () => {
-    this.nextCutsceneStep(cutsceneSteps, callback);
-  });
-}
-
-showCutsceneStep(cutsceneSteps) {
-  if (this.currentCutsceneStep < cutsceneSteps.length) {
-    const { image, text } = cutsceneSteps[this.currentCutsceneStep];
-    
-    // Show image in fullscreen
-    this.cutsceneImage = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, image)
-      .setOrigin(0.5)
-      .setDisplaySize(this.cameras.main.width, this.cameras.main.height);  // Adjust image size to fit the screen
   
-    // Show text after image
-    this.cutsceneText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 150, text, {
-      fontSize: '32px',
-      color: '#ffffff',
-      fontFamily: 'Arial'
-    }).setOrigin(0.5);
-  
-    // Fade in image and text
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+  startCutscene(cutsceneSteps, callback) {
+    this.currentCutsceneStep = 0;
+
+    // Fade out current scene and start the cutscene once fade is complete
+    this.cameras.main.fadeOut(500, 0, 0, 0);
+
+    // Wait for the fadeOut to complete before starting the cutscene
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      this.showCutsceneStep(cutsceneSteps);
+    });
+
+    // Skip key: Press "E" to skip through steps
+    this.input.keyboard.on('keydown-E', () => {
+      this.nextCutsceneStep(cutsceneSteps, callback);
+    });
   }
-}
+  
+  showCutsceneStep(cutsceneSteps) {
+    if (this.currentCutsceneStep < cutsceneSteps.length) {
+      const { image, text } = cutsceneSteps[this.currentCutsceneStep];
+      
+      // Show image in fullscreen
+      this.cutsceneImage = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, image)
+        .setOrigin(0.5)
+        .setDisplaySize(this.cameras.main.width, this.cameras.main.height);  // Adjust image size to fit the screen
+    
+      // Show text after image
+      this.cutsceneText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 150, text, {
+        fontSize: '32px',
+        color: '#ffffff',
+        fontFamily: 'Arial'
+      }).setOrigin(0.5);
+    
+      // Fade in image and text
+      this.cameras.main.fadeIn(500, 0, 0, 0);
+    }
+  }
+  
+  nextCutsceneStep(cutsceneSteps, callback) {
+    this.currentCutsceneStep++;
+  
+    // Remove the old image and text
+    if (this.cutsceneImage) {
+      this.cutsceneImage.destroy();
+    }
+    if (this.cutsceneText) {
+      this.cutsceneText.destroy();
+    }
+  
+    // If we have more steps, show the next one
+    if (this.currentCutsceneStep < cutsceneSteps.length) {
+      this.showCutsceneStep(cutsceneSteps);
+    } else {
+      // If no more steps, call the callback to transition to the next scene
+      this.time.delayedCall(500, () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+          callback();
+        });
+      });
+    }
+  }
 }
