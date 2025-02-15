@@ -62,4 +62,43 @@ export default class MapScene extends Phaser.Scene {
       }
     });
   }
+
+
+startCutscene(cutsceneSteps, callback) {
+  this.currentCutsceneStep = 0;
+
+  // Fade out current scene and start the cutscene once fade is complete
+  this.cameras.main.fadeOut(500, 0, 0, 0);
+
+  // Wait for the fadeOut to complete before starting the cutscene
+  this.cameras.main.once('camerafadeoutcomplete', () => {
+    this.showCutsceneStep(cutsceneSteps);
+  });
+
+  // Skip key: Press "E" to skip through steps
+  this.input.keyboard.on('keydown-E', () => {
+    this.nextCutsceneStep(cutsceneSteps, callback);
+  });
+}
+
+showCutsceneStep(cutsceneSteps) {
+  if (this.currentCutsceneStep < cutsceneSteps.length) {
+    const { image, text } = cutsceneSteps[this.currentCutsceneStep];
+    
+    // Show image in fullscreen
+    this.cutsceneImage = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, image)
+      .setOrigin(0.5)
+      .setDisplaySize(this.cameras.main.width, this.cameras.main.height);  // Adjust image size to fit the screen
+  
+    // Show text after image
+    this.cutsceneText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 150, text, {
+      fontSize: '32px',
+      color: '#ffffff',
+      fontFamily: 'Arial'
+    }).setOrigin(0.5);
+  
+    // Fade in image and text
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+  }
+}
 }
