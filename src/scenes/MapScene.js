@@ -71,9 +71,9 @@ export default class MapScene extends Phaser.Scene {
         if (npc === this.npc1) {
           this.startCutscene(
             [
-              { image: 'placeholder', text: 'Hello, adventurer!' },
-              { image: 'placeholder1', text: 'I have an important task for you!' },
-              { image: 'placeholder2', text: 'Are you ready to begin the challenge?' }
+              { image: 'blacksmith', text: 'dialogo' },
+              { image: 'adventurer', text: 'Dialogo' },
+              { image: 'faceoff', text: 'DIALOGO' }
             ], 
             () => {
               this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });

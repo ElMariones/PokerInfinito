@@ -13,9 +13,9 @@ import player from '../../assets/images/player.png';
 import npc1 from '../../assets/images/npc1.png';
 import npc2 from '../../assets/images/npc2.png';
 import npc3 from '../../assets/images/npc3.png';
-import placeholder from '../../assets/images/downloadPlace.png';
-import placeholder1 from '../../assets/images/placeholder.jpeg';
-import placeholder2 from '../../assets/images/placeholder3.jpeg';
+import blacksmith from '../../assets/images/blacksmith.png';
+import adventurer from '../../assets/images/adventurer.png';
+import faceoff from '../../assets/images/faceoff.png';
 
 
 // NEW: Sort button skins
@@ -44,9 +44,9 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
-    this.load.image('placeholder', placeholder);
-    this.load.image('placeholder1', placeholder1);
-    this.load.image('placeholder2', placeholder2);
+    this.load.image('blacksmith', blacksmith);
+    this.load.image('adventurer', adventurer);
+    this.load.image('faceoff', faceoff);
 
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
