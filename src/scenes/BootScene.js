@@ -16,6 +16,7 @@ import npc3 from '../../assets/images/npc3.png';
 import blacksmith from '../../assets/images/blacksmith.png';
 import adventurer from '../../assets/images/adventurer.png';
 import faceoff from '../../assets/images/faceoff.png';
+import samuel from '../../assets/images/samuel.png';
 
 
 // NEW: Sort button skins
@@ -47,6 +48,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('blacksmith', blacksmith);
     this.load.image('adventurer', adventurer);
     this.load.image('faceoff', faceoff);
+    this.load.image('samuel', samuel);
 
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);

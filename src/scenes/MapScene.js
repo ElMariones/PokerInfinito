@@ -71,7 +71,7 @@ export default class MapScene extends Phaser.Scene {
         if (npc === this.npc1) {
           this.startCutscene(
             [
-              { image: 'blacksmith', text: 'dialogo' },
+              { image: 'samuel', text: 'dialogo' },
               { image: 'adventurer', text: 'Dialogo' },
               { image: 'faceoff', text: 'DIALOGO' }
             ], 
@@ -111,15 +111,14 @@ export default class MapScene extends Phaser.Scene {
   
   startCutscene(cutsceneSteps, callback) {
     this.currentCutsceneStep = 0;
-
+  
     // Fade out current scene and start the cutscene once fade is complete
     this.cameras.main.fadeOut(500, 0, 0, 0);
-
-    // Wait for the fadeOut to complete before starting the cutscene
+  
     this.cameras.main.once('camerafadeoutcomplete', () => {
       this.showCutsceneStep(cutsceneSteps);
     });
-
+  
     // Skip key: Press "E" to skip through steps
     this.input.keyboard.on('keydown-E', () => {
       this.nextCutsceneStep(cutsceneSteps, callback);
@@ -129,19 +128,32 @@ export default class MapScene extends Phaser.Scene {
   showCutsceneStep(cutsceneSteps) {
     if (this.currentCutsceneStep < cutsceneSteps.length) {
       const { image, text } = cutsceneSteps[this.currentCutsceneStep];
-      
-      // Show image in fullscreen
-      this.cutsceneImage = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, image)
-        .setOrigin(0.5)
-        .setDisplaySize(this.cameras.main.width, this.cameras.main.height);  // Adjust image size to fit the screen
-    
-      // Show text after image
-      this.cutsceneText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 150, text, {
+  
+      // Remove previous images/text
+      if (this.cutsceneImage) this.cutsceneImage.destroy();
+      if (this.cutsceneText) this.cutsceneText.destroy();
+  
+      // Position Samuel at the bottom left and scale him down
+      if (image === 'samuel') {
+        this.cutsceneImage = this.add.image(150, this.cameras.main.height - 100, image)
+          .setOrigin(0.5, 0.8)
+          .setScale(0.9); // Adjust scale to make him smaller
+      } else {
+        // Default fullscreen image for others
+        this.cutsceneImage = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, image)
+          .setOrigin(0.5)
+          .setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+      }
+  
+      // Adjust text placement to avoid overlap
+      this.cutsceneText = this.add.text(this.cameras.main.centerX, this.cameras.main.height - 150, text, {
         fontSize: '32px',
         color: '#ffffff',
-        fontFamily: 'Arial'
+        fontFamily: 'Arial',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: { x: 10, y: 5 }
       }).setOrigin(0.5);
-    
+  
       // Fade in image and text
       this.cameras.main.fadeIn(500, 0, 0, 0);
     }
