@@ -42,6 +42,8 @@ export default class IntroScene extends Phaser.Scene {
     // Start the MAP scene (instead of GameScene) on button click
     playBtn.on('pointerdown', () => {
       // Resume the AudioContext (in case it was suspended)
+      console.log("🎮 Botón 'Jugar' presionado. Intentando iniciar MapScene...");
+
       if (this.sound.context.state === 'suspended') {
         this.sound.context.resume().then(() => {
           console.log('AudioContext resumed successfully');

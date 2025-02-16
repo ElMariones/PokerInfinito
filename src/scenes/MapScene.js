@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import DialogText from '../DialogText.js';
 
 export default class MapScene extends Phaser.Scene {
   constructor() {
@@ -34,6 +35,22 @@ export default class MapScene extends Phaser.Scene {
     // Put NPCs in an array for easy iteration
     this.npcArray = [this.npc1, this.npc2, this.npc3];
 
+    // Crear la caja de diálogo, pero oculta inicialmente
+    this.dialogBox = new DialogText(this, { dialogSpeed: 4 });
+    if (this.dialogBox && this.dialogBox.container) {
+      this.dialogBox.container.setVisible(true);
+    } else {
+        console.warn("⚠️ dialogBox o su container no están listos.");
+    }
+  
+
+    // Información de NPCs
+    this.npcData = {
+      npc1: { name: "Samuel", background: "asador_fondo", dialog: "Las cartas no mienten, Dante.", gameData: { pointsNeeded: 100, rounds: 5 } },
+      npc2: { name: "Helena", background: "taberna_fondo", dialog: "Las reglas son como el humo, querido.", gameData: { pointsNeeded: 400, rounds: 5 } },
+      npc3: { name: "Marco", background: "puerto_fondo", dialog: "La suerte es como el mar: caprichosa.", gameData: { pointsNeeded: 500, rounds: 2 } }
+    };
+
     // 5) Interact key
     this.input.keyboard.on('keydown-E', () => {
       this.tryInteract();
@@ -61,28 +78,39 @@ export default class MapScene extends Phaser.Scene {
   }
 
   tryInteract() {
-    // Check if player is close enough to an NPC
     const interactDistance = 50;
+    let interactedNPC = null;
 
     this.npcArray.forEach(npc => {
-      const dist = Phaser.Math.Distance.Between(
-        this.player.x, this.player.y,
-        npc.x, npc.y
-      );
-
-      if (dist < interactDistance) {
-        // Identify which NPC we are near, then start GameScene
-        if (npc === this.npc1) {
-          // NPC1: 300 points in 5 rounds
-          this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });
-        } else if (npc === this.npc2) {
-          // NPC2: 400 points in 5 rounds
-          this.scene.start('GameScene', { pointsNeeded: 400, rounds: 5 });
-        } else if (npc === this.npc3) {
-          // NPC3: 400 points in 4 rounds
-          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
+        const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+        if (dist < interactDistance) {
+            interactedNPC = npc;
         }
-      }
     });
+
+    if (interactedNPC) {
+        const npcKey = this.getNPCKey(interactedNPC);
+        if (npcKey) {
+            const { name, background, dialog, gameData } = this.npcData[npcKey];
+
+            // Mostrar el diálogo del NPC
+            this.dialogBox.setText(dialog, name, background);
+            this.dialogBox.setVisible(true);
+
+            // Agregar un evento para continuar al juego después del diálogo
+            this.input.keyboard.once('keydown-SPACE', () => {
+                this.dialogBox.setVisible(false);
+                this.scene.start('GameScene', gameData);
+            });
+        }
+    }
   }
+
+  getNPCKey(npc) {
+      if (npc === this.npc1) return 'npc1';
+      if (npc === this.npc2) return 'npc2';
+      if (npc === this.npc3) return 'npc3';
+      return null;
+  }
+
 }
