@@ -281,6 +281,9 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
+    // Set the camera zoom level (e.g., 2 for double zoom)
+    this.cameras.main.setZoom(2);
+
     // Make the camera follow the player
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
@@ -295,12 +298,50 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
       interact: Phaser.Input.Keyboard.KeyCodes.E
     });
 
-    // 5) Create NPCs as images (optional)
-    //    Using static images as in your original code
-    this.npc1 = this.add.image(300, 200, 'npc1').setScale(0.1);
-    this.npc2 = this.add.image(500, 300, 'npc2').setScale(0.1);
-    this.npc3 = this.add.image(700, 200, 'npc3').setScale(0.1);
-    this.npcArray = [this.npc1, this.npc2, this.npc3];
+
+    // Define animations for NPCs
+    const npcNames = ['samuel', 'bruja', 'pescador', 'padre', 'gemelos'];
+    npcNames.forEach(npc => {
+      this.anims.create({
+        key: `${npc}-idle-up`,
+        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 0, end: 2 }),
+        frameRate: 6,
+        repeat: -1
+      });
+      this.anims.create({
+        key: `${npc}-idle-left`,
+        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 3, end: 5 }),
+        frameRate: 6,
+        repeat: -1
+      });
+      this.anims.create({
+        key: `${npc}-idle-down`,
+        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 6, end: 8 }),
+        frameRate: 6,
+        repeat: -1
+      });
+      this.anims.create({
+        key: `${npc}-idle-right`,
+        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 9, end: 11 }),
+        frameRate: 6,
+        repeat: -1
+      });
+    });
+
+    // Create NPCs as animated sprites
+    this.npc_samuel = this.add.sprite(256, 426, 'samuelIdle');
+    this.npc_bruja = this.add.sprite(993, 434, 'brujaIdle');
+    this.npc_pescador = this.add.sprite(206, 1025, 'pescadorIdle');
+    this.npc_padre = this.add.sprite(1037, 787, 'padreIdle');
+    this.npc_gemelos = this.add.sprite(1824, 966, 'gemelosIdle');
+
+    this.npc_samuel.play('samuel-idle-down');
+    this.npc_bruja.play('bruja-idle-down');
+    this.npc_pescador.play('pescador-idle-down');
+    this.npc_padre.play('padre-idle-down');
+    this.npc_gemelos.play('gemelos-idle-down');
+
+    this.npcArray = [this.npc_samuel, this.npc_bruja, this.npc_pescador, this.npc_padre, this.npc_gemelos];
 
     // Interact key
     this.input.keyboard.on('keydown-E', () => {
@@ -360,6 +401,20 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
         this.player.play('walk-right', true);
         break;
     }
+
+        // Update NPCs to face the player
+        this.npcArray.forEach(npc => {
+          const angle = Phaser.Math.Angle.Between(npc.x, npc.y, this.player.x, this.player.y);
+          if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
+            npc.play(`${npc.texture.key.split('Idle')[0]}-idle-right`, true);
+          } else if (angle >= Math.PI / 4 && angle < 3 * Math.PI / 4) {
+            npc.play(`${npc.texture.key.split('Idle')[0]}-idle-down`, true);
+          } else if (angle >= -3 * Math.PI / 4 && angle < -Math.PI / 4) {
+            npc.play(`${npc.texture.key.split('Idle')[0]}-idle-up`, true);
+          } else {
+            npc.play(`${npc.texture.key.split('Idle')[0]}-idle-left`, true);
+          }
+        });
   }
   
   
@@ -377,11 +432,15 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
 
       if (dist < interactDistance) {
         // Identify which NPC we are near, then start a scene or do something
-        if (npc === this.npc1) {
+        if (npc === this.npc_samuel) {
           this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });
-        } else if (npc === this.npc2) {
+        } else if (npc === this.npc_bruja) {
           this.scene.start('GameScene', { pointsNeeded: 400, rounds: 5 });
-        } else if (npc === this.npc3) {
+        } else if (npc === this.npc_gemelos) {
+          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
+        } else if (npc === this.npc_padre) {
+          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
+        } else if (npc === this.npc_pescador) {
           this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
         }
       }

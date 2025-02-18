@@ -33,6 +33,8 @@ let config = {
             gravity: { y: 0 } // or whatever you want
         }
     },
+
+    pixelArt: true,
     
     backgroundColor: '#006400', // fallback color if images don't cover background
 
