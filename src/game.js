@@ -24,6 +24,17 @@ let config = {
         mode: Phaser.Scale.FIT,             // Maintains aspect ratio & fits in parent
         autoCenter: Phaser.Scale.CENTER_BOTH // Center horizontally & vertically
     },
+
+      // Enable arcade physics here:
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false,
+            gravity: { y: 0 } // or whatever you want
+        }
+    },
+
+    pixelArt: true,
     
     backgroundColor: '#006400', // fallback color if images don't cover background
 

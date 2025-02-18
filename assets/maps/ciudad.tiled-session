@@ -1,0 +1,23 @@
+{
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "ciudad.json#base_out_atlas": {
+            "scaleInEditor": 1
+        },
+        "ciudad.json#conifers": {
+            "scaleInEditor": 1
+        },
+        "ciudad.json#street_misc": {
+            "scaleInEditor": 1
+        }
+    },
+    "openFiles": [
+    ],
+    "project": "ciudad.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+    ]
+}
