@@ -11,6 +11,8 @@ export default class IntroScene extends Phaser.Scene {
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
     
+    
+
     // Background
     const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug')
     .setOrigin(0, 0);
