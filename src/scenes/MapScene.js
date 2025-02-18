@@ -431,19 +431,24 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
       );
 
       if (dist < interactDistance) {
-        // Identify which NPC we are near, then start a scene or do something
-        if (npc === this.npc_samuel) {
-          this.scene.start('GameScene', { pointsNeeded: 100, rounds: 5 });
-        } else if (npc === this.npc_bruja) {
-          this.scene.start('GameScene', { pointsNeeded: 400, rounds: 5 });
-        } else if (npc === this.npc_gemelos) {
-          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
-        } else if (npc === this.npc_padre) {
-          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
-        } else if (npc === this.npc_pescador) {
-          this.scene.start('GameScene', { pointsNeeded: 500, rounds: 2 });
-        }
+      // We'll store data in an object
+      let transitionData = {};
+
+      if (npc === this.npc_samuel) {
+        transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };
+      } else if (npc === this.npc_bruja) {
+        transitionData = { npc: 'bruja', pointsNeeded: 400, rounds: 5 };
+      } else if (npc === this.npc_gemelos) {
+        transitionData = { npc: 'gemelos', pointsNeeded: 500, rounds: 2 };
+      } else if (npc === this.npc_padre) {
+        transitionData = { npc: 'padre', pointsNeeded: 500, rounds: 2 };
+      } else if (npc === this.npc_pescador) {
+        transitionData = { npc: 'pescador', pointsNeeded: 500, rounds: 2 };
       }
+
+      // Instead of going directly to GameScene, go to the transition
+      this.scene.start('TransicionBatalla', transitionData);
+    }
     });
   }
 }
