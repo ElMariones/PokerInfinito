@@ -7,16 +7,14 @@ export default class Dialogos extends Phaser.Scene {
 
   init(data) {
     this.npc = data.npc;
-    this.currentStep = 0; // Track the current step in the cutscene
+    this.currentStep = 0; 
     this.transitionData = {};
   }
 
   create() {
-    // Bring this scene to the top
     this.scene.bringToTop();
     this.gameScene = this.scene.get('MapScene');
     
-    // Set up cutscene sequence based on NPC
     switch (this.npc) {
       case 'samuel':
         this.cutsceneImages = ['Samuel', 'Dante'];
@@ -45,12 +43,14 @@ export default class Dialogos extends Phaser.Scene {
 
     this.cutsceneImage = this.add.image(512, 384, this.cutsceneImages[this.currentStep]);
 
-    this.input.keyboard.on('keydown-E', this.showNextImage, this);
+    this.input.keyboard.on('keydown-E', () => {
+      this.showNextImage();
+    });  
+  
   }
 
   showNextImage() {
     this.currentStep++;
-
     if (this.currentStep < this.cutsceneImages.length) {
       this.cutsceneImage.destroy();
       this.cutsceneImage = this.add.image(512, 384, this.cutsceneImages[this.currentStep]);
