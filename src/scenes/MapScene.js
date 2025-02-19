@@ -212,26 +212,26 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
     // Define animations for idle
     this.anims.create({
       key: 'idle-up',
-      frames: this.anims.generateFrameNumbers('playerIdle', { start: 0, end: 2 }),
-      frameRate: 6,
+      frames: [{ key: 'playerIdle', frame: 0 }],
+      frameRate: 1,
       repeat: -1
     });
     this.anims.create({
       key: 'idle-left',
-      frames: this.anims.generateFrameNumbers('playerIdle', { start: 3, end: 5 }),
-      frameRate: 6,
+      frames: [{ key: 'playerIdle', frame: 1 }],
+      frameRate: 1,
       repeat: -1
     });
     this.anims.create({
       key: 'idle-down',
-      frames: this.anims.generateFrameNumbers('playerIdle', { start: 6, end: 8 }),
-      frameRate: 6,
+      frames: [{ key: 'playerIdle', frame: 2 }],
+      frameRate: 1,
       repeat: -1
     });
     this.anims.create({
       key: 'idle-right',
-      frames: this.anims.generateFrameNumbers('playerIdle', { start: 9, end: 11 }),
-      frameRate: 6,
+      frames: [{ key: 'playerIdle', frame: 3 }],
+      frameRate: 1,
       repeat: -1
     });
 
@@ -303,28 +303,28 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
     const npcNames = ['samuel', 'bruja', 'pescador', 'padre', 'gemelos'];
     npcNames.forEach(npc => {
       this.anims.create({
-        key: `${npc}-idle-up`,
-        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 0, end: 2 }),
-        frameRate: 6,
-        repeat: -1
+      key: `${npc}-idle-up`,
+      frames: [{ key: `${npc}Idle`, frame: 0 }],
+      frameRate: 1,
+      repeat: -1
       });
       this.anims.create({
-        key: `${npc}-idle-left`,
-        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 3, end: 5 }),
-        frameRate: 6,
-        repeat: -1
+      key: `${npc}-idle-left`,
+      frames: [{ key: `${npc}Idle`, frame: 1 }],
+      frameRate: 1,
+      repeat: -1
       });
       this.anims.create({
-        key: `${npc}-idle-down`,
-        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 6, end: 8 }),
-        frameRate: 6,
-        repeat: -1
+      key: `${npc}-idle-down`,
+      frames: [{ key: `${npc}Idle`, frame: 2 }],
+      frameRate: 1,
+      repeat: -1
       });
       this.anims.create({
-        key: `${npc}-idle-right`,
-        frames: this.anims.generateFrameNumbers(`${npc}Idle`, { start: 9, end: 11 }),
-        frameRate: 6,
-        repeat: -1
+      key: `${npc}-idle-right`,
+      frames: [{ key: `${npc}Idle`, frame: 3 }],
+      frameRate: 1,
+      repeat: -1
       });
     });
 
