@@ -86,16 +86,40 @@ export default class MapScene extends Phaser.Scene {
     if (interactedNPC) {
         const npcKey = this.getNPCKey(interactedNPC);
         if (npcKey) {
-            const { name, background, dialog, gameData } = this.npcData[npcKey];
+            const { name, background, gameData } = this.npcData[npcKey];
 
-            // Mostrar el diálogo del NPC
-            this.dialogBox.startDialog([dialog], name, background, () => {
-              this.dialogBox.container.setVisible(false);
-              this.scene.start('GameScene', gameData);
-          });
+            // Diálogo de Samuel y Dante
+            const dialogLines = [
+                { character: "Samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
+                { character: "Dante", text: "¿Cómo sabes mi nombre?" },
+                { character: "Samuel", text: "Eso no es lo importante. Si de verdad quieres saber lo que te come por dentro, tendrás que ganarme a mí y al resto. La paciencia es buena, pero si esperas demasiado, te quedas con las brasas. La vida es un juego, Dante, y el fuego siempre exige su turno." },
+                { character: "Dante", text: "Espero no quemarme entonces." },
+                { character: "Samuel", text: "Las cartas no mienten, Dante. Y esta mesa es mi trono. Si quieres un lugar en la historia de este pueblo, tendrás que arrebatármelo." }
+            ];
+
+            this.dialogBox.startDialog(dialogLines, background, () => {
+                this.dialogBox.container.setVisible(false);
+                this.scene.start('GameScene', gameData);
+                // this.scene.start('GameScene', { 
+                //     ...gameData, 
+                //     callback: (playerWon) => this.afterBattle(playerWon) 
+                // });
+            });
         }
     }
   }
+
+  // Nueva función para continuar el diálogo después de la batalla
+  afterBattle(playerWon) {
+      const postBattleDialog = playerWon
+          ? [{ character: "Samuel", text: "Bien jugado… La paciencia cocina la mejor jugada, y tú la serviste en su punto. Ahora, ve a la Taberna del Olvido. Allí te espera Helena." }]
+          : [{ character: "Samuel", text: "Tienes la paciencia… pero no la precisión. Aquí, solo los reyes se sientan en la mesa final. Y hoy, no fue tu día." }];
+
+      this.dialogBox.startDialog(postBattleDialog, "asador_fondo", () => {
+          this.dialogBox.container.setVisible(false);
+      });
+  }
+
 
   getNPCKey(npc) {
       if (npc === this.npc1) return 'npc1';

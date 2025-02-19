@@ -46,24 +46,19 @@ export default class DialogText {
         this.container.on('pointerdown', () => this.nextDialogLine());
     }
 
-    startDialog(dialogLines, character, background, onComplete) {
+    startDialog(dialogLines, background, onComplete) {
         this.dialogLines = dialogLines;
         this.currentIndex = 0;
         this.callback = onComplete;
-
+    
         if (this.backgroundImage) this.backgroundImage.destroy();
-        if (this.characterImage) this.characterImage.destroy();
-
         this.backgroundImage = this.scene.add.image(512, 384, background).setDepth(-1).setScale(1.2);
-        this.characterImage = this.scene.add.image(512, 384, character).setDepth(0).setScale(1.0);
-
-        this.container.add([this.backgroundImage, this.characterImage]);
-
+    
         this.container.setAlpha(1);
         this.container.setVisible(true);
         this.showText();
     }
-
+    
     nextDialogLine() {
         this.currentIndex++;
 
@@ -79,18 +74,26 @@ export default class DialogText {
         let x = this.padding + 10;
         let y = this.scene.sys.game.canvas.height - this.windowHeight - this.padding + 15;
     
-        // Si ya hay un texto previo, elimínalo antes de agregar uno nuevo
-        if (this.text) {
-            this.text.destroy();
-        }
+        if (this.text) this.text.destroy();
+        if (this.characterName) this.characterName.destroy();
     
-        this.text = this.scene.add.text(x, y, this.dialogLines[this.currentIndex], {
+        const currentLine = this.dialogLines[this.currentIndex];
+    
+        // Mostrar el nombre del personaje
+        this.characterName = this.scene.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
+            fontSize: `${this.fontSize + 4}px`,
+            fontFamily: this.fontFamily,
+            color: '#FFD700'
+        });
+    
+        // Mostrar el texto del diálogo
+        this.text = this.scene.add.text(x, y + 25, currentLine.text, {
             fontSize: `${this.fontSize}px`,
             fontFamily: this.fontFamily,
             wordWrap: { width: this.scene.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
             color: '#FFFFFF'
         });
     
-        this.container.add(this.text);
-    }    
+        this.container.add([this.characterName, this.text]);
+    }        
 }
