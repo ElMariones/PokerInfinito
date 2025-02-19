@@ -435,7 +435,7 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
       let transitionData = {};
 
       if (npc === this.npc_samuel) {
-        transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };
+        this.scene.launch('Dialogos', {npc: 'samuel', });
       } else if (npc === this.npc_bruja) {
         transitionData = { npc: 'bruja', pointsNeeded: 400, rounds: 5 };
       } else if (npc === this.npc_gemelos) {
@@ -446,9 +446,7 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
         transitionData = { npc: 'pescador', pointsNeeded: 500, rounds: 2 };
       }
 
-      // Instead of going directly to GameScene, go to the transition
-      this.scene.start('TransicionBatalla', transitionData);
-    }
+      this.scene.bringToTop('Dialogos');    }
     });
   }
 }
