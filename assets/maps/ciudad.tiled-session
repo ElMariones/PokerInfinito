@@ -1,0 +1,156 @@
+{
+    "activeFile": "ciudad.json",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "ciudad.json": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 402,
+                "y": 245
+            }
+        },
+        "ciudad.json#Adobe Brick Roof": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Barrel": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Brick Wall Block Edging": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Christmas Wall Decor": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Exterior Tiles": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Flowers": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Grindstone": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Inside_B": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Interior": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Ladder": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Lighting, Outdoors": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Lumber": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Outside Objects": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Outside_B": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Sawhorse": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Shelf": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Skeletons A": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#Terrain and Outside": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#barn": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#base_out_atlas": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ciudad.json#blacksmith-smelter": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#build_atlas": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#cartelines": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#castle-extras": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#castle8dark": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#conifers": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ciudad.json#crops": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#farming_fishing": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#flowers": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#mushrooms": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#obj_misk_atlas": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#olvido3": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#olvidoooo": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#orangetrees": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#plants_winter": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#signpost-outsidestuff": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#street": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#street_misc": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ciudad.json#tavern-cooking": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#terrain_atlas": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#town_buildings": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#trees_autumn": {
+            "scaleInDock": 1
+        },
+        "ciudad.json#victorian house": {
+            "scaleInDock": 1
+        }
+    },
+    "openFiles": [
+        "ciudad.json"
+    ],
+    "project": "ciudad.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "ciudad.json"
+    ]
+}

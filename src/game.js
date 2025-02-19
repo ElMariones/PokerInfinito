@@ -4,6 +4,7 @@ import IntroScene from './scenes/IntroScene.js';
 import MapScene from './scenes/MapScene.js';
 import GameScene from './scenes/GameScene.js';
 import UIScene from './scenes/UIScene.js';
+import TransicionBatalla from './scenes/TransicionBatalla.js';
 import Phaser from 'phaser';
 
 /**
@@ -24,10 +25,21 @@ let config = {
         mode: Phaser.Scale.FIT,             // Maintains aspect ratio & fits in parent
         autoCenter: Phaser.Scale.CENTER_BOTH // Center horizontally & vertically
     },
+
+      // Enable arcade physics here:
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false,
+            gravity: { y: 0 } // or whatever you want
+        }
+    },
+
+    pixelArt: true,
     
     backgroundColor: '#006400', // fallback color if images don't cover background
 
-    scene: [BootScene, IntroScene, MapScene, GameScene, UIScene],
+    scene: [BootScene, IntroScene, MapScene, TransicionBatalla, GameScene, UIScene],
 };
 
 // Create the Phaser game using the config above

@@ -55,6 +55,11 @@ En este juego, el riesgo es absoluto: si gana, logrará librar a su padre de su 
 - Solo tiene una tecla para interactuar con gente, puertas o la tienda.  
 - El mapa funciona como medio a las batallas de cartas que presentan gran parte de las mecánicas del juego.
 
+### Mapa de grafos
+
+![image](https://github.com/user-attachments/assets/9427553e-be47-4c39-aeb0-b5b5b9bfb0ae)
+
+
 ### Batallas de Cartas
 
 - Al retar a un campeón en un bar, aparece la interfaz de juego.  
