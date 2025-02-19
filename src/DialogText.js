@@ -1,9 +1,11 @@
+import Phaser from 'phaser';
+
 export default class DialogText {
     constructor(scene, opts) {
         this.scene = scene;
         this.container = null;
         this.text = null;
-        this.currentIndex = 0;
+        this.currentIndex = -1;
         this.dialogLines = [];
         this.callback = null;
 
@@ -72,20 +74,23 @@ export default class DialogText {
         this.showText();
         }
     }
-
+    
     showText() {
-        if (this.text) this.text.destroy();
-
         let x = this.padding + 10;
         let y = this.scene.sys.game.canvas.height - this.windowHeight - this.padding + 15;
-
+    
+        // Si ya hay un texto previo, elimínalo antes de agregar uno nuevo
+        if (this.text) {
+            this.text.destroy();
+        }
+    
         this.text = this.scene.add.text(x, y, this.dialogLines[this.currentIndex], {
-        fontSize: this.fontSize,
-        fontFamily: this.fontFamily,
-        wordWrap: { width: this.scene.sys.game.canvas.width - (this.padding * 2) - 20 },
-        color: '#FFFFFF'
+            fontSize: `${this.fontSize}px`,
+            fontFamily: this.fontFamily,
+            wordWrap: { width: this.scene.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
+            color: '#FFFFFF'
         });
-
+    
         this.container.add(this.text);
-    }
+    }    
 }

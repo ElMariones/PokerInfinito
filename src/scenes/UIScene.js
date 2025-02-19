@@ -17,10 +17,6 @@ export default class UIScene extends Phaser.Scene {
     this.scene.bringToTop();
     this.gameScene = this.scene.get('GameScene');
 
-    this.dialogBox = new DialogText(this, { dialogSpeed: 4 });
-    this.dialogBox.setText("Bienvenido a Ciudad Trébol.", "Dante", "asador_fondo");
-    this.dialogBox.setVisible(false); // Oculto por defecto
-
     // Shared style for text
     const textStyle = {
       fontFamily: 'MarioKart',
