@@ -75,6 +75,9 @@ import padreWalk from '../../assets/images/sprites/padre/Walk.png';
 import gemelosIdle from '../../assets/images/sprites/gemelos/Idle.png';
 import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 
+//import pictures dialogos
+import Samuel from '../../assets/images/Samuel.png';
+
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
@@ -123,6 +126,9 @@ export default class BootScene extends Phaser.Scene {
 
     this.load.spritesheet('gemelosIdle', gemelosIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('gemelosWalk', gemelosWalk, { frameWidth: 64, frameHeight: 64 });
+
+    // Load the dialog pictures
+    this.load.image('Samuel', Samuel);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
