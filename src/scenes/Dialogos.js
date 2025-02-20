@@ -133,58 +133,86 @@ export default class Dialogos extends Phaser.Scene {
     }
     
     nextDialogLine() {
-        this.currentIndex++;
-
-        if (this.currentIndex >= this.dialogLines.length) {
-            this.container.setVisible(false);
-            this.startBattle();
-            if (this.callback) this.callback();
+        if (this.isTyping) {
+            // If the text is still typing, finish it instantly
+            this.text.setText(this.dialogLines[this.currentIndex].text);
+            this.isTyping = false; // Mark as fully typed
         } else {
-        this.showText();
+            // Move to the next line
+            this.currentIndex++;
+    
+            if (this.currentIndex >= this.dialogLines.length) {
+                this.container.setVisible(false);
+                this.startBattle();
+                if (this.callback) this.callback();
+            } else {
+                this.showText();
+            }
         }
     }
     
+    
     showText() {
         let x = this.padding + 10;
-    let y = this.sys.game.canvas.height - this.windowHeight - this.padding + 15;
-
-    if (this.text) this.text.destroy();
-    if (this.characterName) this.characterName.destroy();
-    if (this.cutsceneImage) this.cutsceneImage.destroy();
-
-    const currentLine = this.dialogLines[this.currentIndex];
-
-    // Mostrar el nombre del personaje
-    this.characterName = this.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
-        fontSize: `${this.fontSize + 4}px`,
-        fontFamily: this.fontFamily,
-        color: '#FFD700'
-    });
-
-    this.text = this.add.text(x, y + 25, currentLine.text, {
-        fontSize: `${this.fontSize}px`,
-        fontFamily: this.fontFamily,
-        wordWrap: { width: this.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
-        color: '#FFFFFF'
-    });
-
-    // Ensure the dialogue box is in front
-    this.container.setDepth(10);
-
-    // Add elements to the container
-    this.container.add([this.characterName, this.text]);
-
-    // Positioning character image based on who is speaking
-    this.cutsceneImage = this.add.image(
-        currentLine.character === "Dante" 
-            ? this.sys.game.canvas.width - this.padding - 50 
-            : this.padding + 50, 
-        this.sys.game.canvas.height - this.windowHeight - this.padding - 50,
-        `${currentLine.character}`
-    ).setScale(1);
-
-    // Set the depth of the image **below** the window
-    this.cutsceneImage.setDepth(5); // Lower than container depth (10)
+        let y = this.sys.game.canvas.height - this.windowHeight - this.padding + 15;
+    
+        // Destroy previous text objects
+        if (this.text) this.text.destroy();
+        if (this.characterName) this.characterName.destroy();
+        if (this.cutsceneImage) this.cutsceneImage.destroy();
+    
+        const currentLine = this.dialogLines[this.currentIndex];
+    
+        this.characterName = this.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
+            fontSize: `${this.fontSize + 4}px`,
+            fontFamily: this.fontFamily,
+            color: '#FFD700'
+        });
+    
+        this.text = this.add.text(x, y + 25, "", {
+            fontSize: `${this.fontSize}px`,
+            fontFamily: this.fontFamily,
+            wordWrap: { width: this.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
+            color: '#FFFFFF'
+        });
+    
+        this.container.setDepth(10);
+        this.container.add([this.characterName, this.text]);
+    
+        this.cutsceneImage = this.add.image(
+            currentLine.character === "Dante" 
+                ? this.sys.game.canvas.width - this.padding - 50 
+                : this.padding + 50, 
+            this.sys.game.canvas.height - this.windowHeight - this.padding - 50,
+            `${currentLine.character}`
+        ).setScale(1);
+        
+        this.cutsceneImage.setDepth(5);
+    
+        // Cancel previous typing event if it exists
+        if (this.typingEvent) {
+            this.typingEvent.remove(false);
+        }
+    
+        // Typing effect logic
+        this.isTyping = true; // Start typing mode
+        let fullText = currentLine.text;
+        let currentIndex = 0;
+        let typingSpeed = 40; // Adjust speed here (lower = faster)
+    
+        this.typingEvent = this.time.addEvent({
+            delay: typingSpeed,
+            repeat: fullText.length - 1,
+            callback: () => {
+                if (!this.isTyping) return;
+                this.text.setText(fullText.substring(0, currentIndex + 1));
+                currentIndex++;
+    
+                if (currentIndex >= fullText.length) {
+                    this.isTyping = false; // Finished typing
+                }
+            }
+        });
     }  
 
     startBattle() {
