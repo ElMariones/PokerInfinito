@@ -58,7 +58,6 @@ export default class Dialogos extends Phaser.Scene {
         npc = 'samuel';
         switch(npc) {
             case 'samuel':
-                this.cutsceneImages = ['samuel'];
                 this.transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };
                 this.dialogLines = [
                     { character: "Samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
@@ -69,7 +68,6 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
             case 'bruja':
-                this.cutsceneImages = ['bruja'];
                 this.transitionData = { npc: 'bruja', pointsNeeded: 80, rounds: 4 };
                 this.dialogLines = [
                     { character: "Helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
@@ -81,7 +79,6 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
             case 'gemelos':
-                this.cutsceneImages = ['gemelos1', 'gemelos2'];
                 this.transitionData = { npc: 'gemelos', pointsNeeded: 90, rounds: 3 };
                 this.dialogLines = [
                     { character: "Hermano 1", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
@@ -94,14 +91,12 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
             case 'padre':
-                this.cutsceneImages = ['padre1', 'padre2'];
                 this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3 };
                 this.dialogLines = [
                    //Falta poner
                 ];
                 break;
             case 'pescador':
-                this.cutsceneImages = ['pescador1', 'pescador2'];
                 this.transitionData = { npc: 'pescador', pointsNeeded: 60, rounds: 2 };
                 this.dialogLines = [
                     { character: "Marco", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
@@ -151,32 +146,45 @@ export default class Dialogos extends Phaser.Scene {
     
     showText() {
         let x = this.padding + 10;
-        let y = this.sys.game.canvas.height - this.windowHeight - this.padding + 15;
-    
-        if (this.text) this.text.destroy();
-        if (this.characterName) this.characterName.destroy();
-        if (this.cutsceneImage) this.cutsceneImage.destroy();
-    
-        const currentLine = this.dialogLines[this.currentIndex];
-    
-        // Mostrar el nombre del personaje
-        this.characterName = this.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
-            fontSize: `${this.fontSize + 4}px`,
-            fontFamily: this.fontFamily,
-            color: '#FFD700'
-        });
+    let y = this.sys.game.canvas.height - this.windowHeight - this.padding + 15;
 
-        this.cutsceneImage = this.add.image(512, 384, `${currentLine.character}`);
-    
-        // Mostrar el texto del diálogo
-        this.text = this.add.text(x, y + 25, currentLine.text, {
-            fontSize: `${this.fontSize}px`,
-            fontFamily: this.fontFamily,
-            wordWrap: { width: this.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
-            color: '#FFFFFF'
-        });
-    
-        this.container.add([this.characterName, this.text]);
+    if (this.text) this.text.destroy();
+    if (this.characterName) this.characterName.destroy();
+    if (this.cutsceneImage) this.cutsceneImage.destroy();
+
+    const currentLine = this.dialogLines[this.currentIndex];
+
+    // Mostrar el nombre del personaje
+    this.characterName = this.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
+        fontSize: `${this.fontSize + 4}px`,
+        fontFamily: this.fontFamily,
+        color: '#FFD700'
+    });
+
+    this.text = this.add.text(x, y + 25, currentLine.text, {
+        fontSize: `${this.fontSize}px`,
+        fontFamily: this.fontFamily,
+        wordWrap: { width: this.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
+        color: '#FFFFFF'
+    });
+
+    // Ensure the dialogue box is in front
+    this.container.setDepth(10);
+
+    // Add elements to the container
+    this.container.add([this.characterName, this.text]);
+
+    // Positioning character image based on who is speaking
+    this.cutsceneImage = this.add.image(
+        currentLine.character === "Dante" 
+            ? this.sys.game.canvas.width - this.padding - 50 
+            : this.padding + 50, 
+        this.sys.game.canvas.height - this.windowHeight - this.padding - 50,
+        `${currentLine.character}`
+    ).setScale(1);
+
+    // Set the depth of the image **below** the window
+    this.cutsceneImage.setDepth(5); // Lower than container depth (10)
     }  
 
     startBattle() {
