@@ -55,10 +55,9 @@ export default class Dialogos extends Phaser.Scene {
     }
 
     startDialog(npc, background) {
-        npc = 'samuel';
         switch(npc) {
-            case 'samuel':
-                this.transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };
+            case 'Samuel':
+                this.transitionData = { npc: 'Samuel', pointsNeeded: 100, rounds: 5 };
                 this.dialogLines = [
                     { character: "Samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                     { character: "Dante", text: "¿Cómo sabes mi nombre?" },
@@ -67,8 +66,8 @@ export default class Dialogos extends Phaser.Scene {
                     { character: "Samuel", text: "Las cartas no mienten, Dante. Y esta mesa es mi trono. Si quieres un lugar en la historia de este pueblo, tendrás que arrebatármelo." }
                 ];
                 break;
-            case 'bruja':
-                this.transitionData = { npc: 'bruja', pointsNeeded: 80, rounds: 4 };
+            case 'Helena':
+                this.transitionData = { npc: 'Helena', pointsNeeded: 80, rounds: 4 };
                 this.dialogLines = [
                     { character: "Helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
                     { character: "Dante", text: "¿Tú también? ¿Cómo es que todos saben quién soy?" },

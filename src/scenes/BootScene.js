@@ -36,6 +36,7 @@ import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 //import pictures dialogos
 import Samuel from '../../assets/images/Samuel.png';
 import Dante from '../../assets/images/Dante.png';
+import Helena from '../../assets/images/bruja.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -89,6 +90,7 @@ export default class BootScene extends Phaser.Scene {
     // Load the dialog pictures
     this.load.image('Samuel', Samuel);
     this.load.image('Dante', Dante);
+    this.load.image('Helena', Helena);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
