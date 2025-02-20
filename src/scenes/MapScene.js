@@ -15,191 +15,21 @@ export default class MapScene extends Phaser.Scene {
     //tilesets
     // 4) Add each tileset by matching:
     //    map.addTilesetImage(<Tiled tileset name>, <Phaser key>)
-    const flowersTileset            = map.addTilesetImage('flowers', 'flowers');
-    const mushroomsTileset          = map.addTilesetImage('mushrooms', 'mushrooms');
-    const plantsWinterTileset       = map.addTilesetImage('plants_winter', 'plantsWinter');
-    const treesAutumnTileset        = map.addTilesetImage('trees_autumn', 'treesAutumn');
-    const ladderTileset             = map.addTilesetImage('Ladder', 'ladder');
-    const lightingOutdoorsTileset   = map.addTilesetImage('Lighting, Outdoors', 'lightingOutdoors');
-    const sawhorseTileset           = map.addTilesetImage('Sawhorse', 'Sawhorse');
-    const shelfTileset              = map.addTilesetImage('Shelf', 'shelf');
-    const barrelTileset             = map.addTilesetImage('Barrel', 'barrel');
-    const grindstoneTileset         = map.addTilesetImage('Grindstone', 'grindstone');
-    const flowers2Tileset           = map.addTilesetImage('Flowers', 'flowers2'); // note the capital F
-    const lumberTileset             = map.addTilesetImage('Lumber', 'Lumber');
-    const skeletonsATileset1        = map.addTilesetImage('Skeletons A', 'skeletons'); 
-    // Tiled lists "Skeletons A" more than once, so you may only need to do it once in Phaser:
-    const skeletonsATileset2        = map.addTilesetImage('Skeletons A', 'skeletons'); 
+    const texturasCiudad = map.addTilesetImage('texturas_ciudad', 'texturas_ciudad');
 
-    const christmasWallDecorTileset1= map.addTilesetImage('Christmas Wall Decor', 'christmasWallDecor');
-    // Another "Christmas Wall Decor" entry in Tiled, but same name:
-    const christmasWallDecorTileset2= map.addTilesetImage('Christmas Wall Decor', 'christmasWallDecor');
+    const layerCalle = map.createLayer('suelo', [texturasCiudad], 0, 0);
+    const layerAgua = map.createLayer('agua (solido)', [texturasCiudad], 0, 0);
+    const layerAguaWalkable = map.createLayer('agua (walkable)', [texturasCiudad], 0, 0);
+    const layerHierba = map.createLayer('hierba', [texturasCiudad], 0, 0);
+    const layerDecoracionSuelo = map.createLayer('decoracion suelo (walkable)', [texturasCiudad], 0, 0);
+    const layerEdificios1 = map.createLayer('edificios (solido)', [texturasCiudad], 0, 0);
+    const layerEdificios2 = map.createLayer('decoracion paredes (solido)', [texturasCiudad], 0, 0);
 
-    const castle8darkTileset        = map.addTilesetImage('castle8dark', 'castle8dark');
-    const castleExtrasTileset       = map.addTilesetImage('castle-extras', 'castleExtras');
-    const conifersTileset           = map.addTilesetImage('conifers', 'conifers');
-    const cropsTileset              = map.addTilesetImage('crops', 'crops');
-    const exteriorTilesTileset      = map.addTilesetImage('Exterior Tiles', 'exteriortiles');
-    const farmingFishingTileset     = map.addTilesetImage('farming_fishing', 'farmingFishing');
-    const insideBTileset            = map.addTilesetImage('Inside_B', 'insideB');
-    const interiorTileset           = map.addTilesetImage('Interior', 'interior');
-    const objMiskAtlasTileset       = map.addTilesetImage('obj_misk_atlas', 'obj_misk_atlas');
-    const orangetreesTileset        = map.addTilesetImage('orangetrees', 'orangetrees');
-    const outsideObjectsTileset     = map.addTilesetImage('Outside Objects', 'outsideObjects');
-    const outsideBTileset           = map.addTilesetImage('Outside_B', 'outsideB');
-    const signpostOutsideTileset    = map.addTilesetImage('signpost-outsidestuff', 'signpostOutside');
-    const streetTileset             = map.addTilesetImage('street', 'street');
-    const streetMiscTileset         = map.addTilesetImage('street_misc', 'street_misc');
-    const tavernCookingTileset      = map.addTilesetImage('tavern-cooking', 'tavernCooking');
-    const terrainOutsideTileset     = map.addTilesetImage('Terrain and Outside', 'terrainOutside');
-    const terrainAtlasTileset       = map.addTilesetImage('terrain_atlas', 'terrainAtlas');
-    const townBuildingsTileset      = map.addTilesetImage('town_buildings', 'townBuildings');
-    const victorianHouseTileset     = map.addTilesetImage('victorian house', 'victorianHouse');
-    const adobeBrickRoofTileset     = map.addTilesetImage('Adobe Brick Roof', 'adobeBrickRoof');
-    const barnTileset               = map.addTilesetImage('barn', 'barn');
-    const baseOutAtlasTileset       = map.addTilesetImage('base_out_atlas', 'baseOutAtlas');
-    const blacksmithSmelterTileset  = map.addTilesetImage('blacksmith-smelter', 'blacksmithSmelter');
-    const brickWallBlockEdgingTileset = map.addTilesetImage('Brick Wall Block Edging', 'brickWallBlockEdging');
-    const buildAtlasTileset         = map.addTilesetImage('build_atlas', 'buildAtlas');
-    const olvido3Tileset           = map.addTilesetImage('olvido3', 'olvido3');
-    const olvidooooTileset         = map.addTilesetImage('olvidoooo', 'olvidoooo');
-    const cartelinesTileset         = map.addTilesetImage('cartelines', 'cartelines');
-
-
-    //layers
-
-
-// 1) calle (walkable) => uses "street"
-const layerCalle = map.createLayer('calle (walkable)', [
-  streetTileset
-], 0, 0);
-// No collision for walkable
-// layerCalle.setCollisionByProperty({ isSolid: false }); // optional
-
-// 2) verde (walkable) => uses baseOutAtlas, terrainOutside, castle8dark
-const layerVerde = map.createLayer('verde (walkable)', [
-  baseOutAtlasTileset,
-  terrainOutsideTileset,
-  castle8darkTileset
-], 0, 0);
-// No collision for walkable
-
-// 3) agua (solid) => uses baseOutAtlas
-const layerAgua = map.createLayer('agua (solida)', [
-  baseOutAtlasTileset
-], 0, 0);
-//layerAgua.setCollisionByProperty({ isSolid: true });
-
-// 4) conos (solida) => uses street_misc, conifers
-const layerConos = map.createLayer('conos (solida)', [
-  streetMiscTileset,
-  conifersTileset
-], 0, 0);
-//layerConos.setCollisionByProperty({ isSolid: true });
-
-// 5) cesped (walkable) => uses baseOutAtlas, outsideObjects, flowers, flowers2, crops, mushrooms, terrainOutside, castle8dark
-const layerCesped = map.createLayer('cesped (walkable)', [
-  baseOutAtlasTileset,
-  outsideObjectsTileset,
-  flowersTileset,
-  flowers2Tileset,
-  cropsTileset,
-  mushroomsTileset,
-  terrainOutsideTileset,
-  castle8darkTileset
-], 0, 0);
-// No collision for walkable
-
-// 6) varios (solid) => uses outsideB, signpostOutside, buildAtlas, farmingFishing, shelf, exteriortiles, brickWallBlockEdging, conifers, blacksmithSmelter, baseOutAtlas, tavernCooking, lightingOutdoors, objMiskAtlas, orangetrees, cartelines
-const layerVarios = map.createLayer('varios (solid)', [
-  outsideBTileset,
-  signpostOutsideTileset,
-  buildAtlasTileset,
-  farmingFishingTileset,
-  shelfTileset,
-  exteriorTilesTileset,
-  brickWallBlockEdgingTileset,
-  conifersTileset,
-  blacksmithSmelterTileset,
-  baseOutAtlasTileset,
-  tavernCookingTileset,
-  lightingOutdoorsTileset,
-  objMiskAtlasTileset,
-  orangetreesTileset,
-  cartelinesTileset,
-  adobeBrickRoofTileset
-], 0, 0);
-//layerVarios.setCollisionByProperty({ isSolid: true });
-
-// 7) madera puerto (solid) => uses farmingFishing, outsideB
-const layerMaderaPuerto = map.createLayer('madera puerto (walkable)', [
-  farmingFishingTileset,
-  outsideBTileset
-], 0, 0);
-//layerMaderaPuerto.setCollisionByProperty({ isSolid: true });
-
-// 8) varios 2 (solid) => uses terrainAtlas, castle8dark, farmingFishing, townBuildings, victorianHouse, treesAutumn, buildAtlas, cartelines, exteriortiles
-const layerVarios2 = map.createLayer('varios 2 (solid)', [
-  terrainAtlasTileset,
-  castle8darkTileset,
-  farmingFishingTileset,
-  townBuildingsTileset,
-  victorianHouseTileset,
-  treesAutumnTileset,
-  buildAtlasTileset,
-  cartelinesTileset,
-  exteriorTilesTileset,
-  conifersTileset
-], 0, 0);
-//layerVarios2.setCollisionByProperty({ isSolid: true });
-
-// 9) varios 3 (solid) => uses lightingOutdoors, objMiskAtlas, outsideObjects, insideB, grindstone, blacksmithSmelter, interior, farmingFishing, castle8dark, castleExtras, conifers, baseOutAtlas, buildAtlas, exteriortiles
-const layerVarios3 = map.createLayer('varios 3 (solid)', [
-  lightingOutdoorsTileset,
-  objMiskAtlasTileset,
-  outsideObjectsTileset,
-  insideBTileset,
-  grindstoneTileset,
-  blacksmithSmelterTileset,
-  interiorTileset,
-  farmingFishingTileset,
-  castle8darkTileset,
-  castleExtrasTileset,
-  conifersTileset,
-  baseOutAtlasTileset,
-  buildAtlasTileset,
-  exteriorTilesTileset
-], 0, 0);
-//layerVarios3.setCollisionByProperty({ isSolid: true });
-
-// 10) varios 4 (solid) => uses barn, barrel, farmingFishing, conifers, ladder, terrainAtlas, objMiskAtlas, Lumber, plantsWinter
-const layerVarios4 = map.createLayer('varios 4 (solid)', [
-  barnTileset,
-  barrelTileset,
-  farmingFishingTileset,
-  conifersTileset,
-  ladderTileset,
-  terrainAtlasTileset,
-  objMiskAtlasTileset,
-  lumberTileset,
-  plantsWinterTileset,
-  olvido3Tileset
-], 0, 0);
-//layerVarios4.setCollisionByProperty({ isSolid: true });
-
-// 11) varios 5 (solid) => uses olvidoooo, skeletons, conifers
-const layerVarios5 = map.createLayer('varios 5 (solid)', [
-  olvidooooTileset,
-  skeletonsATileset1,
-  conifersTileset
-], 0, 0);
-//layerVarios5.setCollisionByProperty({ isSolid: true });
-
-// 12) varios 6 (solid) => uses conifers
-const layerVarios6 = map.createLayer('varios 6 (solid)', [
-  conifersTileset
-], 0, 0);
-//layerVarios6.setCollisionByProperty({ isSolid: true });
+    // Enable collisions for the "solido" layers
+    layerAgua.setCollisionByExclusion([-1]);
+    layerEdificios1.setCollisionByExclusion([-1]);
+    layerEdificios2.setCollisionByExclusion([-1]);
+    
 
     // -------------------------------------
     // 2) CREATE PLAYER (PHYSICS SPRITE)
@@ -267,9 +97,18 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
     });
 
     // Create the player as a physics sprite
-    this.player = this.physics.add.sprite(100, 200, 'playerIdle');
+    this.player = this.physics.add.sprite(200, 500, 'playerIdle');
     this.player.setCollideWorldBounds(true); 
     this.player.play('idle-down'); // default
+
+    // Adjust the hitbox to be just the bottom center of the sprite
+    this.player.body.setSize(20, 28); // Set the size of the hitbox
+    this.player.body.setOffset(22, 36); // Offset the hitbox to the bottom center
+
+    // Add collision between the player and the "solido" layers
+    this.physics.add.collider(this.player, layerAgua);
+    this.physics.add.collider(this.player, layerEdificios1);
+    this.physics.add.collider(this.player, layerEdificios2);
 
     // Keep track of last direction so we know which idle animation to show
     this.lastDirection = 'down';
@@ -347,6 +186,14 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
     this.input.keyboard.on('keydown-E', () => {
       this.tryInteract();
     });
+
+    const layerTejados1 = map.createLayer('tejados (walkable)', [
+      texturasCiudad
+    ], 0, 0);
+    
+    const layerTejados2 = map.createLayer('decoracion tejado (walkable)', [
+      texturasCiudad
+    ], 0, 0);
   }
 
   update() {
@@ -435,7 +282,7 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
       let transitionData = {};
 
       if (npc === this.npc_samuel) {
-        transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };
+        this.scene.launch('Dialogos', {npc: 'samuel', });
       } else if (npc === this.npc_bruja) {
         transitionData = { npc: 'bruja', pointsNeeded: 400, rounds: 5 };
       } else if (npc === this.npc_gemelos) {
@@ -446,9 +293,7 @@ const layerVarios6 = map.createLayer('varios 6 (solid)', [
         transitionData = { npc: 'pescador', pointsNeeded: 500, rounds: 2 };
       }
 
-      // Instead of going directly to GameScene, go to the transition
-      this.scene.start('TransicionBatalla', transitionData);
-    }
+      this.scene.bringToTop('Dialogos');    }
     });
   }
 }
