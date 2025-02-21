@@ -284,13 +284,13 @@ export default class MapScene extends Phaser.Scene {
       if (npc === this.npc_samuel) {
         this.scene.launch('Dialogos', {npc: 'samuel', });
       } else if (npc === this.npc_bruja) {
-        transitionData = { npc: 'bruja', pointsNeeded: 400, rounds: 5 };
+        this.scene.launch('Dialogos', {npc: 'bruja', });
       } else if (npc === this.npc_gemelos) {
-        transitionData = { npc: 'gemelos', pointsNeeded: 500, rounds: 2 };
+        this.scene.launch('Dialogos', {npc: 'gemelos', });
       } else if (npc === this.npc_padre) {
-        transitionData = { npc: 'padre', pointsNeeded: 500, rounds: 2 };
+        this.scene.launch('Dialogos', {npc: 'padre', });
       } else if (npc === this.npc_pescador) {
-        transitionData = { npc: 'pescador', pointsNeeded: 500, rounds: 2 };
+        this.scene.launch('Dialogos', {npc: 'pescador', });
       }
 
       this.scene.bringToTop('Dialogos');    }

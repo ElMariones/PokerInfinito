@@ -7,6 +7,7 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import rug from '../../assets/images/rug.png';
 
+
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
 
@@ -56,6 +57,8 @@ export default class BootScene extends Phaser.Scene {
 
     //effects fx
     this.load.plugin('rexhorrifipipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexhorrifipipelineplugin.min.js', true); 
+    this.load.plugin('rexdissolvepipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdissolvepipelineplugin.min.js', true);
+
     
     // Load other images
     this.load.image('playButton', playButton);

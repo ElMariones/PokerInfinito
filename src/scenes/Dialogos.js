@@ -55,7 +55,6 @@ export default class Dialogos extends Phaser.Scene {
     }
 
     startDialog(npc, background) {
-        npc = 'samuel';
         switch(npc) {
             case 'samuel':
                 this.cutsceneImages = ['samuel'];
