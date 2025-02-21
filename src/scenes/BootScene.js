@@ -113,9 +113,25 @@ export default class BootScene extends Phaser.Scene {
     // 2) Load each image used by your Tiled map
     //    The second argument is the actual path to the PNG in your project.
     this.load.image('texturas_ciudad', texturas_ciudad);
+    this.load.image('boil', boil);
+    this.load.image('castleStairs', castleStairs);
+    this.load.image('castle', castle);
+    this.load.image('darkWood', darkWood);
+    this.load.image('dungeon', dungeon);
+    this.load.image('floors', floors);
+    this.load.image('interior', interior);
+    this.load.image('rpg', rpg);
+    this.load.image('tavernCooking', tavernCooking);
+    this.load.image('tavernDeco', taverDeco);
+
 
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
+    this.load.tilemapTiledJSON('asadorReyMap', mapaAsadorRey);
+    this.load.tilemapTiledJSON('casinoMap', mapaCasino);
+    this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
+    this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
+    this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
 
   }
 
