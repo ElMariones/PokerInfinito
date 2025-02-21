@@ -10,6 +10,16 @@ import rug from '../../assets/images/rug.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
+import boil from '../../assets/maps/images/boil.png';
+import castleStairs from '../../assets/maps/images/castleStairs.png';
+import castle from '../../assets/maps/images/castle.png';
+import darkWood from '../../assets/maps/images/dark-wood.png';
+import dungeon from '../../assets/maps/images/dungeonex.png';
+import floors from '../../assets/maps/images/floors.png';
+import interior from '../../assets/maps/images/Interior.png';
+import rpg from '../../assets/maps/images/rpg.png';
+import tavernCooking from '../../assets/maps/images/tavern-cooking.png';
+import taverDeco from '../../assets/maps/images/tavern-deco.png';
 
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
@@ -37,12 +47,18 @@ import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 //import pictures dialogos
 import Samuel from '../../assets/images/Samuel.png';
 import Dante from '../../assets/images/Dante.png';
+import Helena from '../../assets/images/bruja.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
 //importar mapas
 import mapaCiudad from '../../assets/maps/ciudad2.json';
+import mapaAsadorRey from '../../assets/maps/interior_asadorRey.json';
+import mapaCasino from '../../assets/maps/interior_casino.json';
+import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
+import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
+import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -92,6 +108,7 @@ export default class BootScene extends Phaser.Scene {
     // Load the dialog pictures
     this.load.image('Samuel', Samuel);
     this.load.image('Dante', Dante);
+    this.load.image('Helena', Helena);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
@@ -99,9 +116,25 @@ export default class BootScene extends Phaser.Scene {
     // 2) Load each image used by your Tiled map
     //    The second argument is the actual path to the PNG in your project.
     this.load.image('texturas_ciudad', texturas_ciudad);
+    this.load.image('boil', boil);
+    this.load.image('castleStairs', castleStairs);
+    this.load.image('castle', castle);
+    this.load.image('darkWood', darkWood);
+    this.load.image('dungeon', dungeon);
+    this.load.image('floors', floors);
+    this.load.image('interior', interior);
+    this.load.image('rpg', rpg);
+    this.load.image('tavernCooking', tavernCooking);
+    this.load.image('tavernDeco', taverDeco);
+
 
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
+    this.load.tilemapTiledJSON('asadorReyMap', mapaAsadorRey);
+    this.load.tilemapTiledJSON('casinoMap', mapaCasino);
+    this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
+    this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
+    this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
 
   }
 

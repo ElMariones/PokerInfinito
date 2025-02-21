@@ -282,7 +282,7 @@ export default class MapScene extends Phaser.Scene {
       let transitionData = {};
 
       if (npc === this.npc_samuel) {
-        this.scene.launch('Dialogos', {npc: 'samuel', });
+        this.scene.launch('Dialogos', {npc: 'Samuel', });
       } else if (npc === this.npc_bruja) {
         this.scene.launch('Dialogos', {npc: 'bruja', });
       } else if (npc === this.npc_gemelos) {

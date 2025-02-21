@@ -1,9 +1,9 @@
-/* Reset defaults for full-height usage */
+/* Reset defaults for full-height usage hola*/
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 
 /* Custom font example */
