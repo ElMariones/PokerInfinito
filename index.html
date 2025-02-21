@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <!-- 
-       Set initial-scale=1.0 for better mobile rendering.
-       user-scalable=no prevents the user from zooming (common for games).
-       You can tweak this as needed.
-  -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="./css/game.css">
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+  />
+  <link rel="stylesheet" href="./css/game.css" />
   <title>Poker Infinito con Phaser</title>
 </head>
 <body>
-  <h1>juego con phaser</h1>
-  
-  <!-- Game container -->
-  <div id="juego"></div>
-  
-  <!-- The Phaser game code -->
+  <!-- The TV container with the background image -->
+  <div id="tv-container">
+    <!-- The "screen area" inside the TV -->
+    <div id="tv-screen">
+      <!-- Phaser will mount its canvas in here -->
+      <div id="juego"></div>
+    </div>
+  </div>
+
+  <!-- Phaser code -->
   <script src="./src/game.js" type="module"></script>
 </body>
 </html>
