@@ -3,13 +3,26 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "ciudad.json",
+    "activeFile": "C:/Users/mario/Desktop/tiled/ciudad2.json",
     "expandedProjectPaths": [
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "#texturas_ciudad": {
             "scaleInDock": 0.75
+        },
+        "C:/Users/mario/Desktop/tiled/ciudad2.json": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 353.33333333333337,
+                "y": 500
+            }
+        },
+        "C:/Users/mario/Desktop/tiled/ciudad2.json#texturas_ciudad": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 3
         },
         "ciudad.json": {
             "scale": 1.5,
@@ -156,12 +169,14 @@
     "map.lastUsedFormat": "json",
     "map.width": 54,
     "openFiles": [
-        "ciudad.json"
+        "ciudad.json",
+        "C:/Users/mario/Desktop/tiled/ciudad2.json"
     ],
     "project": "ciudad.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "ciudad.json"
+        "ciudad.json",
+        "C:/Users/mario/Desktop/tiled/ciudad2.json"
     ],
     "tileset.embedInMap": true
 }

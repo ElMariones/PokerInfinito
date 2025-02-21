@@ -6,7 +6,7 @@ html, body {
   box-sizing: border-box; 
 }
 
-/* Load custom font */
+/* Custom font example */
 @font-face {
   font-family: 'MarioKart';
   src: url('../assets/fonts/MarioKart.ttf') format('truetype');
@@ -14,14 +14,14 @@ html, body {
   font-style: normal;
 }
 
+/* Background for the page */
 body {
-  /* Existing background */
   background-image: url('../assets/images/wood.png');
   background-repeat: repeat;
   background-size: auto;
 }
 
-/* Existing heading styles */
+/* Heading styles */
 h1 {
   text-align: center;
   color: white;
@@ -30,18 +30,58 @@ h1 {
   font-weight: bold;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
-  
-  /* Apply custom font */
   font-family: 'Mleitod', sans-serif;
 }
 
-/* The game container should fill remaining screen height 
-   after the <h1>, or you can set it to full page */
+/* 
+  1) tv-container uses a "padding-top" trick to maintain the same 
+     aspect ratio as your 2159×1703 TV image (~1.268:1).
+  2) We apply the TV image as a background with no distortion.
+*/
+#tv-container {
+  position: relative;
+  width: 90vw;              /* Adjust as needed (you can also use 100% width) */
+  max-width: 2159px;        /* Prevent it from blowing up too large if desired */
+  margin: 0 auto;           /* Center horizontally */
+  background: url('../assets/images/tv.png') no-repeat center center;
+  background-size: 100% 100%; /* Fill container exactly (no cropping) */
+}
+
+/* 
+  This pseudo-element enforces the container’s aspect ratio of 2159×1703. 
+  1703/2159 ~ 0.788 => ~78.8% 
+*/
+#tv-container::before {
+  content: "";
+  display: block;
+  padding-top: calc(1703 / 2159 * 100%);
+}
+
+/* 
+  Position the "screen area" at the correct spot in percentages:
+    - The full image is 2159×1703
+    - The “screen” is 1580×1080
+    - left offset: (2159 - 1580) / 2 = ~290 px → 290 / 2159 * 100% ≈ 13.43%
+    - top offset: (1703 - 1080) / 2 = ~311.5 px → 311.5 / 1703 * 100% ≈ 18.3%
+    - width: 1580 / 2159 * 100% ≈ 73.18%
+    - height: 1080 / 1703 * 100% ≈ 63.42%
+*/
+#tv-screen {
+  position: absolute;
+  top: 8.3%;
+  left: 12.4%;
+  width: 75.2%;
+  height: 66.4%;
+  overflow: hidden; /* Hide any overflow from Phaser canvas */
+}
+
+/* 
+  The actual Phaser container fills the screen region.
+  Phaser will scale the canvas (1024×768) to fit inside this area 
+  due to `Phaser.Scale.FIT` and `Phaser.Scale.CENTER_BOTH`.
+*/
 #juego {
   width: 100%;
-  height: calc(100% - 120px); /* If you want some space for the heading */
-  /* Alternatively: height: 100vh; to fill the entire screen. */
-  margin: 0 auto;
-  overflow: hidden;
+  height: 100%;
   position: relative;
 }

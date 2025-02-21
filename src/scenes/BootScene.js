@@ -7,6 +7,7 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import rug from '../../assets/images/rug.png';
 
+
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
 import boil from '../../assets/maps/images/boil.png';
@@ -46,6 +47,7 @@ import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 //import pictures dialogos
 import Samuel from '../../assets/images/Samuel.png';
 import Dante from '../../assets/images/Dante.png';
+import Helena from '../../assets/images/bruja.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -71,6 +73,8 @@ export default class BootScene extends Phaser.Scene {
 
     //effects fx
     this.load.plugin('rexhorrifipipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexhorrifipipelineplugin.min.js', true); 
+    this.load.plugin('rexdissolvepipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdissolvepipelineplugin.min.js', true);
+
     
     // Load other images
     this.load.image('playButton', playButton);
@@ -104,6 +108,7 @@ export default class BootScene extends Phaser.Scene {
     // Load the dialog pictures
     this.load.image('Samuel', Samuel);
     this.load.image('Dante', Dante);
+    this.load.image('Helena', Helena);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);

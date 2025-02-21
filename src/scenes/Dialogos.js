@@ -55,11 +55,9 @@ export default class Dialogos extends Phaser.Scene {
     }
 
     startDialog(npc, background) {
-        npc = 'samuel';
         switch(npc) {
-            case 'samuel':
-                this.cutsceneImages = ['samuel'];
-                this.transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };
+            case 'Samuel':
+                this.transitionData = { npc: 'Samuel', pointsNeeded: 100, rounds: 5 };
                 this.dialogLines = [
                     { character: "Samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                     { character: "Dante", text: "¿Cómo sabes mi nombre?" },
@@ -68,9 +66,8 @@ export default class Dialogos extends Phaser.Scene {
                     { character: "Samuel", text: "Las cartas no mienten, Dante. Y esta mesa es mi trono. Si quieres un lugar en la historia de este pueblo, tendrás que arrebatármelo." }
                 ];
                 break;
-            case 'bruja':
-                this.cutsceneImages = ['bruja'];
-                this.transitionData = { npc: 'bruja', pointsNeeded: 80, rounds: 4 };
+            case 'Helena':
+                this.transitionData = { npc: 'Helena', pointsNeeded: 80, rounds: 4 };
                 this.dialogLines = [
                     { character: "Helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
                     { character: "Dante", text: "¿Tú también? ¿Cómo es que todos saben quién soy?" },
@@ -81,7 +78,6 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
             case 'gemelos':
-                this.cutsceneImages = ['gemelos1', 'gemelos2'];
                 this.transitionData = { npc: 'gemelos', pointsNeeded: 90, rounds: 3 };
                 this.dialogLines = [
                     { character: "Hermano 1", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
@@ -94,14 +90,12 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
             case 'padre':
-                this.cutsceneImages = ['padre1', 'padre2'];
                 this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3 };
                 this.dialogLines = [
                    //Falta poner
                 ];
                 break;
             case 'pescador':
-                this.cutsceneImages = ['pescador1', 'pescador2'];
                 this.transitionData = { npc: 'pescador', pointsNeeded: 60, rounds: 2 };
                 this.dialogLines = [
                     { character: "Marco", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
@@ -138,45 +132,86 @@ export default class Dialogos extends Phaser.Scene {
     }
     
     nextDialogLine() {
-        this.currentIndex++;
-
-        if (this.currentIndex >= this.dialogLines.length) {
-            this.container.setVisible(false);
-            this.startBattle();
-            if (this.callback) this.callback();
+        if (this.isTyping) {
+            // If the text is still typing, finish it instantly
+            this.text.setText(this.dialogLines[this.currentIndex].text);
+            this.isTyping = false; // Mark as fully typed
         } else {
-        this.showText();
+            // Move to the next line
+            this.currentIndex++;
+    
+            if (this.currentIndex >= this.dialogLines.length) {
+                this.container.setVisible(false);
+                this.startBattle();
+                if (this.callback) this.callback();
+            } else {
+                this.showText();
+            }
         }
     }
+    
     
     showText() {
         let x = this.padding + 10;
         let y = this.sys.game.canvas.height - this.windowHeight - this.padding + 15;
     
+        // Destroy previous text objects
         if (this.text) this.text.destroy();
         if (this.characterName) this.characterName.destroy();
         if (this.cutsceneImage) this.cutsceneImage.destroy();
     
         const currentLine = this.dialogLines[this.currentIndex];
     
-        // Mostrar el nombre del personaje
         this.characterName = this.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
             fontSize: `${this.fontSize + 4}px`,
             fontFamily: this.fontFamily,
             color: '#FFD700'
         });
-
-        this.cutsceneImage = this.add.image(512, 384, `${currentLine.character}`);
     
-        // Mostrar el texto del diálogo
-        this.text = this.add.text(x, y + 25, currentLine.text, {
+        this.text = this.add.text(x, y + 25, "", {
             fontSize: `${this.fontSize}px`,
             fontFamily: this.fontFamily,
             wordWrap: { width: this.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
             color: '#FFFFFF'
         });
     
+        this.container.setDepth(10);
         this.container.add([this.characterName, this.text]);
+    
+        this.cutsceneImage = this.add.image(
+            currentLine.character === "Dante" 
+                ? this.sys.game.canvas.width - this.padding - 50 
+                : this.padding + 50, 
+            this.sys.game.canvas.height - this.windowHeight - this.padding - 50,
+            `${currentLine.character}`
+        ).setScale(1);
+        
+        this.cutsceneImage.setDepth(5);
+    
+        // Cancel previous typing event if it exists
+        if (this.typingEvent) {
+            this.typingEvent.remove(false);
+        }
+    
+        // Typing effect logic
+        this.isTyping = true; // Start typing mode
+        let fullText = currentLine.text;
+        let currentIndex = 0;
+        let typingSpeed = 40; // Adjust speed here (lower = faster)
+    
+        this.typingEvent = this.time.addEvent({
+            delay: typingSpeed,
+            repeat: fullText.length - 1,
+            callback: () => {
+                if (!this.isTyping) return;
+                this.text.setText(fullText.substring(0, currentIndex + 1));
+                currentIndex++;
+    
+                if (currentIndex >= fullText.length) {
+                    this.isTyping = false; // Finished typing
+                }
+            }
+        });
     }  
 
     startBattle() {
