@@ -11,6 +11,8 @@ export default class IntroScene extends Phaser.Scene {
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
     
+    
+
     // Background
     const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug')
     .setOrigin(0, 0);
@@ -42,6 +44,8 @@ export default class IntroScene extends Phaser.Scene {
     // Start the MAP scene (instead of GameScene) on button click
     playBtn.on('pointerdown', () => {
       // Resume the AudioContext (in case it was suspended)
+      console.log("🎮 Botón 'Jugar' presionado. Intentando iniciar MapScene...");
+
       if (this.sound.context.state === 'suspended') {
         this.sound.context.resume().then(() => {
           console.log('AudioContext resumed successfully');

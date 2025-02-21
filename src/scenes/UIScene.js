@@ -1,3 +1,5 @@
+import DialogText from '../DialogText.js'; // Ajusta la ruta si es necesario
+
 export default class UIScene extends Phaser.Scene {  
   constructor() {
     super({ key: 'UIScene', active: false });
@@ -12,7 +14,6 @@ export default class UIScene extends Phaser.Scene {
     // -------------------------
     // END POST-PROCESSING EFFECTS
     // -------------------------
-    
     this.scene.bringToTop();
     this.gameScene = this.scene.get('GameScene');
 
@@ -147,4 +148,10 @@ export default class UIScene extends Phaser.Scene {
 
     this.cardsLeftText.setText(`cartas restantes: ${this.gameScene.deck.length}`);
   }
+
+  showDialog(text, character, background) {
+    this.dialogBox.setText(text, character, background);
+    this.dialogBox.setVisible(true);
+  }
+
 }
