@@ -27,6 +27,8 @@ let config = {
     }
   },
   pixelArt: true,
+  roundPixels: true,
+  
   backgroundColor: '#006400',
   scene: [
     BootScene,
