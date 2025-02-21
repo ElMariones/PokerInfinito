@@ -9,6 +9,16 @@ import rug from '../../assets/images/rug.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
+import boil from '../../assets/maps/images/boil.png';
+import castleStairs from '../../assets/maps/images/castleStairs.png';
+import castle from '../../assets/maps/images/castle.png';
+import darkWood from '../../assets/maps/images/dark-wood.png';
+import dungeon from '../../assets/maps/images/dungeonex.png';
+import floors from '../../assets/maps/images/floors.png';
+import interior from '../../assets/maps/images/Interior.png';
+import rpg from '../../assets/maps/images/rpg.png';
+import tavernCooking from '../../assets/maps/images/tavern-cooking.png';
+import taverDeco from '../../assets/maps/images/tavern-deco.png';
 
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
@@ -43,6 +53,11 @@ import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
 //importar mapas
 import mapaCiudad from '../../assets/maps/ciudad2.json';
+import mapaAsadorRey from '../../assets/maps/interior_asadorRey.json';
+import mapaCasino from '../../assets/maps/interior_casino.json';
+import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
+import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
+import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
