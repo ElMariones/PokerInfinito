@@ -263,10 +263,7 @@ export default class MapScene extends Phaser.Scene {
           }
         });
   }
-  
-  
-  
-
+    
   tryInteract() {
     // Check if player is close enough to an NPC
     const interactDistance = 50;

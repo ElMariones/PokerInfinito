@@ -82,7 +82,7 @@
         {
          "columns":16,
          "firstgid":1,
-         "image":"LPC TEXTURAS\/dark-wood.png",
+         "image":"images\/dark-wood.png",
          "imageheight":1024,
          "imagewidth":512,
          "margin":0,
@@ -95,7 +95,7 @@
         {
          "columns":16,
          "firstgid":513,
-         "image":"LPC TEXTURAS\/tavern-deco.png",
+         "image":"images\/tavern-deco.png",
          "imageheight":1792,
          "imagewidth":512,
          "margin":0,
@@ -108,7 +108,7 @@
         {
          "columns":16,
          "firstgid":1409,
-         "image":"LPC TEXTURAS\/tavern-cooking.png",
+         "image":"images\/tavern-cooking.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,
@@ -121,7 +121,7 @@
         {
          "columns":32,
          "firstgid":1665,
-         "image":"LPC TEXTURAS\/floors.png",
+         "image":"images\/floors.png",
          "imageheight":2048,
          "imagewidth":1024,
          "margin":0,

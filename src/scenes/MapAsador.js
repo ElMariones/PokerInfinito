@@ -1,10 +1,190 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export default class MapScene extends Phaser.Scene {
   constructor() {
     super('MapAsador');
   }
 
-  
+  create(){
+    const width = this.cameras.main.width;
+    const height = this.cameras.main.height;
 
+
+    const map = this.make.tilemap({ key: 'asadorReyMap' });
+
+    const texturasSuelosParedes = map.addTilesetImage('floors', 'floors');
+    const texturasMobiliario = map.addTilesetImage('darkWood', 'darkWood');
+    const texturasDecoracion = map.addTilesetImage('tavernDeco', 'tavernDeco');
+    const texturasCocina = map.addTilesetImage('tavernCooking', 'tavernCooking');
+
+    const layerSuelos = map.createLayer('suelo', texturasSuelosParedes, 0, 0);
+    const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion], 0, 0);
+    const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
+    const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
+
+    layerSuelos.setCollisionByExclusion([-1]);
+    layerPared.setCollisionByExclusion([-1]);
+    layerMobiliario.setCollisionByExclusion([-1]);
+
+     // -------------------------------------
+    // 2) CREATE PLAYER (PHYSICS SPRITE)
+    // -------------------------------------
+    // We assume you've loaded the sprite sheets in BootScene as:
+    //   this.load.spritesheet('playerIdle', 'assets/Idle.png', { frameWidth: 64, frameHeight: 64 });
+    //   this.load.spritesheet('playerWalk', 'assets/Walk.png', { frameWidth: 64, frameHeight: 64 });
+    // in your create() or preload() for that scene.
+
+    // Define animations for idle
+    this.anims.create({
+        key: 'idle-up',
+        frames: [{ key: 'playerIdle', frame: 0 }],
+        frameRate: 1,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'idle-left',
+        frames: [{ key: 'playerIdle', frame: 1 }],
+        frameRate: 1,
+        repeat: -1
+    });
+      this.anims.create({
+        key: 'idle-down',
+        frames: [{ key: 'playerIdle', frame: 2 }],
+        frameRate: 1,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'idle-right',
+        frames: [{ key: 'playerIdle', frame: 3 }],
+        frameRate: 1,
+        repeat: -1
+    });
+  
+      // Define animations for walk
+      // Walk.png is 512×256 => 8 columns × 4 rows = 32 frames
+      //   Row 1 (frames 0..7): up
+      //   Row 2 (frames 8..15): left
+      //   Row 3 (frames 16..23): down
+      //   Row 4 (frames 24..31): right
+    this.anims.create({
+        key: 'walk-up',
+        frames: this.anims.generateFrameNumbers('playerWalk', { start: 0, end: 7 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'walk-left',
+        frames: this.anims.generateFrameNumbers('playerWalk', { start: 8, end: 15 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'walk-down',
+        frames: this.anims.generateFrameNumbers('playerWalk', { start: 16, end: 23 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'walk-right',
+        frames: this.anims.generateFrameNumbers('playerWalk', { start: 24, end: 31 }),
+        frameRate: 8,
+        repeat: -1
+    });
+  
+    // Create the player as a physics sprite
+    this.player = this.physics.add.sprite(200, 500, 'playerIdle');
+    this.player.setCollideWorldBounds(true); 
+    this.player.play('idle-down'); // default
+
+    // Adjust the hitbox to be just the bottom center of the sprite
+    this.player.body.setSize(20, 28); // Set the size of the hitbox
+    this.player.body.setOffset(22, 36); // Offset the hitbox to the bottom center
+
+    //Create collision between player and walls
+    this.physics.add.collider(this.player, layerSuelos);
+    this.physics.add.collider(this.player, layerPared);
+    this.physics.add.collider(this.player, layerMobiliario);
+
+    // Keep track of last direction so we know which idle animation to show
+    this.lastDirection = 'down';
+
+    // -------------------------------------
+    // 3) CAMERA FOLLOWS PLAYER
+    // -------------------------------------
+    // Set world bounds to match the tilemap’s size
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    // Set the camera zoom level (e.g., 2 for double zoom)
+    this.cameras.main.setZoom(2);
+
+    // Make the camera follow the player
+    this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+
+    // -------------------------------------
+    // 4) KEY INPUTS
+    // -------------------------------------
+    this.cursors = this.input.keyboard.addKeys({
+        up: Phaser.Input.Keyboard.KeyCodes.W,
+        down: Phaser.Input.Keyboard.KeyCodes.S,
+        left: Phaser.Input.Keyboard.KeyCodes.A,
+        right: Phaser.Input.Keyboard.KeyCodes.D,
+        interact: Phaser.Input.Keyboard.KeyCodes.E
+    });
+  }
+
+  update() {
+    const speed = 100;
+    
+    // Check which keys are down
+    const up = this.cursors.up.isDown;
+    const down = this.cursors.down.isDown;
+    const left = this.cursors.left.isDown;
+    const right = this.cursors.right.isDown;
+  
+    // Count how many directions are pressed
+    const pressedCount = [up, down, left, right].filter(Boolean).length;
+  
+    // If exactly one direction is pressed, update our lastSingleDirection
+    if (pressedCount === 1) {
+      if (up) {
+        this.lastSingleDirection = 'up';
+      } else if (down) {
+        this.lastSingleDirection = 'down';
+      } else if (left) {
+        this.lastSingleDirection = 'left';
+      } else if (right) {
+        this.lastSingleDirection = 'right';
+      }
+    } 
+    // If zero are pressed, idle
+    else if (pressedCount === 0) {
+      this.player.setVelocity(0);
+      // Use whichever idle animation corresponds to the lastSingleDirection
+      this.player.play('idle-' + this.lastSingleDirection, true);
+      return; // Stop here, so we don't set velocity again below
+    }
+  
+    // If we get here, pressedCount >= 1
+    // Move in the lastSingleDirection we have stored
+    switch (this.lastSingleDirection) {
+      case 'up':
+        this.player.setVelocity(0, -speed);
+        this.player.play('walk-up', true);
+        break;
+      case 'down':
+        this.player.setVelocity(0, speed);
+        this.player.play('walk-down', true);
+        break;
+      case 'left':
+        this.player.setVelocity(-speed, 0);
+        this.player.play('walk-left', true);
+        break;
+      case 'right':
+        this.player.setVelocity(speed, 0);
+        this.player.play('walk-right', true);
+        break;
+    }
+  }
 }
