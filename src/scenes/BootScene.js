@@ -49,13 +49,13 @@ import ovejaIdle from '../../assets/images/sprites/oveja/Idle.png';
 import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
 
 //import pictures dialogos
-import Samuel from '../../assets/images/samuel.png';
-import Dante from '../../assets/images/dante.png';
-import Helena from '../../assets/images/bruja.png';
-import Oveja from '../../assets/images/oveja.png';
-import Padre from '../../assets/images/padre.png';
-import Gemelos from '../../assets/images/gemelos.png';
-import Pescador from '../../assets/images/pescador.png';
+import samuel from '../../assets/images/samuel.png';
+import dante from '../../assets/images/dante.png';
+import helena from '../../assets/images/bruja.png';
+import oveja from '../../assets/images/oveja.png';
+import padre from '../../assets/images/padre.png';
+import gemelos from '../../assets/images/gemelos.png';
+import pescador from '../../assets/images/pescador.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -118,13 +118,13 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('ovejaWalk', ovejaWalk, { frameWidth: 64, frameHeight: 64 });
 
     // Load the dialog pictures
-    this.load.image('Samuel', Samuel);
-    this.load.image('Dante', Dante);
-    this.load.image('Helena', Helena);
-    this.load.image('Oveja', Oveja);
-    this.load.image('Padre', Padre);
-    this.load.image('Gemelos', Gemelos);
-    this.load.image('Pescador', Pescador);
+    this.load.image('samuel', samuel);
+    this.load.image('dante', dante);
+    this.load.image('helena', helena);
+    this.load.image('oveja', oveja);
+    this.load.image('padre', padre);
+    this.load.image('gemelos', gemelos);
+    this.load.image('pescador', pescador);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
