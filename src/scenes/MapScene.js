@@ -65,11 +65,24 @@ export default class MapScene extends Phaser.Scene {
 
     // 2) Add NPCs
     //    (name, x, y, animation, facesPlayer)
-    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', true);
+    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false);
+    const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false);
     const bruja = this.npcManager.addNPC('bruja', 993, 434, 'idle-down', false);
     const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true);
     const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false);
     const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true);
+
+    this.npcManager.setNPCPath(samuel, [
+      { x: 256, y: 426 },
+      { x: 400, y: 426 }
+    ], 40, true);
+
+    this.npcManager.setNPCPath(oveja, [
+      { x: 500, y: 630 },
+      { x: 350, y: 630 },
+      { x: 350, y: 710 },
+      { x: 500, y: 710 }
+    ], 60, true);
     
 
     this.npcArray = this.npcManager.getAllNPCs();

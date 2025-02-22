@@ -44,6 +44,9 @@ import padreWalk from '../../assets/images/sprites/padre/Walk.png';
 import gemelosIdle from '../../assets/images/sprites/gemelos/Idle.png';
 import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 
+import ovejaIdle from '../../assets/images/sprites/oveja/Idle.png';
+import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
+
 //import pictures dialogos
 import Samuel from '../../assets/images/samuel.png';
 import Dante from '../../assets/images/dante.png';
@@ -104,6 +107,9 @@ export default class BootScene extends Phaser.Scene {
 
     this.load.spritesheet('gemelosIdle', gemelosIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('gemelosWalk', gemelosWalk, { frameWidth: 64, frameHeight: 64 });
+
+    this.load.spritesheet('ovejaIdle', ovejaIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('ovejaWalk', ovejaWalk, { frameWidth: 64, frameHeight: 64 });
 
     // Load the dialog pictures
     this.load.image('Samuel', Samuel);

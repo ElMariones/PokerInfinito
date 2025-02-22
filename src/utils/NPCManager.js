@@ -20,7 +20,7 @@ export default class NPCManager {
    * Call this once in your scene's create() before adding NPCs.
    */
   createAnimations() {
-    const npcNames = ['samuel', 'bruja', 'pescador', 'padre', 'gemelos'];
+    const npcNames = ['samuel', 'bruja', 'pescador', 'padre', 'gemelos', 'oveja'];
 
     npcNames.forEach(npc => {
       // Idle animations
@@ -48,6 +48,59 @@ export default class NPCManager {
         frameRate: 1,
         repeat: -1
       });
+
+      // Walk animations (based on your Walk.png sprite, 8 frames per direction)
+      if (npc === 'oveja') {
+        this.scene.anims.create({
+          key: 'oveja-walk-up',
+          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 0, end: 3 }),
+          frameRate: 8,
+          repeat: -1
+        });
+        this.scene.anims.create({
+          key: 'oveja-walk-left',
+          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 4, end: 7 }),
+          frameRate: 8,
+          repeat: -1
+        });
+        this.scene.anims.create({
+          key: 'oveja-walk-down',
+          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 8, end: 11 }),
+          frameRate: 8,
+          repeat: -1
+        });
+        this.scene.anims.create({
+          key: 'oveja-walk-right',
+          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 12, end: 15 }),
+          frameRate: 8,
+          repeat: -1
+        });
+      } else {
+        this.scene.anims.create({
+          key: `${npc}-walk-up`,
+          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 0, end: 7 }),
+          frameRate: 8,
+          repeat: -1
+        });
+        this.scene.anims.create({
+          key: `${npc}-walk-left`,
+          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 8, end: 15 }),
+          frameRate: 8,
+          repeat: -1
+        });
+        this.scene.anims.create({
+          key: `${npc}-walk-down`,
+          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 16, end: 23 }),
+          frameRate: 8,
+          repeat: -1
+        });
+        this.scene.anims.create({
+          key: `${npc}-walk-right`,
+          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 24, end: 31 }),
+          frameRate: 8,
+          repeat: -1
+        });
+      }
 
       // Example if you had a "dance" sprite sheet for each NPC:
       // this.scene.anims.create({
@@ -132,8 +185,13 @@ export default class NPCManager {
       const facesPlayer = npc.getData('facesPlayer');
       const name = npc.getData('npcName');
 
+      if (name === 'oveja') {
+      npc.body.setSize(20, 28);
+      npc.body.setOffset(22, 20); // Adjusted offset for 'oveja'
+      } else {
       npc.body.setSize(20, 28);
       npc.body.setOffset(22, 36);
+      }
 
       // 1) Move along path if defined
       if (path && path.length > 0) {
@@ -145,22 +203,33 @@ export default class NPCManager {
           // Move NPC toward the current waypoint
           const angle = Phaser.Math.Angle.Between(npc.x, npc.y, target.x, target.y);
           npc.body.setVelocity(
-            Math.cos(angle) * speed,
-            Math.sin(angle) * speed
+        Math.cos(angle) * speed,
+        Math.sin(angle) * speed
           );
+
+          // Play walking animation based on direction
+          if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
+        npc.play(`${name}-walk-right`, true);
+          } else if (angle >= Math.PI / 4 && angle < 3 * Math.PI / 4) {
+        npc.play(`${name}-walk-down`, true);
+          } else if (angle >= -3 * Math.PI / 4 && angle < -Math.PI / 4) {
+        npc.play(`${name}-walk-up`, true);
+          } else {
+        npc.play(`${name}-walk-left`, true);
+          }
         } else {
           // Reached the waypoint
           npc.setData('pathIndex', index + 1);
 
           // If we've exceeded the path, loop or stop
           if (npc.getData('pathIndex') >= path.length) {
-            if (npc.getData('loopPath')) {
-              npc.setData('pathIndex', 0);
-            } else {
-              // Stop at the last waypoint
-              npc.setData('pathIndex', path.length - 1);
-              npc.body.setVelocity(0, 0);
-            }
+        if (npc.getData('loopPath')) {
+          npc.setData('pathIndex', 0);
+        } else {
+          // Stop at the last waypoint
+          npc.setData('pathIndex', path.length - 1);
+          npc.body.setVelocity(0, 0);
+        }
           }
         }
       } else {
