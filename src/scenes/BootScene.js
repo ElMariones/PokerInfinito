@@ -5,6 +5,7 @@ import cards from '../cards.js';
 import playButton from '../../assets/images/play.png';
 import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
+import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
 
 
@@ -85,6 +86,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    this.load.image('interactKey', interactKey);
 
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);

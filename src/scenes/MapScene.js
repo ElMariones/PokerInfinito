@@ -105,12 +105,48 @@ export default class MapScene extends Phaser.Scene {
   }
 
   update() {
-
     this.player.update();
-
     this.npcManager.updateNPCs();
-    
+  
+    // Find the closest NPC within range
+    const interactDistance = 50;
+    let nearestNpc = null;
+    let minDist = Infinity;
+  
+    this.npcArray.forEach(npc => {
+      const dist = Phaser.Math.Distance.Between(
+        this.player.x, this.player.y,
+        npc.x, npc.y
+      );
+      if (dist < interactDistance && dist < minDist) {
+        minDist = dist;
+        nearestNpc = npc;
+      }
+    });
+  
+    // Show/hide the interact UI depending on the nearest NPC
+    if (nearestNpc) {
+      if (!this.interactUI) {
+        // Create the sprite above the NPC
+        this.interactUI = this.add.image(nearestNpc.x, nearestNpc.y - 30, 'interactKey');
+        // If you want the button to stay world-aligned, omit setScrollFactor(0)
+        // If you want it to be fixed to the camera, keep setScrollFactor(0).
+        // this.interactUI.setScrollFactor(0);
+  
+        this.interactUI.setScale(0.07);
+      } else {
+        // Move the existing sprite above the NPC
+        this.interactUI.setPosition(nearestNpc.x, nearestNpc.y - 30);
+        this.interactUI.setVisible(true);
+      }
+    } else {
+      // No NPC in range; hide the interact UI if it exists
+      if (this.interactUI) {
+        this.interactUI.setVisible(false);
+      }
+    }
   }
+  
   
   
   
