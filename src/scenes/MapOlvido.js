@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 
-export default class MapAsador extends Phaser.Scene {
+export default class MapOlvido extends Phaser.Scene {
   constructor() {
-    super('MapAsador');
+    super('MapOlvido');
   }
 
   create() {
@@ -11,19 +11,20 @@ export default class MapAsador extends Phaser.Scene {
     const height = this.cameras.main.height;
 
     // Mapa
-    const map = this.make.tilemap({ key: 'asadorReyMap' });
+    const map = this.make.tilemap({ key: 'cavernaOlvidoMap' });
 
     // Tilesets
+    const texturasBoil = map.addTilesetImage('boil', 'boil');
     const texturasSuelosParedes = map.addTilesetImage('floors', 'floors');
     const texturasMobiliario = map.addTilesetImage('dark-wood', 'darkWood');
     const texturasDecoracion = map.addTilesetImage('tavern-deco', 'tavernDeco');
-    const texturasCocina = map.addTilesetImage('tavern-cooking', 'tavernCooking');
+    const texturasDungeon = map.addTilesetImage('dungeonex', 'dungeon');
 
     // Capas del mapa
-    const layerSuelos = map.createLayer('suelo', texturasSuelosParedes, 0, 0);
-    const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
+    const layerSuelos = map.createLayer('suelo', texturasDungeon, 0, 0);
+    const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDungeon], 0, 0);
     const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
-    const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasSuelosParedes], 0, 0);
+    const layerMobiliario = map.createLayer('moviliario', [texturasDecoracion, texturasSuelosParedes, texturasDungeon], 0, 0);
   
 
     // Habilitar colisiones en las capas sólidas
@@ -57,7 +58,7 @@ export default class MapAsador extends Phaser.Scene {
       this.tryInteract();
     });
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasBoil], 0, 0);
     
   }
 

@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 
-export default class MapAsador extends Phaser.Scene {
+export default class MapPuerto extends Phaser.Scene {
   constructor() {
-    super('MapAsador');
+    super('MapPuerto');
   }
 
   create() {
@@ -11,19 +11,18 @@ export default class MapAsador extends Phaser.Scene {
     const height = this.cameras.main.height;
 
     // Mapa
-    const map = this.make.tilemap({ key: 'asadorReyMap' });
+    const map = this.make.tilemap({ key: 'puertoAzulMap' });
 
     // Tilesets
     const texturasSuelosParedes = map.addTilesetImage('floors', 'floors');
     const texturasMobiliario = map.addTilesetImage('dark-wood', 'darkWood');
     const texturasDecoracion = map.addTilesetImage('tavern-deco', 'tavernDeco');
-    const texturasCocina = map.addTilesetImage('tavern-cooking', 'tavernCooking');
 
     // Capas del mapa
     const layerSuelos = map.createLayer('suelo', texturasSuelosParedes, 0, 0);
     const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
     const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
-    const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasSuelosParedes], 0, 0);
+    const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasSuelosParedes], 0, 0);
   
 
     // Habilitar colisiones en las capas sólidas
@@ -57,7 +56,7 @@ export default class MapAsador extends Phaser.Scene {
       this.tryInteract();
     });
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion], 0, 0);
     
   }
 

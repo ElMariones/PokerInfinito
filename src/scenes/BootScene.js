@@ -60,6 +60,7 @@ import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 
+
 export default class BootScene extends Phaser.Scene {
   constructor() {
     super('BootScene');
@@ -135,7 +136,6 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
-
   }
 
   create() {
