@@ -45,8 +45,8 @@ import gemelosIdle from '../../assets/images/sprites/gemelos/Idle.png';
 import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 
 //import pictures dialogos
-import Samuel from '../../assets/images/Samuel.png';
-import Dante from '../../assets/images/Dante.png';
+import Samuel from '../../assets/images/samuel.png';
+import Dante from '../../assets/images/dante.png';
 import Helena from '../../assets/images/bruja.png';
 
 // Load the font
