@@ -65,11 +65,24 @@ export default class MapScene extends Phaser.Scene {
 
     // 2) Add NPCs
     //    (name, x, y, animation, facesPlayer)
-    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', true);
+    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false);
+    const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false);
     const bruja = this.npcManager.addNPC('bruja', 993, 434, 'idle-down', false);
     const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true);
     const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false);
     const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true);
+
+    this.npcManager.setNPCPath(samuel, [
+      { x: 256, y: 426 },
+      { x: 400, y: 426 }
+    ], 40, true);
+
+    this.npcManager.setNPCPath(oveja, [
+      { x: 500, y: 630 },
+      { x: 350, y: 630 },
+      { x: 350, y: 710 },
+      { x: 500, y: 710 }
+    ], 60, true);
     
 
     this.npcArray = this.npcManager.getAllNPCs();
@@ -92,13 +105,52 @@ export default class MapScene extends Phaser.Scene {
   }
 
   update() {
-
     this.player.update();
-
     this.npcManager.updateNPCs();
-    
+  
+    // Find the closest NPC within range
+    const interactDistance = 50;
+    let nearestNpc = null;
+    let minDist = Infinity;
+  
+    this.npcArray.forEach(npc => {
+      const dist = Phaser.Math.Distance.Between(
+        this.player.x, this.player.y,
+        npc.x, npc.y
+      );
+      if (dist < interactDistance && dist < minDist) {
+        minDist = dist;
+        nearestNpc = npc;
+      }
+    });
+  
+    // Show/hide the interact UI depending on the nearest NPC
+    if (nearestNpc) {
+      if (!this.interactUI) {
+        // Create the sprite above the NPC
+        this.interactUI = this.add.image(nearestNpc.x, nearestNpc.y - 30, 'interactKey');
+        // If you want the button to stay world-aligned, omit setScrollFactor(0)
+        // If you want it to be fixed to the camera, keep setScrollFactor(0).
+        // this.interactUI.setScrollFactor(0);
+  
+        this.interactUI.setScale(0.07);
+      } else {
+        // Move the existing sprite above the NPC
+        this.interactUI.setPosition(nearestNpc.x, nearestNpc.y - 30);
+        this.interactUI.setVisible(true);
+      }
+    } else {
+      // No NPC in range; hide the interact UI if it exists
+      if (this.interactUI) {
+        this.interactUI.setVisible(false);
+      }
+    }
   }
-    
+  
+  
+  
+  
+
   tryInteract() {
     // Check if player is close enough to an NPC
     const interactDistance = 50;
@@ -114,16 +166,19 @@ export default class MapScene extends Phaser.Scene {
         const name = npc.getData('npcName');
 
         if (name === 'samuel') {
-          this.scene.launch('Dialogos', {npc: 'Samuel', });
+          this.scene.launch('Dialogos', {npc: 'samuel', });
         } else if (name === 'bruja') {
-          this.scene.launch('Dialogos', {npc: 'Helena', });
+          this.scene.launch('Dialogos', {npc: 'helena', });
         } else if (name === 'gemelos') {
           this.scene.launch('Dialogos', {npc: 'gemelos', });
         } else if (name === 'padre') {
           this.scene.launch('Dialogos', {npc: 'padre', });
         } else if (name === 'pescador') {
           this.scene.launch('Dialogos', {npc: 'pescador', });
+        } else if (name === 'oveja') {
+          this.scene.launch('Dialogos', {npc: 'oveja', });
         }
+        
       this.scene.bringToTop('Dialogos');    }
     });
   }
