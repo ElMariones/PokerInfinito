@@ -170,11 +170,11 @@ export default class MapScene extends Phaser.Scene {
         } else if (name === 'bruja') {
           this.scene.launch('Dialogos', {npc: 'Helena', });
         } else if (name === 'gemelos') {
-          this.scene.launch('Dialogos', {npc: 'gemelos', });
+          this.scene.launch('Dialogos', {npc: 'Gemelos', });
         } else if (name === 'padre') {
-          this.scene.launch('Dialogos', {npc: 'padre', });
+          this.scene.launch('Dialogos', {npc: 'Padre', });
         } else if (name === 'pescador') {
-          this.scene.launch('Dialogos', {npc: 'pescador', });
+          this.scene.launch('Dialogos', {npc: 'Pescador', });
         } else if (name === 'oveja') {
           this.scene.launch('Dialogos', {npc: 'oveja', });
         }

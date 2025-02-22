@@ -53,6 +53,9 @@ import Samuel from '../../assets/images/samuel.png';
 import Dante from '../../assets/images/dante.png';
 import Helena from '../../assets/images/bruja.png';
 import Oveja from '../../assets/images/oveja.png';
+import Padre from '../../assets/images/padre.png';
+import Gemelos from '../../assets/images/gemelos.png';
+import Pescador from '../../assets/images/pescador.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -119,6 +122,9 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('Dante', Dante);
     this.load.image('Helena', Helena);
     this.load.image('Oveja', Oveja);
+    this.load.image('Padre', Padre);
+    this.load.image('Gemelos', Gemelos);
+    this.load.image('Pescador', Pescador);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);

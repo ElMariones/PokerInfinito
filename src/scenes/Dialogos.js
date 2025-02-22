@@ -77,48 +77,48 @@ export default class Dialogos extends Phaser.Scene {
                     { character: "Helena", text: "Mmm... eso me gusta. Juguemos, antes de que olvides por qué viniste." }
                 ];
                 break;
-            case 'gemelos':
-                this.transitionData = { npc: 'gemelos', pointsNeeded: 90, rounds: 3 };
+            case 'Gemelos':
+                this.transitionData = { npc: 'Gemelos', pointsNeeded: 90, rounds: 3 };
                 this.dialogLines = [
-                    { character: "Hermano 1", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
-                    { character: "Hermano 2", text: "Oh sí… creía que tardaría más en aparecer." },
+                    { character: "Gemelos", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
+                    { character: "Gemelos", text: "Oh sí… creía que tardaría más en aparecer." },
                     { character: "Dante", text: "Son todos igual de insoportables." },
-                    { character: "Hermano 1", text: "Este ha salido peor que su padre. De igual manera querido Dante, si realmente quieres entrar al Casino, tendrás que demostrar que no solo eres un jugador… sino un estratega." },
-                    { character: "Hermano 2", text: "Aquí no basta con jugar bien, Dante." },
-                    { character: "Hermano 1", text: "Aquí necesitas pensar dos veces antes de cada jugada." },
-                    { character: "Hermano 2", text: "O mejor dicho… pensar como dos." }
+                    { character: "Gemelos", text: "Este ha salido peor que su padre. De igual manera querido Dante, si realmente quieres entrar al Casino, tendrás que demostrar que no solo eres un jugador… sino un estratega." },
+                    { character: "Gemelos", text: "Aquí no basta con jugar bien, Dante." },
+                    { character: "Gemelos", text: "Aquí necesitas pensar dos veces antes de cada jugada." },
+                    { character: "Gemelos", text: "O mejor dicho… pensar como dos." }
                 ];
                 break;
-            case 'padre':
-                this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3 };
+            case 'Padre':
+                this.transitionData = { npc: 'Padre', pointsNeeded: 70, rounds: 3 };
                 this.dialogLines = [
-                    { character: "Dante", text: "Papá." },
-                    { character: "Gran Crupier", text: "Has llegado, Dante. Tal como imaginé." },
+                    { character: "Padre", text: "Papá." },
+                    { character: "Padre", text: "Has llegado, Dante. Tal como imaginé." },
                     { character: "Dante", text: "Todos en el pueblo lo sabían… Me estaban preparando para esto, ¿verdad?" },
-                    { character: "Gran Crupier", text: "Teníamos que asegurarnos de que estuvieras listo." },
-                    { character: "Gran Crupier", text: "Los llamaste rivales, pero eran tus maestros. ¿Crees que fue coincidencia que cada uno te enseñara una faceta del juego?" },
+                    { character: "Padre", text: "Teníamos que asegurarnos de que estuvieras listo." },
+                    { character: "Padre", text: "Los llamaste rivales, pero eran tus maestros. ¿Crees que fue coincidencia que cada uno te enseñara una faceta del juego?" },
                     { character: "Dante", text: "El Monarca me enseñó paciencia. La Bruja, la duda. El Náufrago, el riesgo. Los Hermanos Blackwood, la estrategia..." },
                     { character: "Dante", text: "¡¿Por qué nunca volviste?! ¿Por qué dejaste todo atrás?" },
-                    { character: "Gran Crupier", text: "Porque no tenía elección. Mi deuda con este lugar era más grande que cualquier apuesta que hubiera hecho antes. No se trata solo de dinero… sino del juego en sí." },
+                    { character: "Padre", text: "Porque no tenía elección. Mi deuda con este lugar era más grande que cualquier apuesta que hubiera hecho antes. No se trata solo de dinero… sino del juego en sí." },
                     { character: "Dante", text: "Te convertiste en su prisionero." },
-                    { character: "Gran Crupier", text: "Y en su guardián. Perdí mi última mano hace años… y desde entonces, el Casino me retuvo como su crupier eterno. Pero no fue solo una condena, Dante. Me enamoré del juego. De su arte. De la forma en que cada carta cuenta una historia, cada mano es un destino." },
+                    { character: "Padre", text: "Y en su guardián. Perdí mi última mano hace años… y desde entonces, el Casino me retuvo como su crupier eterno. Pero no fue solo una condena, Dante. Me enamoré del juego. De su arte. De la forma en que cada carta cuenta una historia, cada mano es un destino." },
                     { character: "Dante", text: "Pero esto no es vida." },
-                    { character: "Gran Crupier", text: "Lo sé." },
-                    { character: "Gran Crupier", text: "Pero ahora tienes la oportunidad de cambiar eso." },
+                    { character: "Padre", text: "Lo sé." },
+                    { character: "Padre", text: "Pero ahora tienes la oportunidad de cambiar eso." },
                     { character: "Dante", text: "¿Cómo?" },
-                    { character: "Gran Crupier", text: "Una última partida. Si ganas, mi deuda se salda. Seré libre. Si pierdes… Bueno… digamos que hay espacio para un nuevo crupier." },
+                    { character: "Padre", text: "Una última partida. Si ganas, mi deuda se salda. Seré libre. Si pierdes… Bueno… digamos que hay espacio para un nuevo crupier." },
                     { character: "Dante", text: "Eso no va a pasar." },
-                    { character: "Gran Crupier", text: "Entonces, baraja, hijo mío… y demuestra lo que has aprendido." }
+                    { character: "Padre", text: "Entonces, baraja, hijo mío… y demuestra lo que has aprendido." }
                 ];
                 break;
-            case 'pescador':
-                this.transitionData = { npc: 'pescador', pointsNeeded: 60, rounds: 2 };
+            case 'Pescador':
+                this.transitionData = { npc: 'Pescador', pointsNeeded: 60, rounds: 2 };
                 this.dialogLines = [
-                    { character: "Marco", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
+                    { character: "Pescador", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
                     { character: "Dante", text: "Parece que mi reputación me precede." },
-                    { character: "Marco", text: "No es la reputación, muchacho. Es la carta dorada que arde en tu bolsillo. Pero antes de alzar las velas, tendrás que demostrar que sabes navegar estas aguas." },
+                    { character: "Pescador", text: "No es la reputación, muchacho. Es la carta dorada que arde en tu bolsillo. Pero antes de alzar las velas, tendrás que demostrar que sabes navegar estas aguas." },
                     { character: "Dante", text: "Si si, estoy un poco harto de hablar con cada uno, empieza a barajar las cartas." },
-                    { character: "Marco", text: "La suerte es como el mar: caprichosa, despiadada... pero si sabes leer las corrientes, te lleva a la victoria" }
+                    { character: "Pescador", text: "La suerte es como el mar: caprichosa, despiadada... pero si sabes leer las corrientes, te lleva a la victoria" }
                 ];
                 break;
             case 'oveja':
