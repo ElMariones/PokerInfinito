@@ -91,42 +91,6 @@ export default class Dialogos extends Phaser.Scene {
                 break;
             case 'padre':
                 this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3 };
-                /*
-                    🂠 Dante: "... Papá."
-                    (El Gran Crupier alza la vista. Sus ojos no han cambiado, pero hay algo más en
-                    ellos. Resignación. Sabiduría. Una vida de apuestas que ya no le pertenece.)
-                    🂠 Gran Crupier: "Has llegado, Dante. Tal como imaginé."
-                    🂠 Dante: "Todos en el pueblo lo sabían… Me estaban preparando para esto, ¿verdad?"
-                    🂠 Gran Crupier: (Sonríe levemente.) "Teníamos que asegurarnos de que estuvieras
-                    listo."
-                    🂠 Gran Crupier: (Sonríe levemente.) "Los llamaste rivales, pero eran tus maestros.
-                    ¿Crees que fue coincidencia que cada uno te enseñara una faceta del juego?"
-                    🂠 Dante: "... El Monarca me enseñó paciencia. La Bruja, la duda. El Náufrago, el
-                    riesgo. Los Hermanos Blackwood, la estrategia...
-                    (Dante aprieta los puños.)
-                    🂠 Dante: "¡¿Por qué nunca volviste?! ¿Por qué dejaste todo atrás?"
-                    🂠 Gran Crupier: (Suspira, dejando las cartas sobre la mesa.) "Porque no tenía
-                    elección. Mi deuda con este lugar era más grande que cualquier apuesta que hubiera
-                    hecho antes. No se trata solo de dinero… sino del juego en sí."
-                    🂠 Dante: "Te convertiste en su prisionero."
-                    🂠 Gran Crupier: "Y en su guardián. Perdí mi última mano hace años… y desde
-                    entonces, el Casino me retuvo como su crupier eterno. Pero no fue solo una condena,
-                    Dante. Me enamoré del juego. De su arte. De la forma en que cada carta cuenta una
-                    historia, cada mano es un destino."
-                    (Dante lo observa en silencio. Entiende lo que su padre dice, pero también sabe lo
-                    que significa.)
-                    🂠 Dante: "Pero esto no es vida."
-                    🂠 Gran Crupier: "Lo sé."
-                    (Toma el mazo y comienza a barajar una vez más.)
-                    🂠 Gran Crupier: "Pero ahora tienes la oportunidad de cambiar eso."
-                    🂠 Dante: "¿Cómo?"
-                    🂠 Gran Crupier: "Una última partida. Si ganas, mi deuda se salda. Seré libre. Si
-                    pierdes…" (Sonríe con tristeza.) "Bueno… digamos que hay espacio para un nuevo
-                    crupier."
-                    🂠 Dante: (Aprieta los dientes.) "Eso no va a pasar."
-                    🂠 Gran Crupier: (Se inclina hacia adelante.) "Entonces, baraja, hijo mío… y
-                    demuestra lo que has aprendido."
-                    */
                 this.dialogLines = [
                     { character: "Dante", text: "Papá." },
                     { character: "Gran Crupier", text: "Has llegado, Dante. Tal como imaginé." },
@@ -158,7 +122,7 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
             case 'oveja':
-                this.transitionData = { npc: 'oveja', pointsNeeded: 0, rounds: 0 };
+                this.transitionData = { npc: 'oveja', pointsNeeded: 0, rounds: 0 }; //Si ponemos rounds a 0 no hay batalla, solo diálogo
                 this.dialogLines = [
                     { character: "Oveja", text: "¡Baaa! ¿No esperabas encontrarme aquí, eh?" },
                     { character: "Dante", text: "¿Una oveja que habla? Vaya, creía que ya lo había visto todo en este pueblo..." },
@@ -274,7 +238,7 @@ export default class Dialogos extends Phaser.Scene {
     }  
 
     startBattle() {
-        if (this.transitionData.npc === 'oveja') {
+        if (this.transitionData.rounds == 0) {
             this.container.setVisible(false);
             this.cutsceneImage.destroy();
             this.scene.stop();
