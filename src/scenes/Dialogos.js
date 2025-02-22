@@ -157,15 +157,22 @@ export default class Dialogos extends Phaser.Scene {
                     { character: "Marco", text: "La suerte es como el mar: caprichosa, despiadada... pero si sabes leer las corrientes, te lleva a la victoria" }
                 ];
                 break;
+            case 'oveja':
+                this.transitionData = { npc: 'oveja', pointsNeeded: 0, rounds: 0 };
+                this.dialogLines = [
+                    { character: "Oveja", text: "¡Baaa! ¿No esperabas encontrarme aquí, eh?" },
+                    { character: "Dante", text: "¿Una oveja que habla? Vaya, creía que ya lo había visto todo en este pueblo..." },
+                    { character: "Oveja", text: "Shhh... no se lo cuentes a nadie. Si descubren que hablo, querrán retarme a una batalla de cartas también. Y la verdad, paso de jugar." },
+                    { character: "Dante", text: "En fin... al menos eres más simpática que la mayoría." },
+                    { character: "Oveja", text: "¡Baaa-aadios! Y recuerda, si alguien pregunta, ni me viste." }
+                ];
+                break;
             default:
                 this.dialogLines = [];
                 this.startBattle();
                 break;
         }
         this.currentIndex = 0;
-    
-        if (this.backgroundImage) this.backgroundImage.destroy();
-        this.backgroundImage = this.add.image(512, 384, background).setDepth(-1).setScale(1.2);
     
         this.container.setAlpha(1);
         this.container.setVisible(true);
@@ -267,6 +274,13 @@ export default class Dialogos extends Phaser.Scene {
     }  
 
     startBattle() {
+        if (this.transitionData.npc === 'oveja') {
+            this.container.setVisible(false);
+            this.cutsceneImage.destroy();
+            this.scene.stop();
+            if (this.callback) this.callback();
+            return;
+        }
         this.scene.start('TransicionBatalla', this.transitionData);
     }
 }
