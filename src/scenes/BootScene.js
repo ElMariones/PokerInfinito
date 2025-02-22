@@ -51,6 +51,7 @@ import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
 import Samuel from '../../assets/images/samuel.png';
 import Dante from '../../assets/images/dante.png';
 import Helena from '../../assets/images/bruja.png';
+import Oveja from '../../assets/images/oveja.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -115,6 +116,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('Samuel', Samuel);
     this.load.image('Dante', Dante);
     this.load.image('Helena', Helena);
+    this.load.image('Oveja', Oveja);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
