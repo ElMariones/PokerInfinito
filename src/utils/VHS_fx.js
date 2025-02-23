@@ -5,7 +5,7 @@ export default class VHSFxPlugin extends Phaser.Plugins.ScenePlugin {
   constructor(scene, pluginManager) {
     super(scene, pluginManager);
     // Listen for the scene's "create" event (fires once per scene)
-    scene.events.once(Phaser.Scenes.Events.CREATE, this.onSceneCreate, this);
+    scene.events.on(Phaser.Scenes.Events.CREATE, this.onSceneCreate, this);
   }
 
   onSceneCreate() {

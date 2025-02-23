@@ -1,186 +1,221 @@
-import Phaser from 'phaser';
-import NPCManager from '../utils/NPCManager.js';
-import Player from '../utils/Player.js';
-
+import Phaser from 'phaser'
+import NPCManager from '../utils/NPCManager.js'
+import Player from '../utils/Player.js'
 
 export default class MapScene extends Phaser.Scene {
   constructor() {
-    super('MapScene');
+    super('MapScene')
   }
 
-  create() {
-    const width = this.cameras.main.width;
-    const height = this.cameras.main.height;
+  // Accept optional data with spawnX/spawnY
+  create(data) {
+    // 1) Read spawn coordinates from data, or use defaults
+    const startX = data?.spawnX ?? 256
+    const startY = data?.spawnY ?? 500
 
-    //mapa
-    const map = this.make.tilemap({ key: 'ciudadMap' }); 
+    // 2) Create the tilemap
+    const map = this.make.tilemap({ key: 'ciudadMap' })
 
-    //tilesets
-    // 4) Add each tileset by matching:
-    //    map.addTilesetImage(<Tiled tileset name>, <Phaser key>)
-    const texturasCiudad = map.addTilesetImage('texturas_ciudad', 'texturas_ciudad');
+    // tilesets
+    const texturasCiudad = map.addTilesetImage('texturas_ciudad', 'texturas_ciudad')
 
-    const layerCalle = map.createLayer('suelo', [texturasCiudad], 0, 0);
-    const layerAgua = map.createLayer('agua (solido)', [texturasCiudad], 0, 0);
-    const layerAguaWalkable = map.createLayer('agua (walkable)', [texturasCiudad], 0, 0);
-    const layerHierba = map.createLayer('hierba', [texturasCiudad], 0, 0);
-    const layerDecoracionSuelo = map.createLayer('decoracion suelo (walkable)', [texturasCiudad], 0, 0);
-    const layerEdificios1 = map.createLayer('edificios (solido)', [texturasCiudad], 0, 0);
-    const layerEdificios2 = map.createLayer('decoracion paredes (solido)', [texturasCiudad], 0, 0);
+    const layerCalle = map.createLayer('suelo', [texturasCiudad], 0, 0)
+    const layerAgua = map.createLayer('agua (solido)', [texturasCiudad], 0, 0)
+    const layerAguaWalkable = map.createLayer('agua (walkable)', [texturasCiudad], 0, 0)
+    const layerHierba = map.createLayer('hierba', [texturasCiudad], 0, 0)
+    const layerDecoracionSuelo = map.createLayer('decoracion suelo (walkable)', [texturasCiudad], 0, 0)
+    const layerEdificios1 = map.createLayer('edificios (solido)', [texturasCiudad], 0, 0)
+    const layerEdificios2 = map.createLayer('decoracion paredes (solido)', [texturasCiudad], 0, 0)
 
-    // Enable collisions for the "solido" layers
-    layerAgua.setCollisionByExclusion([-1]);
-    layerEdificios1.setCollisionByExclusion([-1]);
-    layerEdificios2.setCollisionByExclusion([-1]);
-    
-    //Player logic
+    // Enable collisions
+    layerAgua.setCollisionByExclusion([-1])
+    layerEdificios1.setCollisionByExclusion([-1])
+    layerEdificios2.setCollisionByExclusion([-1])
 
-      // 2) Create all player animations once
-      Player.createPlayerAnimations(this);
+    // 3) Doors array
+    this.doors = [
+      {
+        x: 255,
+        y: 365,
+        toScene: 'MapAsador',
+        spawnX: 320,
+        spawnY: 584
+      },
+      {
+        x: 1000,
+        y: 400,
+        toScene: 'MapOlvido',
+        spawnX: 100,
+        spawnY: 200
+      }
+    ]
 
-      // 3) Create the player
-      this.player = new Player(this, 256, 500, 'playerIdle');
+    // 4) Player logic
+    Player.createPlayerAnimations(this)
+    // Create the player at the chosen spawn coords
+    this.player = new Player(this, startX, startY, 'playerIdle')
 
-      // 4) Collisions with tilemap layers
-      this.physics.add.collider(this.player, layerAgua);
-      this.physics.add.collider(this.player, layerEdificios1);
-      this.physics.add.collider(this.player, layerEdificios2);
+    // Collisions
+    this.physics.add.collider(this.player, layerAgua)
+    this.physics.add.collider(this.player, layerEdificios1)
+    this.physics.add.collider(this.player, layerEdificios2)
 
-      // 5) Camera follows player
-      this.cameras.main.startFollow(this.player);
-      this.cameras.main.setZoom(2); // Zoom in a bit
-      this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // Camera can't go out of bounds
-      this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // Player can't go out of bounds
-      this.player.setCollideWorldBounds(true); // Player can't go out of bounds
+    // Camera
+    this.cameras.main.startFollow(this.player)
+    this.cameras.main.setZoom(2)
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+    this.player.setCollideWorldBounds(true)
 
+    // 5) NPC Manager
+    this.npcManager = new NPCManager(this, [layerAgua, layerEdificios1, layerEdificios2], this.player)
+    this.npcManager.createAnimations()
 
+    // Add NPCs
+    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false)
+    const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false)
+    const bruja = this.npcManager.addNPC('bruja', 993, 434, 'idle-down', false)
+    const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true)
+    const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false)
+    const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true)
 
-    // --------------------------------------------------
-    // NPC MANAGER
-    // --------------------------------------------------
-    this.npcManager = new NPCManager(this, [layerAgua, layerEdificios1, layerEdificios2], this.player);
-
-    // 1) Create all NPC animations
-    this.npcManager.createAnimations();
-
-    // 2) Add NPCs
-    //    (name, x, y, animation, facesPlayer)
-    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false);
-    const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false);
-    const bruja = this.npcManager.addNPC('bruja', 993, 434, 'idle-down', false);
-    const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true);
-    const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false);
-    const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true);
-
+    // Example paths
     this.npcManager.setNPCPath(samuel, [
       { x: 256, y: 426 },
       { x: 400, y: 426 }
-    ], 40, true);
+    ], 40, true)
 
     this.npcManager.setNPCPath(oveja, [
       { x: 500, y: 630 },
       { x: 350, y: 630 },
       { x: 350, y: 710 },
       { x: 500, y: 710 }
-    ], 60, true);
-    
+    ], 60, true)
 
-    this.npcArray = this.npcManager.getAllNPCs();
+    this.npcArray = this.npcManager.getAllNPCs()
 
-    const layerTejados1 = map.createLayer('tejados (walkable)', [
-      texturasCiudad
-    ], 0, 0);
-    
-    const layerTejados2 = map.createLayer('decoracion tejado (walkable)', [
-      texturasCiudad
-    ], 0, 0);
+    const layerTejados1 = map.createLayer('tejados (walkable)', [texturasCiudad], 0, 0)
+    const layerTejados2 = map.createLayer('decoracion tejado (walkable)', [texturasCiudad], 0, 0)
 
-   
-    // Interact key
+    // 6) Input for interaction
     this.input.keyboard.on('keydown-E', () => {
-      this.tryInteract();
-    });
+      this.tryInteract()
+    })
 
-
+    this.doorInteractUI = null;
+    this.interactUI = null;
   }
 
   update() {
     this.player.update();
     this.npcManager.updateNPCs();
-  
-    // Find the closest NPC within range
+
     const interactDistance = 50;
+    let nearestDoor = null;
     let nearestNpc = null;
     let minDist = Infinity;
-  
+
+    // 1) Check for doors
+    this.doors.forEach(door => {
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, door.x, door.y);
+      if (dist < interactDistance && dist < minDist) {
+        minDist = dist;
+        nearestDoor = door;
+      }
+    });
+
+    // 2) Show/hide the door "E" icon
+    if (nearestDoor) {
+      if (!this.doorInteractUI) {
+        this.doorInteractUI = this.add.image(nearestDoor.x, nearestDoor.y - 30, 'interactKey');
+        this.doorInteractUI.setScale(0.07);
+        this.doorInteractUI.setDepth(9999);
+      } else {
+        this.doorInteractUI.setPosition(nearestDoor.x, nearestDoor.y - 30);
+        this.doorInteractUI.setVisible(true);
+        this.doorInteractUI.setDepth(9999);
+      }
+    } else {
+      if (this.doorInteractUI) {
+        this.doorInteractUI.setVisible(false);
+      }
+    }
+
+    // 3) Check for NPCs
+    minDist = Infinity;
     this.npcArray.forEach(npc => {
-      const dist = Phaser.Math.Distance.Between(
-        this.player.x, this.player.y,
-        npc.x, npc.y
-      );
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
       if (dist < interactDistance && dist < minDist) {
         minDist = dist;
         nearestNpc = npc;
       }
     });
-  
-    // Show/hide the interact UI depending on the nearest NPC
+
+    // 4) Show/hide the NPC "E" icon
     if (nearestNpc) {
       if (!this.interactUI) {
-        // Create the sprite above the NPC
         this.interactUI = this.add.image(nearestNpc.x, nearestNpc.y - 30, 'interactKey');
-        // If you want the button to stay world-aligned, omit setScrollFactor(0)
-        // If you want it to be fixed to the camera, keep setScrollFactor(0).
-        // this.interactUI.setScrollFactor(0);
-  
         this.interactUI.setScale(0.07);
+        this.interactUI.setDepth(9999);
       } else {
-        // Move the existing sprite above the NPC
         this.interactUI.setPosition(nearestNpc.x, nearestNpc.y - 30);
         this.interactUI.setVisible(true);
+        this.interactUI.setDepth(9999);
       }
     } else {
-      // No NPC in range; hide the interact UI if it exists
       if (this.interactUI) {
         this.interactUI.setVisible(false);
       }
     }
   }
-  
-  
-  
-  
 
   tryInteract() {
-    // Check if player is close enough to an NPC
     const interactDistance = 50;
+    let doorToUse = null;
+    let minDist = Infinity;
 
+    // 1) Check for doors
+    this.doors.forEach(door => {
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, door.x, door.y);
+      if (dist < interactDistance && dist < minDist) {
+        minDist = dist;
+        doorToUse = door;
+      }
+    });
+
+    // 2) If there's a door in range, switch scenes
+    if (doorToUse) {
+      const entryPoint = { x: doorToUse.x, y: doorToUse.y };
+      this.scene.start(doorToUse.toScene, {
+        spawnX: doorToUse.spawnX,
+        spawnY: doorToUse.spawnY,
+        fromScene: 'MapScene',
+        entryPoint: entryPoint
+      });
+      return;
+    }
+
+    // 3) Check NPCs if no door in range
     this.npcArray.forEach(npc => {
-      const dist = Phaser.Math.Distance.Between(
-        this.player.x, this.player.y,
-        npc.x, npc.y
-      );
-
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
       if (dist < interactDistance) {
-
         const name = npc.getData('npcName');
-
+        // Launch dialog logic
         if (name === 'samuel') {
-          this.scene.launch('Dialogos', {npc: 'samuel', });
+          this.scene.launch('Dialogos', { npc: 'samuel' });
         } else if (name === 'bruja') {
-          this.scene.launch('Dialogos', {npc: 'helena', });
+          this.scene.launch('Dialogos', { npc: 'helena' });
         } else if (name === 'gemelos') {
-          this.scene.launch('Dialogos', {npc: 'gemelos', });
+          this.scene.launch('Dialogos', { npc: 'gemelos' });
         } else if (name === 'padre') {
-          this.scene.launch('Dialogos', {npc: 'padre', });
+          this.scene.launch('Dialogos', { npc: 'padre' });
         } else if (name === 'pescador') {
-          this.scene.launch('Dialogos', {npc: 'pescador', });
+          this.scene.launch('Dialogos', { npc: 'pescador' });
         } else if (name === 'oveja') {
-          this.scene.launch('Dialogos', {npc: 'oveja', });
+          this.scene.launch('Dialogos', { npc: 'oveja' });
         }
-        
-      this.scene.bringToTop('Dialogos');    }
+        this.scene.bringToTop('Dialogos');
+      }
     });
   }
 }
-
