@@ -166,9 +166,9 @@ export default class MapScene extends Phaser.Scene {
         const name = npc.getData('npcName');
 
         if (name === 'samuel') {
-          this.scene.launch('Dialogos', {npc: 'Samuel', });
+          this.scene.launch('Dialogos', {npc: 'samuel', });
         } else if (name === 'bruja') {
-          this.scene.launch('Dialogos', {npc: 'Helena', });
+          this.scene.launch('Dialogos', {npc: 'helena', });
         } else if (name === 'gemelos') {
           this.scene.launch('Dialogos', {npc: 'gemelos', });
         } else if (name === 'padre') {
