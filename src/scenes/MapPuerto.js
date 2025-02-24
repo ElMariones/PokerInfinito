@@ -68,7 +68,6 @@ export default class MapPuerto extends Phaser.Scene {
   }
 
   update() {
-    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
     this.doorManager.update(this.player);
   }
