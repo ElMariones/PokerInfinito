@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
+import DoorManager from '../utils/DoorManager.js';
 
 export default class MapRincon extends Phaser.Scene {
   constructor() {
@@ -29,6 +30,9 @@ export default class MapRincon extends Phaser.Scene {
     layerPared.setCollisionByExclusion([-1]);
     layerMobiliario.setCollisionByExclusion([-1]);
 
+    const layerDecoracion = map.createLayer('auxiliar', [texturasDecoracion, texturasInterior], 0, 0);
+    
+
     // -------------------------------------
     // Lógica del Jugador
     // -------------------------------------
@@ -56,13 +60,17 @@ export default class MapRincon extends Phaser.Scene {
       this.tryInteract();
     });
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasDecoracion, texturasInterior], 0, 0);
     
+    this.doorManager = new DoorManager(this, [
+      { x: 956, y: 928, toScene: 'MapScene', spawnX: 1843, spawnY: 956 },
+      // Agrega más puertas según sea necesario
+    ]);
   }
 
   update() {
-    // Actualizar lógica del jugador
+    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
+    this.doorManager.update(this.player);
   }
 
   tryInteract() {
