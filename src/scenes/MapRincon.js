@@ -28,10 +28,7 @@ export default class MapRincon extends Phaser.Scene {
 
     // Habilitar colisiones en las capas sólidas
     layerPared.setCollisionByExclusion([-1]);
-    layerMobiliario.setCollisionByExclusion([-1]);
-
-    const layerDecoracion = map.createLayer('auxiliar', [texturasDecoracion, texturasInterior], 0, 0);
-    
+    layerMobiliario.setCollisionByExclusion([-1]);    
 
     // -------------------------------------
     // Lógica del Jugador
@@ -52,6 +49,8 @@ export default class MapRincon extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // La cámara no puede salir de los límites
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // El jugador no puede salir de los límites
     this.player.setCollideWorldBounds(true); // El jugador no puede salir de los límites
+
+    const layerDecoracion = map.createLayer('auxiliar', [texturasDecoracion, texturasInterior], 0, 0);
 
     // -------------------------------------
     // Interacción con tecla E
