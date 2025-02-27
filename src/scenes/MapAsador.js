@@ -24,7 +24,6 @@ export default class MapAsador extends Phaser.Scene {
     const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
     const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
     const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasSuelosParedes], 0, 0);
-    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
 
     // 4) Set collisions
     layerPared.setCollisionByExclusion([-1]);
@@ -34,6 +33,8 @@ export default class MapAsador extends Phaser.Scene {
     Player.createPlayerAnimations(this);
     // Create player at the specified (or default) position
     this.player = new Player(this, startX, startY, 'playerIdle');
+
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
 
     // Collisions with the solid layers
     this.physics.add.collider(this.player, layerPared);

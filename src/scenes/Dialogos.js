@@ -92,7 +92,7 @@ export default class Dialogos extends Phaser.Scene {
             case 'padre':
                 this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3 };
                 this.dialogLines = [
-                    { character: "padre", text: "Papá." },
+                    { character: "dante", text: "Papá." },
                     { character: "padre", text: "Has llegado, Dante. Tal como imaginé." },
                     { character: "dante", text: "Todos en el pueblo lo sabían… Me estaban preparando para esto, ¿verdad?" },
                     { character: "padre", text: "Teníamos que asegurarnos de que estuvieras listo." },

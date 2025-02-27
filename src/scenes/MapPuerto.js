@@ -28,8 +28,6 @@ export default class MapPuerto extends Phaser.Scene {
     // Habilitar colisiones en las capas sólidas
     layerPared.setCollisionByExclusion([-1]);
     layerMobiliario.setCollisionByExclusion([-1]);
-     // La capa 'auxiliar' debe crearse antes del DoorManager
-     const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion], 0, 0);
 
     // -------------------------------------
     // Lógica del Jugador
@@ -51,6 +49,9 @@ export default class MapPuerto extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // El jugador no puede salir de los límites
     this.player.setCollideWorldBounds(true); // El jugador no puede salir de los límites
 
+    // La capa 'auxiliar' debe crearse antes del DoorManager
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion], 0, 0);
+
     // -------------------------------------
     // Interacción con tecla E
     // -------------------------------------
@@ -68,7 +69,6 @@ export default class MapPuerto extends Phaser.Scene {
   }
 
   update() {
-    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
     this.doorManager.update(this.player);
   }
