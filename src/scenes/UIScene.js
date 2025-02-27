@@ -1,5 +1,3 @@
-import DialogText from '../DialogText.js'; // Ajusta la ruta si es necesario
-
 export default class UIScene extends Phaser.Scene {  
   constructor() {
     super({ key: 'UIScene', active: false });

@@ -20,7 +20,7 @@ export default class NPCManager {
    * Call this once in your scene's create() before adding NPCs.
    */
   createAnimations() {
-    const npcNames = ['samuel', 'bruja', 'pescador', 'padre', 'gemelos', 'oveja'];
+    const npcNames = ['samuel', 'helena', 'pescador', 'padre', 'gemelos', 'oveja'];
 
     npcNames.forEach(npc => {
       // Idle animations

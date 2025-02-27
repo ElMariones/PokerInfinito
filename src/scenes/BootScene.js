@@ -33,8 +33,8 @@ import playerWalk from '../../assets/images/sprites/dante/Walk.png';
 import samuelIdle from '../../assets/images/sprites/samuel/Idle.png';
 import samuelWalk from '../../assets/images/sprites/samuel/Walk.png';
 
-import brujaIdle from '../../assets/images/sprites/bruja/Idle.png';
-import brujaWalk from '../../assets/images/sprites/bruja/Walk.png';
+import helenaIdle from '../../assets/images/sprites/helena/Idle.png';
+import helenaWalk from '../../assets/images/sprites/helena/Walk.png';
 
 import pescadorIdle from '../../assets/images/sprites/pescador/Idle.png';
 import pescadorWalk from '../../assets/images/sprites/pescador/Walk.png';
@@ -51,7 +51,7 @@ import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
 //import pictures dialogos
 import samuel from '../../assets/images/samuel.png';
 import dante from '../../assets/images/dante.png';
-import helena from '../../assets/images/bruja.png';
+import helena from '../../assets/images/helena.png';
 import oveja from '../../assets/images/oveja.png';
 import padre from '../../assets/images/padre.png';
 import gemelos from '../../assets/images/gemelos.png';
@@ -103,8 +103,8 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('samuelIdle', samuelIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('samuelWalk', samuelWalk, { frameWidth: 64, frameHeight: 64 });
 
-    this.load.spritesheet('brujaIdle', brujaIdle, { frameWidth: 64, frameHeight: 64 });
-    this.load.spritesheet('brujaWalk', brujaWalk, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('helenaIdle', helenaIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('helenaWalk', helenaWalk, { frameWidth: 64, frameHeight: 64 });
 
     this.load.spritesheet('pescadorIdle', pescadorIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('pescadorWalk', pescadorWalk, { frameWidth: 64, frameHeight: 64 });

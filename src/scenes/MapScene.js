@@ -90,7 +90,7 @@ export default class MapScene extends Phaser.Scene {
     // Add NPCs
     const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false)
     const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false)
-    const bruja = this.npcManager.addNPC('bruja', 993, 434, 'idle-down', false)
+    const helena = this.npcManager.addNPC('helena', 993, 434, 'idle-down', false)
     const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true)
     const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false)
     const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true)
@@ -174,7 +174,7 @@ export default class MapScene extends Phaser.Scene {
         // Launch dialog logic
         if (name === 'samuel') {
           this.scene.launch('Dialogos', { npc: 'samuel' });
-        } else if (name === 'bruja') {
+        } else if (name === 'helena') {
           this.scene.launch('Dialogos', { npc: 'helena' });
         } else if (name === 'gemelos') {
           this.scene.launch('Dialogos', { npc: 'gemelos' });
