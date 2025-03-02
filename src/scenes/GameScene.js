@@ -151,8 +151,8 @@ export default class GameScene extends Phaser.Scene {
     this.events.emit('toggle-sort-button', false);
 
     this.cardSprites.forEach(sprite => {
-      const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
-      if (!isSelected) sprite.setVisible(false);
+        const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
+        if (!isSelected) sprite.setVisible(false);
     });
 
     const newScale = 0.8;
@@ -161,41 +161,80 @@ export default class GameScene extends Phaser.Scene {
     const startX = centerX - totalWidth / 2;
 
     this.selectedCards.forEach((card, index) => {
-      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-      sprite.clearTint();
-      sprite.setScale(newScale);
-      sprite.disableInteractive();
+        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+        sprite.clearTint();
+        sprite.setScale(newScale);
+        sprite.disableInteractive();
 
-      this.tweens.add({
-        targets: sprite,
-        x: startX + index * spacing,
-        y: centerY,
-        duration: 500,
-        ease: 'Sine.easeInOut',
-      });
+        this.tweens.add({
+            targets: sprite,
+            x: startX + index * spacing,
+            y: centerY,
+            duration: 500,
+            ease: 'Sine.easeInOut',
+        });
     });
 
     this.time.delayedCall(500, () => {
-      this.highlightWinningCards(result);
-      this.time.delayedCall(1000, () => {
-        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+        // Usamos la función que ya tienes para resaltar cartas
+        this.highlightWinningCards(result);
+
         this.time.delayedCall(1000, () => {
-          this.roundNumber++;
-          if (this.roundNumber <= this.maxRounds) {
-            this.replaceUsedCards();
-          } else {
-            if (this.score >= this.pointsNeeded) {
-              this.scene.stop('UIScene');
-              this.scene.start('MapScene');
-            } else {
-              this.scene.stop('UIScene');
-              this.scene.start('IntroScene');
-            }
-          }
+            this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+            
+            this.time.delayedCall(1000, () => {
+                const opponentX = this.cameras.main.width / 2;
+                const opponentY = 100;
+
+                this.selectedCards.forEach((card, index) => {
+                    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+                    if (!sprite) return;
+
+                    this.time.delayedCall(index * 100, () => {
+                        this.tweens.add({
+                            targets: sprite,
+                            x: opponentX,
+                            y: opponentY,
+                            scale: 0.3,
+                            angle: Math.random() * 40 - 20,
+                            duration: 700,
+                            ease: 'Cubic.easeIn',
+                            onStart: () => {
+                                sprite.setDepth(10);
+                            },
+                            onComplete: () => {
+                                sprite.setVisible(false);
+                                this.cameras.main.shake(100, 0.01);
+                            }
+                        });
+                    });
+                });
+
+                this.time.delayedCall(1300, () => {
+                    this.roundNumber++;
+                    if (this.roundNumber <= this.maxRounds) {
+                        this.replaceUsedCards();
+                    } else {
+                        if (this.score >= this.pointsNeeded) {
+                            this.scene.stop('UIScene');
+                            this.scene.start('MapScene');
+                        } else {
+                            this.scene.stop('UIScene');
+                            this.scene.start('IntroScene');
+                        }
+                    }
+                });
+            });
         });
-      });
     });
-  }
+}
+
+
+
+
+
+
+
 
   highlightWinningCards(result) {
     const winners = result.winningCards || [];
