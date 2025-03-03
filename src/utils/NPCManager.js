@@ -20,86 +20,113 @@ export default class NPCManager {
    * Call this once in your scene's create() before adding NPCs.
    */
   createAnimations() {
-    const npcNames = ['samuel', 'bruja', 'pescador', 'padre', 'gemelos', 'oveja'];
+    const npcNames = ['samuel', 'helena', 'pescador', 'padre', 'gemelos', 'oveja'];
 
     npcNames.forEach(npc => {
       // Idle animations
-      this.scene.anims.create({
-        key: `${npc}-idle-up`,
-        frames: [{ key: `${npc}Idle`, frame: 0 }],
-        frameRate: 1,
-        repeat: -1
-      });
-      this.scene.anims.create({
-        key: `${npc}-idle-left`,
-        frames: [{ key: `${npc}Idle`, frame: 1 }],
-        frameRate: 1,
-        repeat: -1
-      });
-      this.scene.anims.create({
-        key: `${npc}-idle-down`,
-        frames: [{ key: `${npc}Idle`, frame: 2 }],
-        frameRate: 1,
-        repeat: -1
-      });
-      this.scene.anims.create({
-        key: `${npc}-idle-right`,
-        frames: [{ key: `${npc}Idle`, frame: 3 }],
-        frameRate: 1,
-        repeat: -1
-      });
+      if (!this.scene.anims.exists(`${npc}-idle-up`)) {
+        this.scene.anims.create({
+          key: `${npc}-idle-up`,
+          frames: [{ key: `${npc}Idle`, frame: 0 }],
+          frameRate: 1,
+          repeat: -1
+        });
+      }
+      
+      if (!this.scene.anims.exists(`${npc}-idle-left`)) {
+        this.scene.anims.create({
+          key: `${npc}-idle-left`,
+          frames: [{ key: `${npc}Idle`, frame: 1 }],
+          frameRate: 1,
+          repeat: -1
+        });
+      }
+      
+      if (!this.scene.anims.exists(`${npc}-idle-down`)) {
+        this.scene.anims.create({
+          key: `${npc}-idle-down`,
+          frames: [{ key: `${npc}Idle`, frame: 2 }],
+          frameRate: 1,
+          repeat: -1
+        });
+      }
+      
+      if (!this.scene.anims.exists(`${npc}-idle-right`)) {
+        this.scene.anims.create({
+          key: `${npc}-idle-right`,
+          frames: [{ key: `${npc}Idle`, frame: 3 }],
+          frameRate: 1,
+          repeat: -1
+        });
+      }      
 
       // Walk animations (based on your Walk.png sprite, 8 frames per direction)
       if (npc === 'oveja') {
-        this.scene.anims.create({
-          key: 'oveja-walk-up',
-          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 0, end: 3 }),
-          frameRate: 8,
-          repeat: -1
-        });
-        this.scene.anims.create({
-          key: 'oveja-walk-left',
-          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 4, end: 7 }),
-          frameRate: 8,
-          repeat: -1
-        });
-        this.scene.anims.create({
-          key: 'oveja-walk-down',
-          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 8, end: 11 }),
-          frameRate: 8,
-          repeat: -1
-        });
-        this.scene.anims.create({
-          key: 'oveja-walk-right',
-          frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 12, end: 15 }),
-          frameRate: 8,
-          repeat: -1
-        });
+        if (!this.scene.anims.exists('oveja-walk-up')) {
+          this.scene.anims.create({
+            key: 'oveja-walk-up',
+            frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 0, end: 3 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
+        if (!this.scene.anims.exists('oveja-walk-left')) {
+          this.scene.anims.create({
+            key: 'oveja-walk-left',
+            frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 4, end: 7 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
+        if (!this.scene.anims.exists('oveja-walk-down')) {
+          this.scene.anims.create({
+            key: 'oveja-walk-down',
+            frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 8, end: 11 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
+        if (!this.scene.anims.exists('oveja-walk-right')) {
+          this.scene.anims.create({
+            key: 'oveja-walk-right',
+            frames: this.scene.anims.generateFrameNumbers('ovejaWalk', { start: 12, end: 15 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
       } else {
-        this.scene.anims.create({
-          key: `${npc}-walk-up`,
-          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 0, end: 7 }),
-          frameRate: 8,
-          repeat: -1
-        });
-        this.scene.anims.create({
-          key: `${npc}-walk-left`,
-          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 8, end: 15 }),
-          frameRate: 8,
-          repeat: -1
-        });
-        this.scene.anims.create({
-          key: `${npc}-walk-down`,
-          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 16, end: 23 }),
-          frameRate: 8,
-          repeat: -1
-        });
-        this.scene.anims.create({
-          key: `${npc}-walk-right`,
-          frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 24, end: 31 }),
-          frameRate: 8,
-          repeat: -1
-        });
+        if (!this.scene.anims.exists(`${npc}-walk-up`)) {
+          this.scene.anims.create({
+            key: `${npc}-walk-up`,
+            frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 0, end: 7 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
+        if (!this.scene.anims.exists(`${npc}-walk-left`)) {
+          this.scene.anims.create({
+            key: `${npc}-walk-left`,
+            frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 8, end: 15 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
+        if (!this.scene.anims.exists(`${npc}-walk-down`)) {
+          this.scene.anims.create({
+            key: `${npc}-walk-down`,
+            frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 16, end: 23 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
+        if (!this.scene.anims.exists(`${npc}-walk-right`)) {
+          this.scene.anims.create({
+            key: `${npc}-walk-right`,
+            frames: this.scene.anims.generateFrameNumbers(`${npc}Walk`, { start: 24, end: 31 }),
+            frameRate: 8,
+            repeat: -1
+          });
+        }
       }
 
       // Example if you had a "dance" sprite sheet for each NPC:

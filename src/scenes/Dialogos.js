@@ -92,7 +92,7 @@ export default class Dialogos extends Phaser.Scene {
             case 'padre':
                 this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3 };
                 this.dialogLines = [
-                    { character: "padre", text: "Papá." },
+                    { character: "dante", text: "Papá." },
                     { character: "padre", text: "Has llegado, Dante. Tal como imaginé." },
                     { character: "dante", text: "Todos en el pueblo lo sabían… Me estaban preparando para esto, ¿verdad?" },
                     { character: "padre", text: "Teníamos que asegurarnos de que estuvieras listo." },
@@ -140,6 +140,10 @@ export default class Dialogos extends Phaser.Scene {
     
         this.container.setAlpha(1);
         this.container.setVisible(true);
+
+        // Pause the MapScene
+        this.scene.pause('MapScene');
+
         this.showText();
     }
 
@@ -167,6 +171,9 @@ export default class Dialogos extends Phaser.Scene {
                 this.container.setVisible(false);
                 this.startBattle();
                 if (this.callback) this.callback();
+
+                // Resume the MapScene
+                this.scene.resume('MapScene');
             } else {
                 this.showText();
             }

@@ -1,4 +1,3 @@
-// Player.js
 import Phaser from 'phaser';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
@@ -40,56 +39,78 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    */
   static createPlayerAnimations(scene) {
     // Idle animations
-    scene.anims.create({
-      key: 'idle-up',
-      frames: [{ key: 'playerIdle', frame: 0 }],
-      frameRate: 1,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: 'idle-left',
-      frames: [{ key: 'playerIdle', frame: 1 }],
-      frameRate: 1,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: 'idle-down',
-      frames: [{ key: 'playerIdle', frame: 2 }],
-      frameRate: 1,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: 'idle-right',
-      frames: [{ key: 'playerIdle', frame: 3 }],
-      frameRate: 1,
-      repeat: -1
-    });
+    if (!scene.anims.exists('idle-up')) {
+      scene.anims.create({
+        key: 'idle-up',
+        frames: [{ key: 'playerIdle', frame: 0 }],
+        frameRate: 1,
+        repeat: -1
+      });
+    }
+
+    if (!scene.anims.exists('idle-left')) {
+      scene.anims.create({
+        key: 'idle-left',
+        frames: [{ key: 'playerIdle', frame: 1 }],
+        frameRate: 1,
+        repeat: -1
+      });
+    }
+
+    if (!scene.anims.exists('idle-down')) {
+      scene.anims.create({
+        key: 'idle-down',
+        frames: [{ key: 'playerIdle', frame: 2 }],
+        frameRate: 1,
+        repeat: -1
+      });
+    }
+
+    if (!scene.anims.exists('idle-right')) {
+      scene.anims.create({
+        key: 'idle-right',
+        frames: [{ key: 'playerIdle', frame: 3 }],
+        frameRate: 1,
+        repeat: -1
+      });
+    }
 
     // Walk animations (based on your Walk.png sprite, 8 frames per direction)
-    scene.anims.create({
-      key: 'walk-up',
-      frames: scene.anims.generateFrameNumbers('playerWalk', { start: 0, end: 7 }),
-      frameRate: 8,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: 'walk-left',
-      frames: scene.anims.generateFrameNumbers('playerWalk', { start: 8, end: 15 }),
-      frameRate: 8,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: 'walk-down',
-      frames: scene.anims.generateFrameNumbers('playerWalk', { start: 16, end: 23 }),
-      frameRate: 8,
-      repeat: -1
-    });
-    scene.anims.create({
-      key: 'walk-right',
-      frames: scene.anims.generateFrameNumbers('playerWalk', { start: 24, end: 31 }),
-      frameRate: 8,
-      repeat: -1
-    });
+    if (!scene.anims.exists('walk-up')) {
+      scene.anims.create({
+        key: 'walk-up',
+        frames: scene.anims.generateFrameNumbers('playerWalk', { start: 0, end: 7 }),
+        frameRate: 8,
+        repeat: -1
+      });
+    }
+
+    if (!scene.anims.exists('walk-left')) {
+      scene.anims.create({
+        key: 'walk-left',
+        frames: scene.anims.generateFrameNumbers('playerWalk', { start: 8, end: 15 }),
+        frameRate: 8,
+        repeat: -1
+      });
+    }
+
+    if (!scene.anims.exists('walk-down')) {
+      scene.anims.create({
+        key: 'walk-down',
+        frames: scene.anims.generateFrameNumbers('playerWalk', { start: 16, end: 23 }),
+        frameRate: 8,
+        repeat: -1
+      });
+    }
+
+    if (!scene.anims.exists('walk-right')) {
+      scene.anims.create({
+        key: 'walk-right',
+        frames: scene.anims.generateFrameNumbers('playerWalk', { start: 24, end: 31 }),
+        frameRate: 8,
+        repeat: -1
+      });
+    }
   }
 
   /**
@@ -97,6 +118,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * Handles movement logic & plays correct animations.
    */
   update() {
+    //console.log(`Player at X: ${this.x}, Y: ${this.y}`);
     const speed = 100;
     const up = this.cursors.up.isDown;
     const down = this.cursors.down.isDown;

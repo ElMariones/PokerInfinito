@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
+import DoorManager from '../utils/DoorManager.js';
 
 export default class MapRincon extends Phaser.Scene {
   constructor() {
@@ -27,7 +28,7 @@ export default class MapRincon extends Phaser.Scene {
 
     // Habilitar colisiones en las capas sólidas
     layerPared.setCollisionByExclusion([-1]);
-    layerMobiliario.setCollisionByExclusion([-1]);
+    layerMobiliario.setCollisionByExclusion([-1]);    
 
     // -------------------------------------
     // Lógica del Jugador
@@ -49,6 +50,8 @@ export default class MapRincon extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // El jugador no puede salir de los límites
     this.player.setCollideWorldBounds(true); // El jugador no puede salir de los límites
 
+    const layerDecoracion = map.createLayer('auxiliar', [texturasDecoracion, texturasInterior], 0, 0);
+
     // -------------------------------------
     // Interacción con tecla E
     // -------------------------------------
@@ -56,13 +59,17 @@ export default class MapRincon extends Phaser.Scene {
       this.tryInteract();
     });
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasDecoracion, texturasInterior], 0, 0);
     
+    this.doorManager = new DoorManager(this, [
+      { x: 956, y: 928, toScene: 'MapScene', spawnX: 1843, spawnY: 956 },
+      // Agrega más puertas según sea necesario
+    ]);
   }
 
   update() {
-    // Actualizar lógica del jugador
+    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
+    this.doorManager.update(this.player);
   }
 
   tryInteract() {

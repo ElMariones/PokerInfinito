@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import NPCManager from '../utils/NPCManager.js'
 import Player from '../utils/Player.js'
+import DoorManager from '../utils/DoorManager.js'
 
 export default class MapScene extends Phaser.Scene {
   constructor() {
@@ -42,13 +43,28 @@ export default class MapScene extends Phaser.Scene {
         spawnY: 584
       },
       {
-        x: 1000,
-        y: 400,
+        x: 1005,
+        y: 412,
         toScene: 'MapOlvido',
-        spawnX: 100,
-        spawnY: 200
+        spawnX: 320,
+        spawnY: 614
+      },
+      {
+        x: 195,
+        y: 956,
+        toScene: 'MapPuerto',
+        spawnX: 478,
+        spawnY: 608
+      },
+      {
+        x: 1843,
+        y: 956,
+        toScene: 'MapRincon',
+        spawnX: 956,
+        spawnY: 928
       }
-    ]
+    ];
+    this.doorManager = new DoorManager(this, this.doors);
 
     // 4) Player logic
     Player.createPlayerAnimations(this)
@@ -74,7 +90,7 @@ export default class MapScene extends Phaser.Scene {
     // Add NPCs
     const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false)
     const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false)
-    const bruja = this.npcManager.addNPC('bruja', 993, 434, 'idle-down', false)
+    const helena = this.npcManager.addNPC('helena', 993, 434, 'idle-down', false)
     const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true)
     const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false)
     const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true)
@@ -109,40 +125,13 @@ export default class MapScene extends Phaser.Scene {
   update() {
     this.player.update();
     this.npcManager.updateNPCs();
+    this.doorManager.update(this.player);
 
     const interactDistance = 50;
     let nearestDoor = null;
     let nearestNpc = null;
     let minDist = Infinity;
 
-    // 1) Check for doors
-    this.doors.forEach(door => {
-      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, door.x, door.y);
-      if (dist < interactDistance && dist < minDist) {
-        minDist = dist;
-        nearestDoor = door;
-      }
-    });
-
-    // 2) Show/hide the door "E" icon
-    if (nearestDoor) {
-      if (!this.doorInteractUI) {
-        this.doorInteractUI = this.add.image(nearestDoor.x, nearestDoor.y - 30, 'interactKey');
-        this.doorInteractUI.setScale(0.07);
-        this.doorInteractUI.setDepth(9999);
-      } else {
-        this.doorInteractUI.setPosition(nearestDoor.x, nearestDoor.y - 30);
-        this.doorInteractUI.setVisible(true);
-        this.doorInteractUI.setDepth(9999);
-      }
-    } else {
-      if (this.doorInteractUI) {
-        this.doorInteractUI.setVisible(false);
-      }
-    }
-
-    // 3) Check for NPCs
-    minDist = Infinity;
     this.npcArray.forEach(npc => {
       const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
       if (dist < interactDistance && dist < minDist) {
@@ -162,37 +151,19 @@ export default class MapScene extends Phaser.Scene {
         this.interactUI.setVisible(true);
         this.interactUI.setDepth(9999);
       }
-    } else {
-      if (this.interactUI) {
-        this.interactUI.setVisible(false);
-      }
+    }
+    else {
+        if (this.interactUI) {
+          this.interactUI.setVisible(false);
+        }
     }
   }
 
   tryInteract() {
     const interactDistance = 50;
-    let doorToUse = null;
-    let minDist = Infinity;
-
-    // 1) Check for doors
-    this.doors.forEach(door => {
-      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, door.x, door.y);
-      if (dist < interactDistance && dist < minDist) {
-        minDist = dist;
-        doorToUse = door;
-      }
-    });
-
-    // 2) If there's a door in range, switch scenes
-    if (doorToUse) {
-      const entryPoint = { x: doorToUse.x, y: doorToUse.y };
-      this.scene.start(doorToUse.toScene, {
-        spawnX: doorToUse.spawnX,
-        spawnY: doorToUse.spawnY,
-        fromScene: 'MapScene',
-        entryPoint: entryPoint
-      });
-      return;
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegamos la interacción con puertas
+      return; // Si hay una puerta, no se verifica lo de los NPCs
     }
 
     // 3) Check NPCs if no door in range
@@ -203,7 +174,7 @@ export default class MapScene extends Phaser.Scene {
         // Launch dialog logic
         if (name === 'samuel') {
           this.scene.launch('Dialogos', { npc: 'samuel' });
-        } else if (name === 'bruja') {
+        } else if (name === 'helena') {
           this.scene.launch('Dialogos', { npc: 'helena' });
         } else if (name === 'gemelos') {
           this.scene.launch('Dialogos', { npc: 'gemelos' });

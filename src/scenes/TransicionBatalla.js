@@ -67,7 +67,7 @@ export default class TransicionBatalla extends Phaser.Scene {
         this.playNpcDirectionalAnimation('samuel');
         break;
       case 'helena':
-        this.playNpcDirectionalAnimation('bruja');
+        this.playNpcDirectionalAnimation('helena');
         break;
       case 'gemelos':
         this.playNpcDirectionalAnimation('gemelos');

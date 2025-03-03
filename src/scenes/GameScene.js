@@ -151,51 +151,135 @@ export default class GameScene extends Phaser.Scene {
     this.events.emit('toggle-sort-button', false);
 
     this.cardSprites.forEach(sprite => {
-      const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
-      if (!isSelected) sprite.setVisible(false);
+        const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
+        if (!isSelected) sprite.setVisible(false);
     });
 
-    const newScale = 0.8;
-    const spacing = 170;
+    const newScale = 1.0;
+    const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
     const startX = centerX - totalWidth / 2;
 
+    // ⚡ Flash antes de la selección
+    //this.cameras.main.flash(200);
+
     this.selectedCards.forEach((card, index) => {
-      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-      sprite.clearTint();
-      sprite.setScale(newScale);
-      sprite.disableInteractive();
+        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+        if (!sprite) return;
 
-      this.tweens.add({
-        targets: sprite,
-        x: startX + index * spacing,
-        y: centerY,
-        duration: 500,
-        ease: 'Sine.easeInOut',
-      });
-    });
+        sprite.clearTint();
+        sprite.disableInteractive();
 
-    this.time.delayedCall(500, () => {
-      this.highlightWinningCards(result);
-      this.time.delayedCall(1000, () => {
-        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
-        this.time.delayedCall(1000, () => {
-          this.roundNumber++;
-          if (this.roundNumber <= this.maxRounds) {
-            this.replaceUsedCards();
-          } else {
-            if (this.score >= this.pointsNeeded) {
-              this.scene.stop('UIScene');
-              this.scene.start('MapScene');
-            } else {
-              this.scene.stop('UIScene');
-              this.scene.start('IntroScene');
-            }
-          }
+        this.time.delayedCall(index * 100, () => {
+            if (!sprite.active) return; // Verifica que aún existe
+
+            this.tweens.add({
+                targets: sprite,
+                scale: 1.4, 
+                angle: Math.random() * 10 - 5,
+                duration: 200,
+                ease: 'Back.easeOut',
+                yoyo: true,
+                onComplete: () => {
+                    if (!sprite.active) return;
+
+                    this.tweens.add({
+                        targets: sprite,
+                        x: startX + index * spacing,
+                        y: centerY,
+                        scale: newScale,
+                        duration: 600,
+                        ease: 'Back.easeOut',
+                    });
+                }
+            });
         });
-      });
     });
-  }
+
+    // ⏳ Espera y luego ejecuta el ataque
+    this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
+        this.highlightWinningCards(result);
+
+        this.time.delayedCall(600, () => {
+          this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+
+            this.time.delayedCall(1200, () => {
+                const opponentX = this.cameras.main.width / 2;
+                const opponentY = 100;
+
+        
+                this.selectedCards.forEach((card, index) => {
+                    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+                    if (!sprite) return;
+
+                    this.time.delayedCall(index * 100, () => {
+                        this.tweens.add({
+                            targets: sprite,
+                            x: opponentX,
+                            y: opponentY,
+                            scale: 0.3,
+                            angle: Math.random() * 40 - 20,
+                            duration: 700,
+                            ease: 'Cubic.easeIn',
+                            onStart: () => {
+                                sprite.setDepth(10);
+                            },
+                            onComplete: () => {
+                                sprite.setVisible(false);
+
+                                // **Flash para impacto**
+                                const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
+                                flash.setAlpha(0);
+                                this.tweens.add({
+                                    targets: flash,
+                                    alpha: { from: 0.7, to: 0 },
+                                    duration: 200,
+                                    onComplete: () => flash.destroy(),
+                                });
+
+                                // **Oscurecimiento rápido para efecto más fuerte**
+                                const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
+                                darken.setAlpha(0);
+                                this.tweens.add({
+                                    targets: darken,
+                                    alpha: { from: 0.5, to: 0 },
+                                    duration: 600,
+                                    onComplete: () => darken.destroy(),
+                                });
+
+                                // **Pantalla vibra sin mostrar fondo**
+                                this.cameras.main.shake(500, 0.03);
+                            }
+                        });
+                    });
+                });
+
+                this.time.delayedCall(1300, () => {
+                    this.roundNumber++;
+                    if (this.roundNumber <= this.maxRounds) {
+                        this.replaceUsedCards();
+                    } else {
+                        if (this.score >= this.pointsNeeded) {
+                            this.scene.stop('UIScene');
+                            this.scene.start('MapScene');
+                        } else {
+                            this.scene.stop('UIScene');
+                            this.scene.start('IntroScene');
+                        }
+                    }
+                });
+            });
+        });
+    });
+}
+
+
+
+
+
+
+
+
 
   highlightWinningCards(result) {
     const winners = result.winningCards || [];
@@ -416,3 +500,4 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 }
+

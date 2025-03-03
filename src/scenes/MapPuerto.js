@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
+import DoorManager from '../utils/DoorManager.js';
 
 export default class MapPuerto extends Phaser.Scene {
   constructor() {
@@ -23,7 +24,6 @@ export default class MapPuerto extends Phaser.Scene {
     const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
     const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
     const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasSuelosParedes], 0, 0);
-  
 
     // Habilitar colisiones en las capas sólidas
     layerPared.setCollisionByExclusion([-1]);
@@ -49,6 +49,9 @@ export default class MapPuerto extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // El jugador no puede salir de los límites
     this.player.setCollideWorldBounds(true); // El jugador no puede salir de los límites
 
+    // La capa 'auxiliar' debe crearse antes del DoorManager
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion], 0, 0);
+
     // -------------------------------------
     // Interacción con tecla E
     // -------------------------------------
@@ -56,13 +59,18 @@ export default class MapPuerto extends Phaser.Scene {
       this.tryInteract();
     });
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion], 0, 0);
-    
+   
+
+    // Inicializar el DoorManager después de todas las capas
+    this.doorManager = new DoorManager(this, [
+      { x: 478, y: 608, toScene: 'MapScene', spawnX: 195, spawnY: 956 },
+      // Agrega más puertas según sea necesario
+    ]);
   }
 
   update() {
-    // Actualizar lógica del jugador
     this.player.update();
+    this.doorManager.update(this.player);
   }
 
   tryInteract() {

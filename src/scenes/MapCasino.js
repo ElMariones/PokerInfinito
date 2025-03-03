@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
+import DoorManager from '../utils/DoorManager.js';
 
 export default class MapCasino extends Phaser.Scene {
   constructor() {
@@ -61,11 +62,15 @@ export default class MapCasino extends Phaser.Scene {
 
     const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasCastle], 0, 0);
     
+    this.doorManager = new DoorManager(this, [
+        { x: 320, y: 614, toScene: 'MapScene', spawnX: 255, spawnY: 365 },
+        // Agrega más puertas según sea necesario
+    ]);
   }
-
+  
   update() {
-    // Actualizar lógica del jugador
     this.player.update();
+    this.doorManager.update(this.player);
   }
 
   tryInteract() {
