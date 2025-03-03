@@ -155,37 +155,59 @@ export default class GameScene extends Phaser.Scene {
         if (!isSelected) sprite.setVisible(false);
     });
 
-    const newScale = 0.8;
-    const spacing = 170;
+    const newScale = 1.0;
+    const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
     const startX = centerX - totalWidth / 2;
 
+    // ⚡ Flash antes de la selección
+    //this.cameras.main.flash(200);
+
     this.selectedCards.forEach((card, index) => {
         const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+        if (!sprite) return;
+
         sprite.clearTint();
-        sprite.setScale(newScale);
         sprite.disableInteractive();
 
-        this.tweens.add({
-            targets: sprite,
-            x: startX + index * spacing,
-            y: centerY,
-            duration: 500,
-            ease: 'Sine.easeInOut',
+        this.time.delayedCall(index * 100, () => {
+            if (!sprite.active) return; // Verifica que aún existe
+
+            this.tweens.add({
+                targets: sprite,
+                scale: 1.4, 
+                angle: Math.random() * 10 - 5,
+                duration: 200,
+                ease: 'Back.easeOut',
+                yoyo: true,
+                onComplete: () => {
+                    if (!sprite.active) return;
+
+                    this.tweens.add({
+                        targets: sprite,
+                        x: startX + index * spacing,
+                        y: centerY,
+                        scale: newScale,
+                        duration: 600,
+                        ease: 'Back.easeOut',
+                    });
+                }
+            });
         });
     });
 
-    this.time.delayedCall(500, () => {
-        // Usamos la función que ya tienes para resaltar cartas
+    // ⏳ Espera y luego ejecuta el ataque
+    this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
         this.highlightWinningCards(result);
 
-        this.time.delayedCall(1000, () => {
-            this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
-            
-            this.time.delayedCall(1000, () => {
+        this.time.delayedCall(600, () => {
+          this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+
+            this.time.delayedCall(1200, () => {
                 const opponentX = this.cameras.main.width / 2;
                 const opponentY = 100;
 
+        
                 this.selectedCards.forEach((card, index) => {
                     const sprite = this.cardSprites.find(s => s.texture.key === card.key);
                     if (!sprite) return;
@@ -204,7 +226,29 @@ export default class GameScene extends Phaser.Scene {
                             },
                             onComplete: () => {
                                 sprite.setVisible(false);
-                                this.cameras.main.shake(100, 0.01);
+
+                                // **Flash para impacto**
+                                const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
+                                flash.setAlpha(0);
+                                this.tweens.add({
+                                    targets: flash,
+                                    alpha: { from: 0.7, to: 0 },
+                                    duration: 200,
+                                    onComplete: () => flash.destroy(),
+                                });
+
+                                // **Oscurecimiento rápido para efecto más fuerte**
+                                const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
+                                darken.setAlpha(0);
+                                this.tweens.add({
+                                    targets: darken,
+                                    alpha: { from: 0.5, to: 0 },
+                                    duration: 600,
+                                    onComplete: () => darken.destroy(),
+                                });
+
+                                // **Pantalla vibra sin mostrar fondo**
+                                this.cameras.main.shake(500, 0.03);
                             }
                         });
                     });
@@ -228,6 +272,7 @@ export default class GameScene extends Phaser.Scene {
         });
     });
 }
+
 
 
 
@@ -455,3 +500,4 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 }
+
