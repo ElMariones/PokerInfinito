@@ -38,32 +38,13 @@ export default class GameScene extends Phaser.Scene {
     // Background
     this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug').setOrigin(0, 0);
 
-    /*const postFxPlugin = this.plugins.get('rexhorrifipipelineplugin');
-    if (postFxPlugin) {
-      // Apply the pipeline to the main camera.
-      const postFxPipeline = postFxPlugin.add(this.cameras.main, {
-        enable: true,
-        // Bloom settings
-        bloomRadius: 25,
-        bloomIntensity: 0,
-        bloomThreshold: 0,
-        bloomTexelWidth: 0,
-        // Chromatic abberation settings
-        chabIntensity: 0.1,
-        // Vignette settings
-        vignetteStrength: 0.1,
-        vignetteIntensity: 0.15,
-        // Noise settings
-        noiseStrength: 0.05,
-        // VHS settings
-        vhsStrength: 0.15,
-        // Scanlines settings
-        scanStrength: 0.15,
-        // CRT settings
-        crtWidth: 5,
-        crtHeight: 5,
-      });
-    }*/
+    // --- Reset game state ---
+    this.deck = [];
+    this.playerHand = [];
+    this.selectedCards = [];
+    this.score = 0;
+    this.roundNumber = 1;
+    this.cardSprites = [];
 
     // --- Create & shuffle deck (48 cards total) ---
     let fullDeck = createDeck();      // Normally 52 cards
@@ -74,9 +55,10 @@ export default class GameScene extends Phaser.Scene {
     this.dealNewHand();
 
     // --- LAUNCH UI SCENE ---
-    if (!this.scene.isActive('UIScene')) {
-      this.scene.launch('UIScene');
+    if (this.scene.isActive('UIScene')) {
+      this.scene.stop('UIScene');
     }
+    this.scene.launch('UIScene');
     this.scene.bringToTop('UIScene');
   }
 
