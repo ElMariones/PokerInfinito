@@ -180,6 +180,7 @@ export default class NPCManager {
 
     // Add to our manager array
     this.npcArray.push(npc);
+    this.interactUI = null;
     return npc;
   }
 
@@ -206,6 +207,10 @@ export default class NPCManager {
    * Call this once per frame in your scene's update().
    */
   updateNPCs() {
+    let interactDistance = 50;
+    let nearestNpc = null;
+    let minDist = Infinity;
+
     this.npcArray.forEach(npc => {
       const path = npc.getData('path');
       const speed = npc.getData('speed');
@@ -219,6 +224,8 @@ export default class NPCManager {
       npc.body.setSize(20, 28);
       npc.body.setOffset(22, 36);
       }
+      if (name === 'samuel')
+        interactDistance = 75;
 
       // 1) Move along path if defined
       if (path && path.length > 0) {
@@ -280,7 +287,31 @@ export default class NPCManager {
           npc.play(`${name}-idle-left`, true);
         }
       }
+
+      // 3) If the NPC is close enough to the player, show the "E" icon
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+      if (dist < interactDistance && dist < minDist) {
+        minDist = dist;
+        nearestNpc = npc;
+      }
     });
+    // 4) Show/hide the NPC "E" icon
+    if (nearestNpc) {
+      if (!this.interactUI) {
+        this.interactUI = this.scene.add.image(nearestNpc.x, nearestNpc.y - 30, 'interactKey');
+        this.interactUI.setScale(0.07);
+        this.interactUI.setDepth(9999);
+      } else {
+        this.interactUI.setPosition(nearestNpc.x, nearestNpc.y - 30);
+        this.interactUI.setVisible(true);
+        this.interactUI.setDepth(9999);
+      }
+    }
+    else {
+        if (this.interactUI) {
+          this.interactUI.setVisible(false);
+        }
+    }
   }
 
   /**
@@ -288,5 +319,23 @@ export default class NPCManager {
    */
   getAllNPCs() {
     return this.npcArray;
+  }
+
+  tryInteract() {
+    let interactDistance = 50;
+    let nearestDoor = null;
+    let nearestNpc = null;
+
+    this.npcArray.forEach(npc => {
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+      if (npc === 'samuel')
+        interactDistance = 75;
+      if (dist < interactDistance) {
+        nearestNpc = npc;
+        const name = npc.getData('npcName');
+        this.scene.scene.launch('Dialogos', { npc: name });
+        this.scene.scene.bringToTop('Dialogos');
+      }
+    });
   }
 }

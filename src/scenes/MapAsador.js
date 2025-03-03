@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapAsador extends Phaser.Scene {
   constructor() {
@@ -51,10 +52,26 @@ export default class MapAsador extends Phaser.Scene {
       { x: 320, y: 614, toScene: 'MapScene', spawnX: 255, spawnY: 365 },
       // Agrega más puertas según sea necesario
     ]);
+
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)
+    this.npcManager.createAnimations()
+
+    const samuel = this.npcManager.addNPC('samuel', 321, 125, 'idle-down', false)
+    this.npcArray = this.npcManager.getAllNPCs()
   }
 
   update() {
+    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
     this.doorManager.update(this.player);
+    this.npcManager.updateNPCs();
+  }
+
+  tryInteract() {
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegamos la interacción con puertas
+      return; // Si hay una puerta, no se verifica lo de los NPCs
+    }
+    this.npcManager.tryInteract();
   }
 }

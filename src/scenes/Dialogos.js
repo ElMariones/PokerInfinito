@@ -10,6 +10,7 @@ export default class Dialogos extends Phaser.Scene {
         this.callback = null;
         this.currentStep = 0; 
         this.transitionData = {};
+        console.log("Creando dialogos");
     }
 
     init(opts) {
@@ -55,6 +56,7 @@ export default class Dialogos extends Phaser.Scene {
     }
 
     startDialog(npc, background) {
+        console.log("Dialogando");
         switch(npc) {
             case 'samuel':
                 this.transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 5 };

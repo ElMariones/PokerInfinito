@@ -88,18 +88,18 @@ export default class MapScene extends Phaser.Scene {
     this.npcManager.createAnimations()
 
     // Add NPCs
-    const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false)
+    //const samuel = this.npcManager.addNPC('samuel', 256, 426, 'idle-down', false)
     const oveja = this.npcManager.addNPC('oveja', 500, 630, 'idle-down', false)
-    const helena = this.npcManager.addNPC('helena', 993, 434, 'idle-down', false)
+    const helena = this.npcManager.addNPC('helena', 1070, 413, 'idle-down', false)
     const pescador = this.npcManager.addNPC('pescador', 206, 1025, 'idle-down', true)
     const padre = this.npcManager.addNPC('padre', 1037, 787, 'idle-down', false)
-    const gemelos = this.npcManager.addNPC('gemelos', 1824, 966, 'idle-down', true)
+    const gemelos = this.npcManager.addNPC('gemelos', 1752, 959, 'idle-down', true)
 
     // Example paths
-    this.npcManager.setNPCPath(samuel, [
-      { x: 256, y: 426 },
-      { x: 400, y: 426 }
-    ], 40, true)
+    // this.npcManager.setNPCPath(samuel, [
+    //   { x: 256, y: 426 },
+    //   { x: 400, y: 426 }
+    // ], 40, true)
 
     this.npcManager.setNPCPath(oveja, [
       { x: 500, y: 630 },
@@ -126,67 +126,13 @@ export default class MapScene extends Phaser.Scene {
     this.player.update();
     this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
-
-    const interactDistance = 50;
-    let nearestDoor = null;
-    let nearestNpc = null;
-    let minDist = Infinity;
-
-    this.npcArray.forEach(npc => {
-      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-      if (dist < interactDistance && dist < minDist) {
-        minDist = dist;
-        nearestNpc = npc;
-      }
-    });
-
-    // 4) Show/hide the NPC "E" icon
-    if (nearestNpc) {
-      if (!this.interactUI) {
-        this.interactUI = this.add.image(nearestNpc.x, nearestNpc.y - 30, 'interactKey');
-        this.interactUI.setScale(0.07);
-        this.interactUI.setDepth(9999);
-      } else {
-        this.interactUI.setPosition(nearestNpc.x, nearestNpc.y - 30);
-        this.interactUI.setVisible(true);
-        this.interactUI.setDepth(9999);
-      }
-    }
-    else {
-        if (this.interactUI) {
-          this.interactUI.setVisible(false);
-        }
-    }
   }
 
   tryInteract() {
-    const interactDistance = 50;
     if (this.doorManager.nearestDoor) {
       this.doorManager.tryInteract(); // Delegamos la interacción con puertas
       return; // Si hay una puerta, no se verifica lo de los NPCs
     }
-
-    // 3) Check NPCs if no door in range
-    this.npcArray.forEach(npc => {
-      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-      if (dist < interactDistance) {
-        const name = npc.getData('npcName');
-        // Launch dialog logic
-        if (name === 'samuel') {
-          this.scene.launch('Dialogos', { npc: 'samuel' });
-        } else if (name === 'helena') {
-          this.scene.launch('Dialogos', { npc: 'helena' });
-        } else if (name === 'gemelos') {
-          this.scene.launch('Dialogos', { npc: 'gemelos' });
-        } else if (name === 'padre') {
-          this.scene.launch('Dialogos', { npc: 'padre' });
-        } else if (name === 'pescador') {
-          this.scene.launch('Dialogos', { npc: 'pescador' });
-        } else if (name === 'oveja') {
-          this.scene.launch('Dialogos', { npc: 'oveja' });
-        }
-        this.scene.bringToTop('Dialogos');
-      }
-    });
+    this.npcManager.tryInteract();
   }
 }
