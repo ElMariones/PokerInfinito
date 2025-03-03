@@ -142,6 +142,10 @@ export default class Dialogos extends Phaser.Scene {
     
         this.container.setAlpha(1);
         this.container.setVisible(true);
+
+        // Pause the MapScene
+        this.scene.pause('MapScene');
+
         this.showText();
     }
 
@@ -169,6 +173,9 @@ export default class Dialogos extends Phaser.Scene {
                 this.container.setVisible(false);
                 this.startBattle();
                 if (this.callback) this.callback();
+
+                // Resume the MapScene
+                this.scene.resume('MapScene');
             } else {
                 this.showText();
             }
