@@ -9,6 +9,11 @@ import GameScene from './scenes/GameScene.js';
 import UIScene from './scenes/UIScene.js';
 import TransicionBatalla from './scenes/TransicionBatalla.js';
 import Dialogos from './scenes/Dialogos.js';
+import MapAsador from './scenes/MapAsador.js';
+import MapPuerto from './scenes/MapPuerto.js';
+import MapRicon from './scenes/MapRincon.js';
+import MapOlvido from './scenes/MapOlvido.js';
+import MapCasino from './scenes/MapCasino.js';
 
 let config = {
   type: Phaser.AUTO,
@@ -27,11 +32,18 @@ let config = {
     }
   },
   pixelArt: true,
+  roundPixels: true,
+  
   backgroundColor: '#006400',
   scene: [
     BootScene,
     IntroScene,
     MapScene,
+    MapAsador,
+    MapPuerto,
+    MapRicon,
+    MapOlvido,
+    MapCasino,
     TransicionBatalla,
     GameScene,
     UIScene,

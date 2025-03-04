@@ -1,5 +1,3 @@
-import DialogText from '../DialogText.js'; // Ajusta la ruta si es necesario
-
 export default class UIScene extends Phaser.Scene {  
   constructor() {
     super({ key: 'UIScene', active: false });
@@ -114,18 +112,18 @@ export default class UIScene extends Phaser.Scene {
     // Listen for card selection changes to enable/disable buttons.
     this.gameScene.events.on('cards-changed', (selectedCount) => {
       // For the shuffle button
-      if (selectedCount === 0) {
+      if (selectedCount === 0 && this.shuffleButton.active) {
         this.shuffleButton.disableInteractive();
         this.shuffleButton.setAlpha(0.5);
-      } else {
+      } else if (this.shuffleButton.active) {
         this.shuffleButton.setInteractive();
         this.shuffleButton.setAlpha(1);
       }
       // For the submit button - enabled only if exactly 5 cards are selected.
-      if (selectedCount !== 5) {
+      if (selectedCount !== 5 && this.submitButton.active) {
         this.submitButton.disableInteractive();
         this.submitButton.setAlpha(0.5);
-      } else {
+      } else if (this.submitButton.active) {
         this.submitButton.setInteractive();
         this.submitButton.setAlpha(1);
       }
@@ -138,16 +136,20 @@ export default class UIScene extends Phaser.Scene {
   }
 
   update() {
-    this.scoreText.setText(`puntos: ${this.gameScene.score}`);
-    this.roundText.setText(`ronda: ${this.gameScene.roundNumber}`);
-
-    const pointsNeeded = this.gameScene.pointsNeeded || 0;
-    const maxRounds = this.gameScene.maxRounds || 0;
+    const gameScene = this.scene.get('GameScene');
+    if (!gameScene) return; // Optionally, skip if GameScene isn't available.
+    
+    this.scoreText.setText(`puntos: ${gameScene.score}`);
+    this.roundText.setText(`ronda: ${gameScene.roundNumber}`);
+  
+    const pointsNeeded = gameScene.pointsNeeded || 0;
+    const maxRounds = gameScene.maxRounds || 0;
     this.npcGoalText.setText(`objetivo: ${pointsNeeded} puntos`);
     this.npcRoundsText.setText(`max rondas: ${maxRounds}`);
-
-    this.cardsLeftText.setText(`cartas restantes: ${this.gameScene.deck.length}`);
+    
+    this.cardsLeftText.setText(`cartas restantes: ${gameScene.deck.length}`);
   }
+  
 
   showDialog(text, character, background) {
     this.dialogBox.setText(text, character, background);

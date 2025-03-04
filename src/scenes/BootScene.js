@@ -5,6 +5,7 @@ import cards from '../cards.js';
 import playButton from '../../assets/images/play.png';
 import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
+import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
 
 
@@ -32,8 +33,8 @@ import playerWalk from '../../assets/images/sprites/dante/Walk.png';
 import samuelIdle from '../../assets/images/sprites/samuel/Idle.png';
 import samuelWalk from '../../assets/images/sprites/samuel/Walk.png';
 
-import brujaIdle from '../../assets/images/sprites/bruja/Idle.png';
-import brujaWalk from '../../assets/images/sprites/bruja/Walk.png';
+import helenaIdle from '../../assets/images/sprites/helena/Idle.png';
+import helenaWalk from '../../assets/images/sprites/helena/Walk.png';
 
 import pescadorIdle from '../../assets/images/sprites/pescador/Idle.png';
 import pescadorWalk from '../../assets/images/sprites/pescador/Walk.png';
@@ -44,10 +45,19 @@ import padreWalk from '../../assets/images/sprites/padre/Walk.png';
 import gemelosIdle from '../../assets/images/sprites/gemelos/Idle.png';
 import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 
+import ovejaIdle from '../../assets/images/sprites/oveja/Idle.png';
+import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
+
 //import pictures dialogos
-import Samuel from '../../assets/images/samuel.png';
-import Dante from '../../assets/images/dante.png';
-import Helena from '../../assets/images/bruja.png';
+
+import samuel from '../../assets/images/samuel.png';
+import dante from '../../assets/images/dante.png';
+import helena from '../../assets/images/helena.png';
+import oveja from '../../assets/images/oveja.png';
+import padre from '../../assets/images/padre.png';
+import gemelos from '../../assets/images/gemelos.png';
+import pescador from '../../assets/images/pescador.png';
+
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -59,6 +69,7 @@ import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
+
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -81,6 +92,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    this.load.image('interactKey', interactKey);
 
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
@@ -93,8 +105,8 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('samuelIdle', samuelIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('samuelWalk', samuelWalk, { frameWidth: 64, frameHeight: 64 });
 
-    this.load.spritesheet('brujaIdle', brujaIdle, { frameWidth: 64, frameHeight: 64 });
-    this.load.spritesheet('brujaWalk', brujaWalk, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('helenaIdle', helenaIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('helenaWalk', helenaWalk, { frameWidth: 64, frameHeight: 64 });
 
     this.load.spritesheet('pescadorIdle', pescadorIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('pescadorWalk', pescadorWalk, { frameWidth: 64, frameHeight: 64 });
@@ -105,10 +117,17 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('gemelosIdle', gemelosIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('gemelosWalk', gemelosWalk, { frameWidth: 64, frameHeight: 64 });
 
+    this.load.spritesheet('ovejaIdle', ovejaIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('ovejaWalk', ovejaWalk, { frameWidth: 64, frameHeight: 64 });
+
     // Load the dialog pictures
-    this.load.image('Samuel', Samuel);
-    this.load.image('Dante', Dante);
-    this.load.image('Helena', Helena);
+    this.load.image('samuel', samuel);
+    this.load.image('dante', dante);
+    this.load.image('helena', helena);
+    this.load.image('oveja', oveja);
+    this.load.image('padre', padre);
+    this.load.image('gemelos', gemelos);
+    this.load.image('pescador', pescador);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
@@ -135,7 +154,6 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
-
   }
 
   create() {
