@@ -117,9 +117,6 @@ export default class MapScene extends Phaser.Scene {
     this.input.keyboard.on('keydown-E', () => {
       this.tryInteract()
     })
-
-    this.doorInteractUI = null;
-    this.interactUI = null;
   }
 
   update() {

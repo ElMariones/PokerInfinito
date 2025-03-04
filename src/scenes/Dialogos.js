@@ -10,7 +10,9 @@ export default class Dialogos extends Phaser.Scene {
         this.callback = null;
         this.currentStep = 0; 
         this.transitionData = {};
+        this.gameScene = null;
         console.log("Creando dialogos");
+        
     }
 
     init(opts) {
@@ -22,6 +24,7 @@ export default class Dialogos extends Phaser.Scene {
         this.padding = opts.padding || 32;
         this.fontSize = opts.fontSize || 26;
         this.fontFamily = opts.fontFamily || 'serif';
+        this.gameScene = opts.scene;
 
         this.npc = opts.npc || null;
         this.createWindow();
@@ -31,7 +34,7 @@ export default class Dialogos extends Phaser.Scene {
 
     create() {
         this.scene.bringToTop();
-        this.gameScene = this.scene.get('MapScene');
+        //this.gameScene = this.scene.get('MapScene');
     }
 
     createWindow() {
@@ -144,7 +147,7 @@ export default class Dialogos extends Phaser.Scene {
         this.container.setVisible(true);
 
         // Pause the MapScene
-        this.scene.pause('MapScene');
+        this.gameScene.scene.pause();
 
         this.showText();
     }
@@ -175,7 +178,7 @@ export default class Dialogos extends Phaser.Scene {
                 if (this.callback) this.callback();
 
                 // Resume the MapScene
-                this.scene.resume('MapScene');
+                this.gameScene.scene.resume();
             } else {
                 this.showText();
             }

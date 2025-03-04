@@ -327,13 +327,14 @@ export default class NPCManager {
     let nearestNpc = null;
 
     this.npcArray.forEach(npc => {
+      const name = npc.getData('npcName');
       const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-      if (npc === 'samuel')
-        interactDistance = 75;
+      if (name === 'samuel')
+        interactDistance = 100;
       if (dist < interactDistance) {
         nearestNpc = npc;
         const name = npc.getData('npcName');
-        this.scene.scene.launch('Dialogos', { npc: name });
+        this.scene.scene.launch('Dialogos', { npc: name , scene: this.scene});
         this.scene.scene.bringToTop('Dialogos');
       }
     });

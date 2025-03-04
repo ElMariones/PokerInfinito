@@ -58,13 +58,16 @@ export default class MapAsador extends Phaser.Scene {
 
     const samuel = this.npcManager.addNPC('samuel', 321, 125, 'idle-down', false)
     this.npcArray = this.npcManager.getAllNPCs()
+
+    this.input.keyboard.on('keydown-E', () => {
+      this.tryInteract()
+    });
   }
 
   update() {
-    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
-    this.doorManager.update(this.player);
     this.npcManager.updateNPCs();
+    this.doorManager.update(this.player);
   }
 
   tryInteract() {
