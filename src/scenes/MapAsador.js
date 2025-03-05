@@ -25,10 +25,12 @@ export default class MapAsador extends Phaser.Scene {
     const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
     const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
     const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasSuelosParedes], 0, 0);
+    const layerencima_mobiliario = map.createLayer('encima_mobiliario', texturasCocina, 0, 0);
 
     // 4) Set collisions
     layerPared.setCollisionByExclusion([-1]);
     layerMobiliario.setCollisionByExclusion([-1]);
+    layerencima_mobiliario.setCollisionByExclusion([-1]);
 
     // 5) Player logic
     Player.createPlayerAnimations(this);
