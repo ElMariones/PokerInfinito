@@ -10,7 +10,7 @@ export default class MapScene extends Phaser.Scene {
 
   // Accept optional data with spawnX/spawnY
   create(data) {
-
+    this.registry.set('currentMap', this.scene.key);
     this.scene.launch('UIOverlay');  // start the UI overlay on top of this scene
 
     // 1) Read spawn coordinates from data, or use defaults

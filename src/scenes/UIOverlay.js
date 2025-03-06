@@ -25,7 +25,11 @@ export default class UIOverlay extends Phaser.Scene {
         // On click, open the Shop scene
         shopButton.on('pointerdown', () => {
             // Pause the current game (MapScene) and launch Shop scene
-            this.scene.pause('MapScene');
+            // Retrieve the key of the currently active map from the registry
+            const currentMap = this.registry.get('currentMap');
+            if (currentMap) {
+                this.scene.pause(currentMap);
+            }
             this.scene.launch('ShopScene'); // Ensure the key matches your Shop scene
             // Hide the UI overlay while in Shop
             this.scene.sleep('UIOverlay');
@@ -36,7 +40,11 @@ export default class UIOverlay extends Phaser.Scene {
             .setInteractive({ useHandCursor: true });
         jokersButton.on('pointerdown', () => {
             // Pause the main game and launch the Jokers Inventory scene
-            this.scene.pause('MapScene');
+            // Retrieve the key of the currently active map from the registry
+            const currentMap = this.registry.get('currentMap');
+            if (currentMap) {
+                this.scene.pause(currentMap);
+            }
             this.scene.launch('JokersInventoryScene');
             this.scene.sleep('UIOverlay');
         });

@@ -33,6 +33,7 @@ export default class Dialogos extends Phaser.Scene {
     }
 
     create() {
+        this.scene.sleep('UIOverlay');
         this.scene.bringToTop();
         //this.gameScene = this.scene.get('MapScene');
     }
@@ -255,6 +256,7 @@ export default class Dialogos extends Phaser.Scene {
         if (this.transitionData.rounds == 0) {
             this.container.setVisible(false);
             this.cutsceneImage.destroy();
+            this.scene.wake('UIOverlay');
             this.scene.stop();
             if (this.callback) this.callback();
             return;

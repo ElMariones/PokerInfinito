@@ -8,6 +8,8 @@ export default class MapCasino extends Phaser.Scene {
   }
 
   create(data) {
+    this.registry.set('currentMap', this.scene.key);
+
     const startX = data?.spawnX ?? 317;
     const startY = data?.spawnY ?? 586;
     const width = this.cameras.main.width;
