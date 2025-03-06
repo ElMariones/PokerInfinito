@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { jokers } from './Jokers.js';
 
 /**
  * Evaluate a 5-card hand and return:
@@ -8,14 +9,14 @@ import Phaser from 'phaser';
  *   winningCards: array of card objects that form the winning combo
  * }
  */
-export function evaluateHand(cards) {
+export function evaluateHand(cards, playerContext) {
   if (cards.length !== 5) {
     return { handType: 'Invalid', score: 0, winningCards: [] };
   }
   
   // Order to compare ranks
   const ranksOrder = [
-    'ace','2','3','4','5','6','7','8','9','10','queen','king'
+    'ace','2','3','4','5','6','7','8','9','sota','caballo','rey'
   ];
   
   // Count ranks & suits
@@ -69,7 +70,8 @@ export function evaluateHand(cards) {
 
   // We'll figure out which cards are in the winning set:
   let handType = 'Carta Alta';
-  let score = 10;  // default if none of the combos below
+  let baseScore = 5;  // default if none of the combos below
+  let multiplier = 1;
   let winningCards = [];
 
   // Helper: gather all cards if flush/straight
@@ -88,35 +90,38 @@ export function evaluateHand(cards) {
   // Start determining best hand:
   if (isStraight && isFlush) {
     handType = 'Escalera de Color';
-    score = 100;
+    baseScore = 100;
+    multiplier = 8;
     winningCards = allFive;
   } else if (counts[0] === 4) {
     handType = 'Póker';
-    score = 90;
+    baseScore = 60;
+    multiplier = 7;
     winningCards = getCardsForCount(4);
-    // plus the 5th leftover card is often not “winning,”
-    // so we highlight only the 4-of-kind
   } else if (counts[0] === 3 && counts[1] === 2) {
     handType = 'Full House';
-    score = 80;
-    // highlight all 5 as a typical approach
+    baseScore = 40;
+    multiplier = 4;
     winningCards = allFive;
   } else if (isFlush) {
     handType = 'Color';
-    score = 70;
+    baseScore = 35;
+    multiplier = 4;
     winningCards = allFive;
   } else if (isStraight) {
     handType = 'Escalera';
-    score = 60;
+    baseScore = 30;
+    multiplier = 4;
     winningCards = allFive;
   } else if (counts[0] === 3) {
     handType = 'Trío';
-    score = 50;
+    baseScore = 30;
+    multiplier = 3;
     winningCards = getCardsForCount(3);
   } else if (counts[0] === 2 && counts[1] === 2) {
     handType = 'Doble Pareja';
-    score = 40;
-    // Find both pairs
+    baseScore = 20;
+    multiplier = 2;
     winningCards = [];
     for (let rank in rankCounts) {
       if (rankCounts[rank] === 2) {
@@ -125,11 +130,61 @@ export function evaluateHand(cards) {
     }
   } else if (counts[0] === 2) {
     handType = 'Pareja';
-    score = 30;
+    baseScore = 10;
+    multiplier = 2;
     winningCards = getCardsForCount(2);
   } 
-  // else => 'Carta Alta' with score=10 => highlight none or all?
-  // We'll highlight none for high card. (winningCards = [])
 
-  return { handType, score, winningCards };
+  // Calculate base chips from card values
+  let chips = 0;
+  cards.forEach(card => {
+    let cardValue = ranksOrder.indexOf(card.rank) + 1;
+    if (card.rank === 'ace') cardValue = 14; // Ace is high
+    chips += cardValue;
+  });
+
+  // Aplicar los efectos de los jokers
+  const context = {
+    handType,
+    baseScore,
+    winningCards,
+    multiplier: playerContext.multiplier || 1,
+    chips: playerContext.chips || 0,
+    emptyJokerSlots: playerContext.emptyJokerSlots || 0,
+    remainingDiscards: playerContext.remainingDiscards || 0,
+    jokerCount: playerContext.jokerCount || 0,
+    isFinalHand: playerContext.isFinalHand || false,
+    firstFigurePlayed: playerContext.firstFigurePlayed || false,
+    jokerDestroyed: false,
+    handSize: playerContext.handSize || 5
+  };
+
+  cards.forEach(card => {
+    inventory.getJokers().forEach(joker => {
+      if (jokers[joker]) {
+        console.log(`Aplicando joker ${joker} a la carta ${card.rank} de ${card.suit}`);
+        jokers[joker].apply([card], context);
+      }
+    });
+  });
+
+  inventory.getJokers().forEach(joker => {
+    if (jokers[joker]) {
+      console.log(`Aplicando joker global ${joker}`);
+      jokers[joker].apply(cards, context);
+    }
+  });
+
+  // Actualizar el contexto del jugador con los nuevos valores
+  playerContext.multiplier = context.multiplier;
+  playerContext.chips = context.chips;
+  playerContext.firstFigurePlayed = context.firstFigurePlayed;
+  playerContext.handSize = context.handSize;
+
+  // Calcular la puntuación final
+  const finalScore = (chips + baseScore) * context.multiplier;
+
+  console.log(`Puntuación final: ${finalScore}, Fichas: ${chips}, Multiplicador: ${context.multiplier}`);
+
+  return { handType, score: finalScore, winningCards };
 }
