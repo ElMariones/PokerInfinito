@@ -26,6 +26,7 @@ export default class TransicionBatalla extends Phaser.Scene {
     this.npc = data.npc;
     this.pointsNeeded = data.pointsNeeded;
     this.rounds = data.rounds;
+    this.gameScene = data.scene;
   }
 
   preload() {
@@ -33,6 +34,9 @@ export default class TransicionBatalla extends Phaser.Scene {
   }
 
   create() {
+
+    this.scene.sleep('UIOverlay');
+
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
 
@@ -171,7 +175,7 @@ export default class TransicionBatalla extends Phaser.Scene {
         onStart: (fromScene, toScene, duration) => {
           DissolveMainCamera(fromScene, duration);
         },
-        data: { pointsNeeded: this.pointsNeeded, rounds: this.rounds }
+        data: { pointsNeeded: this.pointsNeeded, rounds: this.rounds, scene: this.gameScene }
       });
     });
   }
