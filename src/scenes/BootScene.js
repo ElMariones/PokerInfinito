@@ -49,6 +49,7 @@ import ovejaIdle from '../../assets/images/sprites/oveja/Idle.png';
 import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
 
 //import pictures dialogos
+
 import samuel from '../../assets/images/samuel.png';
 import dante from '../../assets/images/dante.png';
 import helena from '../../assets/images/helena.png';
@@ -56,6 +57,7 @@ import oveja from '../../assets/images/oveja.png';
 import padre from '../../assets/images/padre.png';
 import gemelos from '../../assets/images/gemelos.png';
 import pescador from '../../assets/images/pescador.png';
+
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';

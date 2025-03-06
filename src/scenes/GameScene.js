@@ -29,6 +29,7 @@ export default class GameScene extends Phaser.Scene {
     this.maxRounds = data.rounds || 5;
     this.score = 0;
     this.roundNumber = 1;
+    this.gameScene = data.scene;
   }
 
   create() {
@@ -110,6 +111,7 @@ export default class GameScene extends Phaser.Scene {
     if (this.deck.length === 0 && this.score < this.pointsNeeded) {
       this.showResultMessage("No hay más cartas en el mazo. ¡Has perdido!");
       this.scene.stop('UIScene');
+      this.scene.stop();
       this.scene.start('IntroScene');
     }
   }
@@ -334,6 +336,7 @@ export default class GameScene extends Phaser.Scene {
         this.registry.set('coins', coins + excessPoints);
       } else {
         this.scene.stop('UIScene');
+        this.scene.stop();
         this.scene.start('IntroScene');
       }
     }

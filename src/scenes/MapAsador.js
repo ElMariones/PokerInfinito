@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapAsador extends Phaser.Scene {
   constructor() {
@@ -24,10 +25,12 @@ export default class MapAsador extends Phaser.Scene {
     const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
     const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
     const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasSuelosParedes], 0, 0);
+    const layerencima_mobiliario = map.createLayer('encima_mobiliario', texturasCocina, 0, 0);
 
     // 4) Set collisions
     layerPared.setCollisionByExclusion([-1]);
     layerMobiliario.setCollisionByExclusion([-1]);
+    layerencima_mobiliario.setCollisionByExclusion([-1]);
 
     // 5) Player logic
     Player.createPlayerAnimations(this);
@@ -51,10 +54,29 @@ export default class MapAsador extends Phaser.Scene {
       { x: 320, y: 614, toScene: 'MapScene', spawnX: 255, spawnY: 365 },
       // Agrega más puertas según sea necesario
     ]);
+
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)
+    this.npcManager.createAnimations()
+
+    const samuel = this.npcManager.addNPC('samuel', 321, 125, 'idle-down', false)
+    this.npcArray = this.npcManager.getAllNPCs()
+
+    this.input.keyboard.on('keydown-E', () => {
+      this.tryInteract()
+    });
   }
 
   update() {
     this.player.update();
+    this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
+  }
+
+  tryInteract() {
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegamos la interacción con puertas
+      return; // Si hay una puerta, no se verifica lo de los NPCs
+    }
+    this.npcManager.tryInteract();
   }
 }

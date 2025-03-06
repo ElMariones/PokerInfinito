@@ -7,7 +7,9 @@ export default class MapOlvido extends Phaser.Scene {
     super('MapOlvido');
   }
 
-  create() {
+  create(data) {
+    const startX = data?.spawnX ?? 317;
+    const startY = data?.spawnY ?? 586;
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
@@ -39,7 +41,7 @@ export default class MapOlvido extends Phaser.Scene {
     Player.createPlayerAnimations(this);
 
     // 2) Crear el jugador
-    this.player = new Player(this, 200, 500, 'playerIdle');
+    this.player = new Player(this, startX, startY, 'playerIdle');
 
     // 3) Colisiones con las capas del mapa
     this.physics.add.collider(this.player, layerPared);
