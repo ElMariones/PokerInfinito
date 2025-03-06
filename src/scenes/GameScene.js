@@ -243,7 +243,11 @@ export default class GameScene extends Phaser.Scene {
                     } else {
                         if (this.score >= this.pointsNeeded) {
                             this.scene.stop('UIScene');
+                            this.scene.wake('UIOverlay');
                             this.scene.start('MapScene');
+                            const coins = this.registry.get('coins') || 0;
+                            const excessPoints = this.score - this.pointsNeeded;
+                            this.registry.set('coins', coins + excessPoints);
                         } else {
                             this.scene.stop('UIScene');
                             this.scene.start('IntroScene');
@@ -323,7 +327,11 @@ export default class GameScene extends Phaser.Scene {
     if (this.roundNumber > this.maxRounds) {
       if (this.score >= this.pointsNeeded) {
         this.scene.stop('UIScene');
+        this.scene.wake('UIOverlay');
         this.scene.start('MapScene');
+        const coins = this.registry.get('coins') || 0;
+        const excessPoints = this.score - this.pointsNeeded;
+        this.registry.set('coins', coins + excessPoints);
       } else {
         this.scene.stop('UIScene');
         this.scene.start('IntroScene');
