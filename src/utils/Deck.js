@@ -8,8 +8,8 @@ import Phaser from 'phaser'
  *    { rank: string, suit: string, key: string }
  */
 export function createDeck(includeJokers = false) {
-    const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
-    const ranks = ['2','3','4','5','6','7','8','9','10','queen','king','ace'];
+    const suits = ['bastos', 'oros', 'copas', 'espadas'];
+    const ranks = ['2','3','4','5','6','7','8','9','sota','caballo','rey','ace'];
   
     const deck = [];
   

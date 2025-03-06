@@ -1,289 +1,43 @@
-export const jokers = {
-    'Guasón de Barrio': {
-      apply: (hand, context) => {
-        context.multiplier += 4;
-      }
-    },
-    'Tío Gilito': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'oros') {
-            context.multiplier += 3;
-          }
-        });
-      }
-    },
-    'Don Juan de la Baraja': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'copas') {
-            context.multiplier += 3;
-          }
-        });
-      }
-    },
-    'Espadachín Colérico': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'espadas') {
-            context.multiplier += 3;
-          }
-        });
-      }
-    },
-    'Tragaldabas de Bastos': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'bastos') {
-            context.multiplier += 3;
-          }
-        });
-      }
-    },
-    'Loco de Atar': {
-      apply: (hand, context) => {
-        if (context.handType === 'Trío') {
-          context.multiplier += 12;
-        }
-      }
-    },
-    'Chiflado de Pares': {
-      apply: (hand, context) => {
-        if (context.handType === 'Doble Pareja') {
-          context.multiplier += 10;
-        }
-      }
-    },
-    'Pirado de Escaleras': {
-      apply: (hand, context) => {
-        if (context.handType === 'Escalera') {
-          context.multiplier += 12;
-        }
-      }
-    },
-    'Bufón de Colores': {
-      apply: (hand, context) => {
-        if (context.handType === 'Color') {
-          context.multiplier += 10;
-        }
-      }
-    },
-    'Zorro de la Pareja': {
-      apply: (hand, context) => {
-        if (context.handType === 'Pareja') {
-          context.chips += 50;
-        }
-      }
-    },
-    'Astuto del Trío': {
-      apply: (hand, context) => {
-        if (context.handType === 'Trío') {
-          context.chips += 100;
-        }
-      }
-    },
-    'Listo de la Doble': {
-      apply: (hand, context) => {
-        if (context.handType === 'Doble Pareja') {
-          context.chips += 80;
-        }
-      }
-    },
-    'Tramposo de la Escalera': {
-      apply: (hand, context) => {
-        if (context.handType === 'Escalera') {
-          context.chips += 100;
-        }
-      }
-    },
-    'Marañoso del Color': {
-      apply: (hand, context) => {
-        if (context.handType === 'Color') {
-          context.chips += 80;
-        }
-      }
-    },
-    'Sombra del Guasón': {
-      apply: (hand, context) => {
-        context.multiplier += context.emptyJokerSlots;
-      }
-    },
-    'El Banderín': {
-      apply: (hand, context) => {
-        context.chips += 30 * context.remainingDiscards;
-      }
-    },
-    'Cima Mística': {
-      apply: (hand, context) => {
-        if (context.remainingDiscards === 0) {
-          context.multiplier += 15;
-        }
-      }
-    },
-    'Guasón Abstracto': {
-      apply: (hand, context) => {
-        context.multiplier += 3 * context.jokerCount;
-      }
-    },
-    'Erudito': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.rank === 'ace') {
-            context.chips += 20;
-            context.multiplier += 4;
-          }
-        });
-      }
-    },
-    'Caminante': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          card.permanentChipBonus = (card.permanentChipBonus || 0) + 5;
-        });
-      }
-    },
-    'El Noble Cavendish': {
-      apply: (hand, context) => {
-        context.multiplier *= 3;
-        if (Math.random() < 0.001) {
-          context.jokerDestroyed = true;
-        }
-      }
-    },
-    'El Barón': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.rank === 'king') {
-            context.multiplier *= 1.5;
-          }
-        });
-      }
-    },
-    'La Fotografía': {
-      apply: (hand, context) => {
-        if (!context.firstFigurePlayed) {
-          context.multiplier *= 2;
-          context.firstFigurePlayed = true;
-        }
-      }
-    },
-    'El Juglar': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.rank === 'king' || card.rank === 'knight') {
-            context.multiplier *= 2;
-          }
-        });
-      }
-    },
-    'El Ahorrador': {
-      apply: (hand, context) => {
-        context.multiplier += 2 * Math.floor(context.chips / 5);
-      }
-    },
-    'El Caballista': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.rank === 'knight') {
-            context.multiplier += 13;
-          }
-        });
-      }
-    },
-    'El Acróbata': {
-      apply: (hand, context) => {
-        context.chips += 250;
-        context.handSize -= 2;
-      }
-    },
-    'El Dúo': {
-      apply: (hand, context) => {
-        if (context.handType === 'Pareja') {
-          context.multiplier *= 2;
-        }
-      }
-    },
-    'El Trío': {
-      apply: (hand, context) => {
-        if (context.handType === 'Trío') {
-          context.multiplier *= 3;
-        }
-      }
-    },
-    'La Familia': {
-      apply: (hand, context) => {
-        if (context.handType === 'Póker') {
-          context.multiplier *= 4;
-        }
-      }
-    },
-    'La Orden': {
-      apply: (hand, context) => {
-        if (context.handType === 'Escalera') {
-          context.multiplier *= 3;
-        }
-      }
-    },
-    'La Tribu': {
-      apply: (hand, context) => {
-        if (context.handType === 'Color') {
-          context.multiplier *= 2;
-        }
-      }
-    },
-    'Punta de Flecha': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'espadas') {
-            context.chips += 50;
-          }
-        });
-      }
-    },
-    'Gema en Bruto': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'oros') {
-            context.chips += 1;
-          }
-        });
-      }
-    },
-    'Guasón Manchado': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'copas') {
-            card.suit = 'oros';
-          } else if (card.suit === 'bastos') {
-            card.suit = 'espadas';
-          }
-        });
-      }
-    },
-    'El Trapecista': {
-      apply: (hand, context) => {
-        if (context.isFinalHand) {
-          context.multiplier *= 3;
-        }
-      }
-    },
-    'El Billete Dorado': {
-      apply: (hand, context) => {
-        hand.forEach(card => {
-          if (card.suit === 'oros') {
-            context.chips += 4;
-          }
-        });
-      }
-    },
-    'La Cromos': {
-      apply: (hand, context) => {
-        context.multiplier += 1.5 * context.jokerCount;
-      }
-    },
-    'El Guasón Dorado': {
-      apply: (hand, context) => {
-        context.chips += 4;
-      }
-    }
-  };
+const Jokers = [
+  { id: 1, name: "Guasón de Barrio", image: "barrioJoker", effect: "context.multiplier += 4", price: 100 },
+  { id: 2, name: "Tío Gilito", image: "gilitoJoker", effect: "if (card.suit === 'oros') context.multiplier += 3", price: 120 },
+  { id: 3, name: "Don Juan de la Baraja", image: "juanJoker", effect: "if (card.suit === 'copas') context.multiplier += 3", price: 150 },
+  { id: 4, name: "Espadachín Colérico", image: "espadachinJoker", effect: "if (card.suit === 'espadas') context.multiplier += 3", price: 200 },
+  { id: 5, name: "Tragaldabas de Bastos", image: "tragaldabasJoker", effect: "if (card.suit === 'bastos') context.multiplier += 3", price: 180 },
+  { id: 6, name: "Loco de Atar", image: "locoJoker", effect: "if (context.handType === 'Trío') context.multiplier += 12", price: 160 },
+  { id: 7, name: "Chiflado de Pares", image: "chifladoJoker", effect: "if (context.handType === 'Doble Pareja') context.multiplier += 10", price: 250 },
+  { id: 8, name: "Pirado de Escaleras", image: "piradoJoker", effect: "if (context.handType === 'Escalera') context.multiplier += 12", price: 220 },
+  { id: 9, name: "Bufón de Colores", image: "bufonJoker", effect: "if (context.handType === 'Color') context.multiplier += 10", price: 100 },
+  { id: 10, name: "Zorro de la Pareja", image: "zorroJoker", effect: "if (context.handType === 'Pareja') context.chips += 50", price: 120 },
+  { id: 11, name: "Astuto del Trío", image: "astutoJoker", effect: "if (context.handType === 'Trío') context.chips += 100", price: 150 },
+  { id: 12, name: "Listo de la Doble", image: "listoJoker", effect: "if (context.handType === 'Doble Pareja') context.chips += 80", price: 200 },
+  { id: 13, name: "Tramposo de la Escalera", image: "tramposoJoker", effect: "if (context.handType === 'Escalera') context.chips += 100", price: 180 },
+  { id: 14, name: "Marañoso del Color", image: "marañosoJoker", effect: "if (context.handType === 'Color') context.chips += 80", price: 160 },
+  { id: 15, name: "Sombra del Guasón", image: "sombraJoker", effect: "context.multiplier += context.emptyJokerSlots", price: 250 },
+  { id: 16, name: "El Banderín", image: "banderinJoker", effect: "context.chips += 30 * context.remainingDiscards", price: 220 },
+  { id: 17, name: "Cima Mística", image: "cimaJoker", effect: "if (context.remainingDiscards === 0) context.multiplier += 15", price: 100 },
+  { id: 18, name: "Guasón Abstracto", image: "abstractoJoker", effect: "context.multiplier += 3 * context.jokerCount", price: 120 },
+  { id: 19, name: "Erudito", image: "eruditoJoker", effect: "if (card.rank === 'ace') { context.chips += 20; context.multiplier += 4; }", price: 150 },
+  { id: 20, name: "Caminante", image: "caminanteJoker", effect: "card.permanentChipBonus = (card.permanentChipBonus || 0) + 5", price: 200 },
+  { id: 21, name: "El Noble Cavendish", image: "nobleJoker", effect: "context.multiplier *= 3; if (Math.random() < 0.01) context.jokerDestroyed = true", price: 180 },
+  { id: 22, name: "El Barón", image: "baronJoker", effect: "if (card.rank === 'rey') context.multiplier *= 1.5", price: 160 },
+  { id: 23, name: "La Fotografía", image: "fotografiaJoker", effect: "if (!context.firstFigurePlayed) { context.multiplier *= 2; context.firstFigurePlayed = true; }", price: 250 },
+  { id: 24, name: "El Juglar", image: "juglarJoker", effect: "if (card.rank === 'rey' || card.rank === 'caballo') context.multiplier *= 2", price: 220 },
+  { id: 25, name: "El Ahorrador", image: "ahorradorJoker", effect: "context.multiplier += 2 * Math.floor(context.chips / 5)", price: 100 },
+  { id: 26, name: "El Caballista", image: "caballistaJoker", effect: "if (card.rank === 'caballo') context.multiplier += 13", price: 120 },
+  { id: 27, name: "El Acróbata", image: "acrobataJoker", effect: "context.chips += 250; context.handSize -= 2", price: 150 },
+  { id: 28, name: "El Dúo", image: "duoJoker", effect: "if (context.handType === 'Pareja') context.multiplier *= 2", price: 200 },
+  { id: 29, name: "El Trío", image: "trioJoker", effect: "if (context.handType === 'Trío') context.multiplier *= 3", price: 180 },
+  { id: 30, name: "La Familia", image: "familiaJoker", effect: "if (context.handType === 'Póker') context.multiplier *= 4", price: 160 },
+  { id: 31, name: "La Orden", image: "ordenJoker", effect: "if (context.handType === 'Escalera') context.multiplier *= 3", price: 250 },
+  { id: 32, name: "La Tribu", image: "tribuJoker", effect: "if (context.handType === 'Color') context.multiplier *= 2", price: 220 },
+  { id: 33, name: "Punta de Flecha", image: "flechaJoker", effect: "if (card.suit === 'espadas') context.chips += 50", price: 100 },
+  { id: 34, name: "Gema en Bruto", image: "gemaJoker", effect: "if (card.suit === 'oros') context.chips += 1", price: 120 },
+  { id: 35, name: "Guasón Manchado", image: "manchadoJoker", effect: "if (card.suit === 'copas') { card.suit = 'oros'; } else if (card.suit === 'bastos') { card.suit = 'espadas'; }", price: 150 },
+  { id: 36, name: "El Trapecista", image: "trapecistaJoker", effect: "if (context.isFinalHand) context.multiplier *= 3", price: 200 },
+  { id: 37, name: "El Billete Dorado", image: "billeteJoker", effect: "if (card.suit === 'oros') context.chips += 4", price: 180 },
+  { id: 38, name: "La Cromos", image: "cromosJoker", effect: "context.multiplier += 1.5 * context.jokerCount", price: 160 },
+  { id: 39, name: "El Guasón Dorado", image: "doradoJoker", effect: "context.chips += 4", price: 250 }
+];
+
+export default Jokers;

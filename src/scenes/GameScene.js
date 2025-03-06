@@ -354,10 +354,10 @@ export default class GameScene extends Phaser.Scene {
     } else {
       // Sort by suit in the following order: hearts, diamonds, spades, clubs.
       const suitOrder = {
-        'hearts': 0,
-        'diamonds': 1,
-        'spades': 2,
-        'clubs': 3
+        'copas': 0,
+        'oros': 1,
+        'espadas': 2,
+        'bastos': 3
       };
   
       this.playerHand.sort((a, b) => {
@@ -383,9 +383,9 @@ export default class GameScene extends Phaser.Scene {
       '7': 7,
       '8': 8,
       '9': 9,
-      '10': 10,
-      'queen': 11,
-      'king': 12
+      'sota': 10,
+      'caballo': 11,
+      'rey': 12
     };
     return order[rank] || 0;
   }
