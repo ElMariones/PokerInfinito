@@ -14,6 +14,9 @@ import MapPuerto from './scenes/MapPuerto.js';
 import MapRicon from './scenes/MapRincon.js';
 import MapOlvido from './scenes/MapOlvido.js';
 import MapCasino from './scenes/MapCasino.js';
+import UIOverlay from './scenes/UIOverlay.js';
+import Shop from './scenes/Shop.js';
+import JokersInventoryScene from './scenes/JokersInventoryScene.js';
 
 let config = {
   type: Phaser.AUTO,
@@ -47,7 +50,10 @@ let config = {
     TransicionBatalla,
     GameScene,
     UIScene,
-    Dialogos
+    Dialogos,
+    UIOverlay,
+    Shop,
+    JokersInventoryScene
   ],
 
   // Register the plugin so it loads in each scene

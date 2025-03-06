@@ -34,6 +34,9 @@ export default class TransicionBatalla extends Phaser.Scene {
   }
 
   create() {
+
+    this.scene.sleep('UIOverlay');
+
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
 
