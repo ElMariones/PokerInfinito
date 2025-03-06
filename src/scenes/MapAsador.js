@@ -9,6 +9,8 @@ export default class MapAsador extends Phaser.Scene {
   }
 
   create(data) {
+    this.registry.set('currentMap', this.scene.key);
+
     // 1) Read optional spawn data (in case we're coming from another scene)
     const startX = data?.spawnX ?? 200;
     const startY = data?.spawnY ?? 500;

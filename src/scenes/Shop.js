@@ -79,17 +79,20 @@ export default class ShopScene extends Phaser.Scene {
 
     // Add this after your jokerOptions.forEach loop in the create() method:
 
-// Exit button at the bottom
-const exitButton = this.add.text(width / 2, height - 50, "[ Exit ]", 
-    { font: "20px Arial", fill: "#ff0000" })
-    .setOrigin(0.5)
-    .setInteractive({ useHandCursor: true });
-
-exitButton.on('pointerdown', () => {
-    this.scene.stop('ShopScene');
-    this.scene.resume('MapScene');
-    this.scene.wake('UIOverlay');
-});
+        // Exit button at the bottom
+        const exitButton = this.add.text(width / 2, height - 50, "[ Exit ]", 
+            { font: "20px Arial", fill: "#ff0000" })
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true });
+            exitButton.on('pointerdown', () => {
+            // Retrieve the key of the current map scene
+            const currentMap = this.registry.get('currentMap');
+            this.scene.stop('ShopScene');
+            if (currentMap) {
+            this.scene.resume(currentMap);
+            }
+            this.scene.wake('UIOverlay');
+    });
 
   }
 }

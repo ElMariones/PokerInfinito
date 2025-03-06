@@ -39,15 +39,19 @@ export default class JokersInventoryScene extends Phaser.Scene {
             });
         }
 
-        // Exit button to close the inventory scene and resume game and UI overlay
+        // Exit button at the bottom
         const exitButton = this.add.text(width / 2, height - 50, "[ Exit ]", 
-            { font: "20px Arial", fill: "#ff0000" }).setOrigin(0.5);
-        exitButton.setInteractive({ useHandCursor: true });
+                          { font: "20px Arial", fill: "#ff0000" })
+                          .setOrigin(0.5)
+                          .setInteractive({ useHandCursor: true });
         exitButton.on('pointerdown', () => {
-            // Close this inventory scene and resume the main game and UI overlay
+            // Retrieve the key of the current map scene
+            const currentMap = this.registry.get('currentMap');
             this.scene.stop('JokersInventoryScene');
+            if (currentMap) {
+            this.scene.resume(currentMap);
+            }
             this.scene.wake('UIOverlay');
-            this.scene.resume('MapScene');
         });
     }
 }
