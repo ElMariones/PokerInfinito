@@ -63,7 +63,7 @@ import pescador from '../../assets/images/pescador.png';
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
 //importar mapas
-import mapaCiudad from '../../assets/maps/ciudad2.json';
+import mapaCiudad from '../../assets/maps/ciudad3.json';
 import mapaAsadorRey from '../../assets/maps/interior_asadorRey.json';
 import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
@@ -159,7 +159,7 @@ export default class BootScene extends Phaser.Scene {
   create() {
     // Start the IntroScene after preloading assets
     // In a BootScene or before starting game scenes
-    this.registry.set('coins', 200);  // start with 0 or loaded value
+    this.registry.set('coins', 2200);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
     this.scene.start('IntroScene');
   }
