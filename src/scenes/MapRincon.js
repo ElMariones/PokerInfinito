@@ -65,7 +65,7 @@ export default class MapRincon extends Phaser.Scene {
 
     
     this.doorManager = new DoorManager(this, [
-      { x: 956, y: 928, toScene: 'MapScene', spawnX: 1843, spawnY: 956 },
+      { x: 956, y: 928, toScene: 'MapScene', spawnX: 832, spawnY: 449 },
       // Agrega más puertas según sea necesario
     ]);
   }

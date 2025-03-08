@@ -36,6 +36,8 @@ let config = {
   },
   pixelArt: true,
   roundPixels: true,
+  maxLights: 200,
+
   
   backgroundColor: '#006400',
   scene: [
