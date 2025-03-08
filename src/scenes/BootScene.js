@@ -70,6 +70,9 @@ import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 
+//importar botones
+import button_default from '../../assets/images/button_default.png';
+
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -145,6 +148,13 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('rpg', rpg);
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
+
+    // In your preload scene:
+this.load.spritesheet('button_default', button_default, {
+  frameWidth: 142,  // width of each frame
+  frameHeight: 28   // height of each frame (112 / 4)
+});
+
 
 
     //Json Mapas
