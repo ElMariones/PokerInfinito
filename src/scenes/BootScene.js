@@ -63,12 +63,15 @@ import pescador from '../../assets/images/pescador.png';
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
 //importar mapas
-import mapaCiudad from '../../assets/maps/ciudad2.json';
+import mapaCiudad from '../../assets/maps/ciudad3.json';
 import mapaAsadorRey from '../../assets/maps/interior_asadorRey.json';
 import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
+
+//importar botones
+import button_default from '../../assets/images/button_default.png';
 
 
 export default class BootScene extends Phaser.Scene {
@@ -146,6 +149,13 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
 
+    // In your preload scene:
+this.load.spritesheet('button_default', button_default, {
+  frameWidth: 142,  // width of each frame
+  frameHeight: 28   // height of each frame (112 / 4)
+});
+
+
 
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
@@ -158,6 +168,9 @@ export default class BootScene extends Phaser.Scene {
 
   create() {
     // Start the IntroScene after preloading assets
+    // In a BootScene or before starting game scenes
+    this.registry.set('coins', 2200);  // start with 0 or loaded value
+    this.registry.set('jokers', []);  // start with empty array or loaded value
     this.scene.start('IntroScene');
   }
 

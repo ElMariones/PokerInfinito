@@ -8,6 +8,8 @@ export default class MapPuerto extends Phaser.Scene {
   }
 
   create(data) {
+    this.registry.set('currentMap', this.scene.key);
+
     const startX = data?.spawnX ?? 317;
     const startY = data?.spawnY ?? 586;
     const width = this.cameras.main.width;
@@ -65,7 +67,7 @@ export default class MapPuerto extends Phaser.Scene {
 
     // Inicializar el DoorManager después de todas las capas
     this.doorManager = new DoorManager(this, [
-      { x: 478, y: 608, toScene: 'MapScene', spawnX: 195, spawnY: 956 },
+      { x: 478, y: 608, toScene: 'MapScene', spawnX: 1920, spawnY: 444 },
       // Agrega más puertas según sea necesario
     ]);
   }
