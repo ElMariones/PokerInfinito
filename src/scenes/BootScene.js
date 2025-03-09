@@ -171,6 +171,7 @@ this.load.spritesheet('button_default', button_default, {
     // In a BootScene or before starting game scenes
     this.registry.set('coins', 2200);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
+    this.registry.set('stage', 0);  // 
     this.scene.start('IntroScene');
   }
 

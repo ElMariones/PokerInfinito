@@ -10,6 +10,9 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "": {
+            "scaleInEditor": 2
+        },
         "#texturas_ciudad": {
             "scaleInDock": 0.75
         },
@@ -166,15 +169,18 @@
             "scaleInDock": 1
         },
         "ciudad3.tmj": {
-            "scale": 1,
-            "selectedLayer": 3,
+            "expandedObjectLayers": [
+                10
+            ],
+            "scale": 2,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 348.5,
-                "y": 389
+                "x": 268.25,
+                "y": 556
             }
         },
         "ciudad3.tmj#texturas_ciudad": {
-            "scaleInDock": 1.5
+            "scaleInDock": 1
         }
     },
     "last.exportedFilePath": "C:/Users/mario/mariogit/PokerInfinito/assets/maps",
@@ -184,14 +190,15 @@
     "map.lastUsedFormat": "json",
     "map.width": 32,
     "openFiles": [
-        "ciudad.json",
-        "C:/Users/mario/Desktop/tiled/ciudad2.json"
+        "C:/Users/mario/Desktop/tiled/ciudad2.json",
+        "ciudad3.tmj"
     ],
     "project": "ciudad.tiled-project",
     "property.type": "object",
     "recentFiles": [
-        "ciudad.json",
-        "C:/Users/mario/Desktop/tiled/ciudad2.json"
+        "ciudad3.tmj",
+        "C:/Users/mario/Desktop/tiled/ciudad2.json",
+        "ciudad.json"
     ],
     "tileset.embedInMap": true
 }

@@ -48,7 +48,7 @@ export default class UIOverlay extends Phaser.Scene {
 
         // When the scene wakes (e.g., returning from Shop or Inventory), update coin text
         this.events.on('wake', () => {
-            this.coinText.setText('Coins: ' + this.registry.get('coins'));
+            this.coinText.setText('Dinero: ' + this.registry.get('coins'));
         });
     }
 
