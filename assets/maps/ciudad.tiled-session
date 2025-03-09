@@ -20,7 +20,7 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 878,
+                "x": 1210,
                 "y": 410.6666666666666
             }
         },
@@ -172,14 +172,30 @@
             "expandedObjectLayers": [
                 10
             ],
-            "scale": 2,
+            "scale": 0.5,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 268.25,
-                "y": 556
+                "x": 1319,
+                "y": 970
             }
         },
         "ciudad3.tmj#texturas_ciudad": {
+            "scaleInDock": 1
+        },
+        "exterior_casino.tmj": {
+            "expandedObjectLayers": [
+                11,
+                10,
+                12
+            ],
+            "scale": 1.5,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 874.3333333333333,
+                "y": 531.3333333333333
+            }
+        },
+        "exterior_casino.tmj#texturas_ciudad": {
             "scaleInDock": 1
         }
     },
@@ -191,11 +207,13 @@
     "map.width": 32,
     "openFiles": [
         "C:/Users/mario/Desktop/tiled/ciudad2.json",
-        "ciudad3.tmj"
+        "ciudad3.tmj",
+        "exterior_casino.tmj"
     ],
     "project": "ciudad.tiled-project",
     "property.type": "object",
     "recentFiles": [
+        "exterior_casino.tmj",
         "ciudad3.tmj",
         "C:/Users/mario/Desktop/tiled/ciudad2.json",
         "ciudad.json"
