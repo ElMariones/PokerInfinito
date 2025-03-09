@@ -119,7 +119,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    */
   update() {
     //console.log(`Player at X: ${this.x}, Y: ${this.y}`);
-    const speed = 100;
+    const speed = 600;
     const up = this.cursors.up.isDown;
     const down = this.cursors.down.isDown;
     const left = this.cursors.left.isDown;

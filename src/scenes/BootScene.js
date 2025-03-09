@@ -69,6 +69,7 @@ import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
+import mapaextCasino from '../../assets/maps/exterior_casino.json';
 
 //importar botones
 import button_default from '../../assets/images/button_default.png';
@@ -164,6 +165,7 @@ this.load.spritesheet('button_default', button_default, {
     this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
+    this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
   }
 
   create() {
