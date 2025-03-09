@@ -70,6 +70,12 @@ import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 
+//importar jokers
+import joker1 from '../../assets/images/joker1.png';
+import joker2 from '../../assets/images/joker2.png';
+import joker3 from '../../assets/images/joker3.png';
+import joker4 from '../../assets/images/joker4.png'; 
+import joker5 from '../../assets/images/joker5.png';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -146,7 +152,6 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
 
-
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
     this.load.tilemapTiledJSON('asadorReyMap', mapaAsadorRey);
@@ -154,6 +159,13 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
+
+    //Imágnes para los jokers
+    this.load.image('joker1', joker1);
+    this.load.image('joker2', joker2);
+    this.load.image('joker3', joker3);
+    this.load.image('joker4', joker4);
+    this.load.image('joker5', joker5);
   }
 
   create() {

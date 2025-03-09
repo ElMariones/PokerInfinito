@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { createDeck, shuffle } from '../utils/Deck.js';
 import { drawCards } from '../utils/HandManager.js';
 import { evaluateHand } from '../utils/PokerScoring.js';
+import Inventory from '../utils/Inventory.js';
+import JokerManager from '../utils/JokerManager.js';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -46,6 +48,17 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
+
+    this.inventory = new Inventory(this);
+
+    // Initialize joker manager
+    this.jokerManager = new JokerManager(this, this.inventory);
+  
+    // For testing: Add the first 5 jokers to inventory
+    this.inventory.addFirstFiveJokers();
+    
+    // Display jokers
+    this.jokerManager.displayJokers();
 
     // --- Create & shuffle deck (48 cards total) ---
     let fullDeck = createDeck();      // Normally 52 cards
@@ -123,7 +136,7 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
-    const result = evaluateHand(this.selectedCards);
+    const result = evaluateHand(this.selectedCards, this, this.registry, this.inventory);
     this.score += result.score;
     this.animateSelectedCards(result);
   }
@@ -261,15 +274,7 @@ export default class GameScene extends Phaser.Scene {
     });
 }
 
-
-
-
-
-
-
-
-
-  highlightWinningCards(result) {
+highlightWinningCards(result) {
     const winners = result.winningCards || [];
     winners.forEach(card => {
       const sprite = this.cardSprites.find(s => s.texture.key === card.key);
