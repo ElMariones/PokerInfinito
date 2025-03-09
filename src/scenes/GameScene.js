@@ -239,23 +239,47 @@ export default class GameScene extends Phaser.Scene {
                 });
 
                 this.time.delayedCall(1300, () => {
-                    this.roundNumber++;
-                    if (this.roundNumber <= this.maxRounds) {
-                        this.replaceUsedCards();
+                  this.roundNumber++;
+                  if (this.roundNumber <= this.maxRounds) {
+                      this.replaceUsedCards();
+                  } else {
+                    if (this.score >= this.pointsNeeded) {
+                      // Player won the battle:
+                      this.scene.stop('UIScene');
+                      this.scene.stop('GameScene');
+                      this.scene.wake('UIOverlay');
+                      const currentMap = this.registry.get('currentMap')
+                      this.scene.resume(currentMap);
+                      const coins = this.registry.get('coins') || 0;
+                      const excessPoints = this.score - this.pointsNeeded;
+                      this.registry.set('coins', coins + excessPoints);
+                    
+                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+                      // If Dialogos is not already active, launch it with required data.
+                      if (!this.scene.isActive('Dialogos')) {
+                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+                      }
+                      // Call the afterBattle function (passing the npc name).
+                      this.scene.get('Dialogos').afterBattle(true);
                     } else {
-                        if (this.score >= this.pointsNeeded) {
-                            this.scene.stop('UIScene');
-                            this.scene.wake('UIOverlay');
-                            this.scene.start('MapScene');
-                            const coins = this.registry.get('coins') || 0;
-                            const excessPoints = this.score - this.pointsNeeded;
-                            this.registry.set('coins', coins + excessPoints);
-                        } else {
-                            this.scene.stop('UIScene');
-                            this.scene.start('IntroScene');
-                        }
+                      // Player lost the battle:
+                      this.scene.stop('UIScene');
+                      this.scene.stop('GameScene');
+                      this.scene.wake('UIOverlay');
+                      const currentMap = this.registry.get('currentMap')
+                      this.scene.resume(currentMap);
+                    
+                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+                      // If Dialogos is not already active, launch it with required data.
+                      if (!this.scene.isActive('Dialogos')) {
+                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+                      }
+                      // Call the afterBattle function (passing the npc name).
+                      this.scene.get('Dialogos').afterBattle(false);
                     }
-                });
+                  }
+              });
+              
             });
         });
     });
@@ -327,18 +351,40 @@ export default class GameScene extends Phaser.Scene {
     }
 
     if (this.roundNumber > this.maxRounds) {
-      if (this.score >= this.pointsNeeded) {
-        this.scene.stop('UIScene');
-        this.scene.wake('UIOverlay');
-        this.scene.start('MapScene');
-        const coins = this.registry.get('coins') || 0;
-        const excessPoints = this.score - this.pointsNeeded;
-        this.registry.set('coins', coins + excessPoints);
-      } else {
-        this.scene.stop('UIScene');
-        this.scene.stop();
-        this.scene.start('IntroScene');
-      }
+if (this.score >= this.pointsNeeded) {
+                      // Player won the battle:
+                      this.scene.stop('UIScene');
+                      this.scene.stop('GameScene');
+                      this.scene.wake('UIOverlay');
+                      const currentMap = this.registry.get('currentMap')
+                      this.scene.resume(currentMap);
+                      const coins = this.registry.get('coins') || 0;
+                      const excessPoints = this.score - this.pointsNeeded;
+                      this.registry.set('coins', coins + excessPoints);
+                    
+                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+                      // If Dialogos is not already active, launch it with required data.
+                      if (!this.scene.isActive('Dialogos')) {
+                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+                      }
+                      // Call the afterBattle function (passing the npc name).
+                      this.scene.get('Dialogos').afterBattle(true);
+                    } else {
+                      // Player lost the battle:
+                      this.scene.stop('UIScene');
+                      this.scene.stop('GameScene');
+                      this.scene.wake('UIOverlay');
+                      const currentMap = this.registry.get('currentMap')
+                      this.scene.resume(currentMap);
+                    
+                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+                      // If Dialogos is not already active, launch it with required data.
+                      if (!this.scene.isActive('Dialogos')) {
+                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+                      }
+                      // Call the afterBattle function (passing the npc name).
+                      this.scene.get('Dialogos').afterBattle(false);
+}
     }
   }
 
