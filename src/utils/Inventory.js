@@ -2,6 +2,7 @@
 import Jokers from './Jokers.js';
 
 class Inventory {
+  
   constructor(scene) {
     if (!scene || !scene.registry) {
       throw new Error("Inventory requiere una escena de Phaser con registry válido");

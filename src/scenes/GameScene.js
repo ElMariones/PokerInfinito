@@ -21,6 +21,22 @@ export default class GameScene extends Phaser.Scene {
 
     // NEW: Sorting method; default is by number
     this.sortMethod = 'number';
+  
+    // Contexto del jugador
+    this.playerContext = {
+      handType: '',
+      baseScore: 0,
+      winningCards: [],
+      multiplier: 1,
+      //chips: 0,
+      emptyJokerSlots: 0,
+      remainingDiscards: 0,
+      jokerCount: 0,
+      isFinalHand: false,
+      firstFigurePlayed: false,
+      jokerDestroyed: false,
+      handSize: 5
+    };
   }
 
   /**
@@ -49,6 +65,7 @@ export default class GameScene extends Phaser.Scene {
     this.roundNumber = 1;
     this.cardSprites = [];
 
+    // Inventario del jugador
     this.inventory = new Inventory(this);
 
     // Initialize joker manager
@@ -136,7 +153,7 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
-    const result = evaluateHand(this.selectedCards, this, this.inventory);
+    const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
     this.score += result.score;
     this.animateSelectedCards(result);
   }

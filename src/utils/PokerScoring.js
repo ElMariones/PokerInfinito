@@ -143,28 +143,12 @@ export function evaluateHand(cards, playerContext, inventory) {
     chips += cardValue;
   });
 
-  // Aplicar los efectos de los jokers
-  const context = {
-    handType,
-    baseScore,
-    winningCards,
-    multiplier: playerContext.multiplier || 1,
-    chips: playerContext.chips || 0,
-    emptyJokerSlots: playerContext.emptyJokerSlots || 0,
-    remainingDiscards: playerContext.remainingDiscards || 0,
-    jokerCount: playerContext.jokerCount || 0,
-    isFinalHand: playerContext.isFinalHand || false,
-    firstFigurePlayed: playerContext.firstFigurePlayed || false,
-    jokerDestroyed: false,
-    handSize: playerContext.handSize || 5
-  };
-
-  applyJokerEffects(cards, context, inventory);
+  applyJokerEffects(cards, playerContext, inventory);
 
   // Calculate final score with joker effects applied
-  const finalScore = Math.round((baseScore + context.chips) * context.multiplier);
+  const finalScore = Math.round((baseScore + chips + playerContext.chips) * (multiplier + playerContext.multiplier));
 
-  console.log(`Final Score: ${finalScore}, Chips: ${context.chips}, Multiplier: ${context.multiplier}`);
+  console.log(`Final Score: ${finalScore}, Chips: ${chips}, playerContext Chips: ${playerContext.chips}, Multiplier: ${multiplier}, playerContext Multiplier: ${playerContext.multiplier}`);
 
   return { handType, score: finalScore, winningCards };
 }
@@ -174,44 +158,21 @@ export function evaluateHand(cards, playerContext, inventory) {
  */
 function applyJokerEffects(cards, context, inventory) {
   // Get the player's owned jokers from the registry
-  const ownedJokerIds = registry.get('jokers') || [];
-  if (ownedJokerIds.length === 0) return; // No jokers to apply
+  const ownedJokers = inventory.getOwnedJokers();
+  if (ownedJokers.length === 0) return; // No jokers to apply
   
   // Apply each owned joker's effect
-  ownedJokerIds.forEach(jokerId => {
-    const joker = inventory.getJokerById(jokerId);
-    if (!joker) return;
-    
+  ownedJokers.forEach(joker => {
     console.log(`Applying joker effect: ${joker.name}`);
     
-    let effectApplied = false;
-    
-    // Apply joker effect to each card
-    cards.forEach(card => {
-      try {
-        // Create a context copy to check if effect changes anything
-        const contextBefore = JSON.stringify(context);
-        
-        // Create a function from the effect string
-        const effectFn = new Function('card', 'context', joker.effect);
-        
-        // Apply the effect to the card and context
-        effectFn(card, context);
-        
-        // See if context changed
-        const contextAfter = JSON.stringify(context);
-        if (contextBefore !== contextAfter) {
-          effectApplied = true;
-          //this.jokerManager.animateJokerEffect(jokerId, card);
-        }
-      } catch (error) {
-        console.error(`Error applying joker effect for ${joker.name}:`, error);
-      }
-    });
-    
-    // If no specific card triggered the effect, it might be a global effect
-    if (!effectApplied) {
-      //this.jokerManager.animateJokerEffect(jokerId);
+    try {
+      // Create a function from the effect string
+      const effectFn = new Function('cards', 'context', joker.effect);
+      
+      // Apply the effect to the context
+      effectFn(cards, context);
+    } catch (error) {
+      console.error(`Error applying joker effect for ${joker.name}:`, error);
     }
   });
 }
