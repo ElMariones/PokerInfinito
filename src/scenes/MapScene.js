@@ -2,6 +2,8 @@ import Phaser from 'phaser'
 import NPCManager from '../utils/NPCManager.js'
 import Player from '../utils/Player.js'
 import DoorManager from '../utils/DoorManager.js'
+import Weather from '../utils/Weather.js';
+
 
 export default class MapScene extends Phaser.Scene {
   constructor() {
@@ -49,7 +51,7 @@ export default class MapScene extends Phaser.Scene {
     layerEdificios2.setCollisionByExclusion([-1])
 
     // 2.1) Enable the Lights plugin for dynamic lighting
-    this.lights.enable().setAmbientColor(0x888888); // Brighter ambient color
+    this.lights.enable().setAmbientColor(0x444444); // Darker ambient color
     layerCalle.setPipeline('Light2D');
     layerAgua.setPipeline('Light2D');
     layerAguaWalkable.setPipeline('Light2D');
@@ -132,6 +134,16 @@ export default class MapScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.player.setCollideWorldBounds(true);
+
+    //efectos
+    // Create the Weather object
+    this.weather = new Weather(this.game);
+    
+    // Add or remove weather effects as needed:
+    this.weather.addRain();
+    // this.weather.removeRain();
+    //this.weather.addFog();
+    // this.weather.removeFog();
 
     // 5) NPC Manager
     this.npcManager = new NPCManager(this, [layerAgua, layerEdificios1, layerEdificios2, layerDecoracionSuelo], this.player);
