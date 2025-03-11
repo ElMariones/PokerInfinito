@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { createDeck, shuffle } from '../utils/Deck.js';
 import { drawCards } from '../utils/HandManager.js';
 import { evaluateHand } from '../utils/PokerScoring.js';
+import Inventory from '../utils/Inventory.js';
+import JokerManager from '../utils/JokerManager.js';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -19,6 +21,22 @@ export default class GameScene extends Phaser.Scene {
 
     // NEW: Sorting method; default is by number
     this.sortMethod = 'number';
+  
+    // Contexto del jugador
+    this.playerContext = {
+      handType: '',
+      baseScore: 0,
+      winningCards: [],
+      multiplier: 1,
+      //chips: 0,
+      emptyJokerSlots: 0,
+      remainingDiscards: 0,
+      jokerCount: 0,
+      isFinalHand: false,
+      firstFigurePlayed: false,
+      jokerDestroyed: false,
+      handSize: 5
+    };
   }
 
   /**
@@ -46,6 +64,18 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
+
+    // Inventario del jugador
+    this.inventory = new Inventory(this);
+
+    // Initialize joker manager
+    this.jokerManager = new JokerManager(this, this.inventory);
+  
+    // For testing: Add the first 5 jokers to inventory
+    this.inventory.addFirstFiveJokers();
+    
+    // Display jokers
+    this.jokerManager.displayJokers();
 
     // --- Create & shuffle deck (48 cards total) ---
     let fullDeck = createDeck();      // Normally 52 cards
@@ -123,7 +153,7 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
-    const result = evaluateHand(this.selectedCards);
+    const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
     this.score += result.score;
     this.animateSelectedCards(result);
   }
@@ -285,15 +315,7 @@ export default class GameScene extends Phaser.Scene {
     });
 }
 
-
-
-
-
-
-
-
-
-  highlightWinningCards(result) {
+highlightWinningCards(result) {
     const winners = result.winningCards || [];
     winners.forEach(card => {
       const sprite = this.cardSprites.find(s => s.texture.key === card.key);
@@ -400,10 +422,10 @@ if (this.score >= this.pointsNeeded) {
     } else {
       // Sort by suit in the following order: hearts, diamonds, spades, clubs.
       const suitOrder = {
-        'hearts': 0,
-        'diamonds': 1,
-        'spades': 2,
-        'clubs': 3
+        'copas': 0,
+        'oros': 1,
+        'espadas': 2,
+        'bastos': 3
       };
   
       this.playerHand.sort((a, b) => {
@@ -429,9 +451,9 @@ if (this.score >= this.pointsNeeded) {
       '7': 7,
       '8': 8,
       '9': 9,
-      '10': 10,
-      'queen': 11,
-      'king': 12
+      'sota': 10,
+      'caballo': 11,
+      'rey': 12
     };
     return order[rank] || 0;
   }

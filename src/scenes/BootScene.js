@@ -63,7 +63,7 @@ import pescador from '../../assets/images/pescador.png';
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
 //importar mapas
-import mapaCiudad from '../../assets/maps/ciudad3.json';
+import mapaCiudad from '../../assets/maps/ciudad2.json';
 import mapaAsadorRey from '../../assets/maps/interior_asadorRey.json';
 import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
@@ -71,9 +71,12 @@ import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 import mapaextCasino from '../../assets/maps/exterior_casino.json';
 
-//importar botones
-import button_default from '../../assets/images/button_default.png';
-
+//importar jokers
+import joker1 from '../../assets/images/joker1.png';
+import joker2 from '../../assets/images/joker2.png';
+import joker3 from '../../assets/images/joker3.png';
+import joker4 from '../../assets/images/joker4.png'; 
+import joker5 from '../../assets/images/joker5.png';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -150,14 +153,6 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
 
-    // In your preload scene:
-this.load.spritesheet('button_default', button_default, {
-  frameWidth: 142,  // width of each frame
-  frameHeight: 28   // height of each frame (112 / 4)
-});
-
-
-
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
     this.load.tilemapTiledJSON('asadorReyMap', mapaAsadorRey);
@@ -166,14 +161,20 @@ this.load.spritesheet('button_default', button_default, {
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
+
+    //Imágnes para los jokers
+    this.load.image('joker1', joker1);
+    this.load.image('joker2', joker2);
+    this.load.image('joker3', joker3);
+    this.load.image('joker4', joker4);
+    this.load.image('joker5', joker5);
   }
 
   create() {
     // Start the IntroScene after preloading assets
     // In a BootScene or before starting game scenes
-    this.registry.set('coins', 2200);  // start with 0 or loaded value
+    this.registry.set('coins', 200);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
-    this.registry.set('stage', 0);  // 
     this.scene.start('IntroScene');
   }
 
