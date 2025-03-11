@@ -7,6 +7,7 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
+import button_default from '../../assets/images/button_default.png';
 
 
 //import tilesets
@@ -63,7 +64,7 @@ import pescador from '../../assets/images/pescador.png';
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 
 //importar mapas
-import mapaCiudad from '../../assets/maps/ciudad2.json';
+import mapaCiudad from '../../assets/maps/ciudad3.json';
 import mapaAsadorRey from '../../assets/maps/interior_asadorRey.json';
 import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
@@ -100,7 +101,10 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
     this.load.image('interactKey', interactKey);
-
+    this.load.spritesheet('button_default', button_default, {
+      frameWidth: 142,  // width of each frame
+      frameHeight: 28   // height of each frame (112 / 4)
+    });
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
     this.load.image('sortColor', sortColor);
