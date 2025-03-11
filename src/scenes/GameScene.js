@@ -136,7 +136,7 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
-    const result = evaluateHand(this.selectedCards, this, this.registry, this.inventory);
+    const result = evaluateHand(this.selectedCards, this, this.inventory);
     this.score += result.score;
     this.animateSelectedCards(result);
   }

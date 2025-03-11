@@ -9,7 +9,7 @@ import Jokers from './Jokers.js';
  *   winningCards: array of card objects that form the winning combo
  * }
  */
-export function evaluateHand(cards, playerContext, registry, inventory) {
+export function evaluateHand(cards, playerContext, inventory) {
   if (cards.length !== 5) {
     return { handType: 'Invalid', score: 0, winningCards: [] };
   }
@@ -159,7 +159,7 @@ export function evaluateHand(cards, playerContext, registry, inventory) {
     handSize: playerContext.handSize || 5
   };
 
-  applyJokerEffects(cards, context);
+  applyJokerEffects(cards, context, inventory);
 
   // Calculate final score with joker effects applied
   const finalScore = Math.round((baseScore + context.chips) * context.multiplier);
@@ -172,7 +172,7 @@ export function evaluateHand(cards, playerContext, registry, inventory) {
 /**
  * Apply joker effects to the hand
  */
-function applyJokerEffects(cards, context, registry, inventory) {
+function applyJokerEffects(cards, context, inventory) {
   // Get the player's owned jokers from the registry
   const ownedJokerIds = registry.get('jokers') || [];
   if (ownedJokerIds.length === 0) return; // No jokers to apply
