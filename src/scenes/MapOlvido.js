@@ -8,6 +8,8 @@ export default class MapOlvido extends Phaser.Scene {
   }
 
   create(data) {
+    this.registry.set('currentMap', this.scene.key);
+
     const startX = data?.spawnX ?? 317;
     const startY = data?.spawnY ?? 586;
     const width = this.cameras.main.width;
@@ -63,7 +65,7 @@ export default class MapOlvido extends Phaser.Scene {
 
     const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasBoil], 0, 0);
     this.doorManager = new DoorManager(this, [
-      { x: 320, y: 614, toScene: 'MapScene', spawnX: 1005, spawnY: 412 },
+      { x: 320, y: 614, toScene: 'MapScene', spawnX: 720, spawnY: 1756 },
       // Agrega más puertas según sea necesario
   ]);
 }

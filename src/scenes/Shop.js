@@ -1,6 +1,7 @@
 // Shop.js – A Phaser Scene for the Joker Shop
 import Jokers from '../utils/Jokers.js';
 import Inventory from '../utils/Inventory.js';
+import UIButton from '../utils/Button.js';  // Import the custom button class
 
 export default class ShopScene extends Phaser.Scene {
     constructor() {
@@ -15,15 +16,15 @@ export default class ShopScene extends Phaser.Scene {
         this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
 
         // Title for the shop
-        this.add.text(width / 2, 50, "Joker Shop", { font: "24px Arial", fill: "#fff" })
+        this.add.text(width / 2, 50, "Tienda de Jokers", { font: "24px Arial", fill: "#fff" })
                 .setOrigin(0.5);
 
         // Create an Inventory helper for this scene
         this.inventory = new Inventory(this);
 
         // Display player's current coin count at top
-        this.coinText = this.add.text(20, 20, `Coins: ${this.registry.get('coins')}`, 
-                                                                    { font: '18px Arial', fill: '#fff' });
+        this.coinText = this.add.text(20, 20, `Dinero: ${this.registry.get('coins')}`, 
+                                       { font: '18px Arial', fill: '#fff' });
 
         // Randomly select five unique jokers for sale
         let jokerOptions = [...Jokers];
@@ -33,63 +34,74 @@ export default class ShopScene extends Phaser.Scene {
         // Layout variables for positioning the shop items
         const startX = width / 2 - 150;
         const startY = 100;
-        let offsetY = 0;
+        let offsetY = 10;
 
         jokerOptions.forEach(joker => {
             const { id, name, price } = joker;
             const owned = this.inventory.hasJoker(id);
 
             // Display Joker name and price
-            this.add.text(startX, startY + offsetY, `${name} - ${price} coins`, 
-                                        { font: '16px Arial', fill: '#ffffff' }).setOrigin(0, 0.5);
+            this.add.text(startX, startY + offsetY, `${name} - ${price} monedas`, 
+                          { font: '16px Arial', fill: '#ffffff' }).setOrigin(0, 0.5);
 
             if (owned) {
                 // If already owned, show "Owned" label instead of a buy button
-                this.add.text(startX + 200, startY + offsetY, "Owned", 
-                                            { font: '16px Arial', fill: '#00ff00' }).setOrigin(0, 0.5);
-      } else {
-        // Create a Buy button for this Joker
-        const buyButton = this.add.text(startX + 200, startY + offsetY, "[ Buy ]", 
-                                        { font: '16px Arial', fill: '#00aeff' });
-        buyButton.setInteractive();  // make the text clickable as a button&#8203;:contentReference[oaicite:6]{index=6}
-
-        // Handle the click (pointerdown) event on the buy button
-        buyButton.on('pointerdown', () => {  // listen for pointerdown on this GameObject&#8203;:contentReference[oaicite:7]{index=7}
-          const currentCoins = this.registry.get('coins');
-          if (currentCoins >= price) {
-            // Deduct price and add Joker to inventory
-            this.registry.set('coins', currentCoins - price);
-            this.inventory.addJoker(id);
-            // Update UI: coin display and mark this item as owned
-            this.coinText.setText(`Coins: ${this.registry.get('coins')}`);
-            buyButton.setText("Owned").setStyle({ fill: '#00ff00' });
-            buyButton.disableInteractive();  // disable further clicks on this button
-          } else {
-            // Optional: feedback that not enough coins (e.g., flash red or show a message)
-            buyButton.setStyle({ fill: '#ff0000' });
-            this.time.delayedCall(500, () => {
-              buyButton.setStyle({ fill: '#00aeff' });
-            });
-          }
+                const ownedButton = new UIButton(
+                  this, 
+                  startX + 300, 
+                  startY + offsetY, 
+                  "Comprado", 
+                  () => {}
+                );
+                ownedButton.bg.setFrame(3); // Set to disabled state
+                ownedButton.disable();
+            } else {
+                // Create a Buy button using UIButton
+                const buyButton = new UIButton(
+                    this, 
+                    startX + 300, 
+                    startY + offsetY, 
+                    "Comprar", 
+                    () => {
+                        const currentCoins = this.registry.get('coins');
+                        if (currentCoins >= price) {
+                            // Deduct price and add Joker to inventory
+                            this.registry.set('coins', currentCoins - price);
+                            this.inventory.addJoker(id);
+                            // Update coin display and mark this item as owned
+                            this.coinText.setText(`Dinero: ${this.registry.get('coins')}`);
+                            buyButton.label.setText("Comprado");
+                            buyButton.bg.setFrame(3); // Optionally show disabled state
+                            buyButton.disable();
+                        } else {
+                            // Optional: feedback that not enough coins (flash red, etc.)
+                            buyButton.bg.setFrame(2); // Use the clicked state briefly
+                            this.time.delayedCall(500, () => {
+                                buyButton.bg.setFrame(0);
+                            });
+                        }
+                    }
+                );
+            }
+            offsetY += 30;  // Move down for the next item
         });
-      }
 
-      offsetY += 30;  // move down for the next item
-    });
-
-    // Add this after your jokerOptions.forEach loop in the create() method:
-
-// Exit button at the bottom
-const exitButton = this.add.text(width / 2, height - 50, "[ Exit ]", 
-    { font: "20px Arial", fill: "#ff0000" })
-    .setOrigin(0.5)
-    .setInteractive({ useHandCursor: true });
-
-exitButton.on('pointerdown', () => {
-    this.scene.stop('ShopScene');
-    this.scene.resume('MapScene');
-    this.scene.wake('UIOverlay');
-});
-
-  }
+        // Add an Exit button at the bottom using UIButton
+        const exitButton = new UIButton(
+            this, 
+            width / 2, 
+            height - 50, 
+            "Cerrar", 
+            () => {
+                // Retrieve the key of the current map scene
+                const currentMap = this.registry.get('currentMap');
+                this.scene.stop('ShopScene');
+                if (currentMap) {
+                    this.scene.resume(currentMap);
+                }
+                this.scene.wake('UIOverlay');
+            }
+        );
+        exitButton.setScale(1.0);
+    }
 }

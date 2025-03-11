@@ -17,6 +17,7 @@ import MapCasino from './scenes/MapCasino.js';
 import UIOverlay from './scenes/UIOverlay.js';
 import Shop from './scenes/Shop.js';
 import JokersInventoryScene from './scenes/JokersInventoryScene.js';
+import MapExtCasino from './scenes/MapExtCasino.js';
 
 let config = {
   type: Phaser.AUTO,
@@ -36,6 +37,8 @@ let config = {
   },
   pixelArt: true,
   roundPixels: true,
+  maxLights: 200,
+
   
   backgroundColor: '#006400',
   scene: [
@@ -47,6 +50,7 @@ let config = {
     MapRicon,
     MapOlvido,
     MapCasino,
+    MapExtCasino,
     TransicionBatalla,
     GameScene,
     UIScene,

@@ -9,6 +9,8 @@ export default class MapAsador extends Phaser.Scene {
   }
 
   create(data) {
+    this.registry.set('currentMap', this.scene.key);
+
     // 1) Read optional spawn data (in case we're coming from another scene)
     const startX = data?.spawnX ?? 200;
     const startY = data?.spawnY ?? 500;
@@ -51,7 +53,7 @@ export default class MapAsador extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
 
     this.doorManager = new DoorManager(this, [
-      { x: 320, y: 614, toScene: 'MapScene', spawnX: 255, spawnY: 365 },
+      { x: 320, y: 614, toScene: 'MapScene', spawnX: 862, spawnY: 2431 },
       // Agrega más puertas según sea necesario
     ]);
 

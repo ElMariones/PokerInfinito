@@ -8,8 +8,10 @@ export default class MapCasino extends Phaser.Scene {
   }
 
   create(data) {
-    const startX = data?.spawnX ?? 317;
-    const startY = data?.spawnY ?? 586;
+    this.registry.set('currentMap', this.scene.key);
+
+    const startX = data?.spawnX ?? 637;
+    const startY = data?.spawnY ?? 1208;
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
@@ -65,7 +67,7 @@ export default class MapCasino extends Phaser.Scene {
     const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasCastle], 0, 0);
     
     this.doorManager = new DoorManager(this, [
-        { x: 320, y: 614, toScene: 'MapScene', spawnX: 255, spawnY: 365 },
+        { x: 637, y: 1208, toScene: 'MapExtCasino', spawnX: 939, spawnY: 570 },
         // Agrega más puertas según sea necesario
     ]);
   }
