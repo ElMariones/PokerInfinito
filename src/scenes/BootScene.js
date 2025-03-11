@@ -69,6 +69,7 @@ import mapaCasino from '../../assets/maps/interior_casino.json';
 import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
+import mapaextCasino from '../../assets/maps/exterior_casino.json';
 
 //importar jokers
 import joker1 from '../../assets/images/joker1.png';
@@ -159,6 +160,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('cavernaOlvidoMap', mapacavernaOlvido);
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
+    this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
 
     //Imágnes para los jokers
     this.load.image('joker1', joker1);
