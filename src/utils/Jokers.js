@@ -1,9 +1,9 @@
 const Jokers = [
   { id: 1, name: "Guasón de Barrio", image: "joker1", effect: "context.multiplier += 4", price: 100 },
-  { id: 2, name: "Tío Gilito", image: "gilitoJoker", effect: "if (cards.suit === 'oros') context.multiplier += 3", price: 120 },
-  { id: 3, name: "Don Juan de la Baraja", image: "juanJoker", effect: "if (cards.suit === 'copas') context.multiplier += 3", price: 150 },
-  { id: 4, name: "Espadachín Colérico", image: "espadachinJoker", effect: "if (cards.suit === 'espadas') context.multiplier += 3", price: 200 },
-  { id: 5, name: "Tragaldabas de Bastos", image: "tragaldabasJoker", effect: "if (cards.suit === 'bastos') context.multiplier += 3", price: 180 },
+  { id: 2, name: "Tío Gilito", image: "joker2", effect: "if (cards.suit === 'oros') context.multiplier += 3", price: 120 },
+  { id: 3, name: "Don Juan de la Baraja", image: "joker3", effect: "if (cards.suit === 'copas') context.multiplier += 3", price: 150 },
+  { id: 4, name: "Espadachín Colérico", image: "joker4", effect: "if (cards.suit === 'espadas') context.multiplier += 3", price: 200 },
+  { id: 5, name: "Tragaldabas de Bastos", image: "joker5", effect: "if (cards.suit === 'bastos') context.multiplier += 3", price: 180 },
   { id: 6, name: "Loco de Atar", image: "locoJoker", effect: "if (context.handType === 'Trío') context.multiplier += 12", price: 160 },
   { id: 7, name: "Chiflado de Pares", image: "chifladoJoker", effect: "if (context.handType === 'Doble Pareja') context.multiplier += 10", price: 250 },
   { id: 8, name: "Pirado de Escaleras", image: "piradoJoker", effect: "if (context.handType === 'Escalera') context.multiplier += 12", price: 220 },

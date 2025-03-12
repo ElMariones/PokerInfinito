@@ -36,17 +36,17 @@ class JokerManager {
     ownedJokers.forEach((joker, index) => {
       const x = startX + (index * spacing);
       const sprite = this.scene.add.image(x, y, joker.image)
-        .setScale(0.5)
+        .setScale(0.3)
         .setInteractive();
         
       // Add hover effects to show joker details
       sprite.on('pointerover', () => {
-        sprite.setScale(0.6);
+        sprite.setScale(0.4);
         this.showJokerInfo(joker, x, y + 50);
       });
       
       sprite.on('pointerout', () => {
-        sprite.setScale(0.5);
+        sprite.setScale(0.3);
         if (this.jokerInfoText) {
           this.jokerInfoText.destroy();
           this.jokerInfoText = null;
