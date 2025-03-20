@@ -5,6 +5,7 @@ import DoorManager from '../utils/DoorManager.js'
 import Weather from '../utils/Weather.js';
 
 
+
 export default class MapScene extends Phaser.Scene {
   constructor() {
     super('MapScene')
@@ -82,6 +83,15 @@ export default class MapScene extends Phaser.Scene {
       });
     }
 
+    //Music
+    this.songs = [];
+    this.rainAudio = this.sound.add('rain', { volume: 0.2, loop: true });
+    this.songs.push(this.rainAudio);
+    this.rainAudio.play();
+    this.music = this.sound.add('mapSceneMusic', { volume: 0.6, loop: true });
+    this.songs.push(this.music);
+    this.music.play();
+
     // 3) Doors array
     this.doors = [
       {
@@ -120,7 +130,7 @@ export default class MapScene extends Phaser.Scene {
         spawnY: 928
       }
     ];
-    this.doorManager = new DoorManager(this, this.doors);
+    this.doorManager = new DoorManager(this, this.doors, this.songs);
 
     // Collisions
     this.physics.add.collider(this.player, layerAgua);
@@ -174,6 +184,8 @@ export default class MapScene extends Phaser.Scene {
     this.input.keyboard.on('keydown-E', () => {
       this.tryInteract();
     });
+
+    
   }
 
   update() {

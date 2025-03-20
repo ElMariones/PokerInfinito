@@ -66,10 +66,12 @@ export default class MapCasino extends Phaser.Scene {
 
     const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasCastle], 0, 0);
     
+    // Music
+    this.songs = null;
     this.doorManager = new DoorManager(this, [
         { x: 637, y: 1208, toScene: 'MapExtCasino', spawnX: 939, spawnY: 570 },
         // Agrega más puertas según sea necesario
-    ]);
+    ], this.songs);
   }
   
   update() {
@@ -78,7 +80,10 @@ export default class MapCasino extends Phaser.Scene {
   }
 
   tryInteract() {
-    // Lógica de interacción (si es necesaria)
-    console.log("Intentando interactuar...");
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegate door interaction
+      return; // If there is a door, don’t check NPC interaction
+    }
+    this.npcManager.tryInteract();
   }
 }

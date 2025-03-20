@@ -56,6 +56,8 @@ export default class MapOlvido extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); // El jugador no puede salir de los límites
     this.player.setCollideWorldBounds(true); // El jugador no puede salir de los límites
 
+    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasBoil], 0, 0);
+
     // -------------------------------------
     // Interacción con tecla E
     // -------------------------------------
@@ -63,11 +65,17 @@ export default class MapOlvido extends Phaser.Scene {
       this.tryInteract();
     });
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasBoil], 0, 0);
+     // Music
+    if (this.scene.sound) {
+      this.scene.sound.stopAll();
+    }
+     this.music = this.sound.add('olvidoMusic', { volume: 0.5, loop: true });
+     this.music.play();
+
     this.doorManager = new DoorManager(this, [
       { x: 320, y: 614, toScene: 'MapScene', spawnX: 720, spawnY: 1756 },
       // Agrega más puertas según sea necesario
-  ]);
+    ], this.music);
 }
 
   update() {
@@ -76,7 +84,10 @@ export default class MapOlvido extends Phaser.Scene {
   }
 
   tryInteract() {
-    // Lógica de interacción (si es necesaria)
-    console.log("Intentando interactuar...");
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegate door interaction
+      return; // If there is a door, don’t check NPC interaction
+    }
+    this.npcManager.tryInteract();
   }
 }

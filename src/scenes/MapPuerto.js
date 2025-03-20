@@ -63,13 +63,14 @@ export default class MapPuerto extends Phaser.Scene {
       this.tryInteract();
     });
 
-   
+    //Music
+    this.songs = null;
 
     // Inicializar el DoorManager después de todas las capas
     this.doorManager = new DoorManager(this, [
       { x: 478, y: 608, toScene: 'MapScene', spawnX: 1920, spawnY: 444 },
       // Agrega más puertas según sea necesario
-    ]);
+    ], this.songs);
   }
 
   update() {
@@ -78,7 +79,10 @@ export default class MapPuerto extends Phaser.Scene {
   }
 
   tryInteract() {
-    // Lógica de interacción (si es necesaria)
-    console.log("Intentando interactuar...");
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegate door interaction
+      return; // If there is a door, don’t check NPC interaction
+    }
+    this.npcManager.tryInteract();
   }
 }

@@ -63,11 +63,12 @@ export default class MapRincon extends Phaser.Scene {
       this.tryInteract();
     });
 
+    this.songs = null;
     
     this.doorManager = new DoorManager(this, [
       { x: 956, y: 928, toScene: 'MapScene', spawnX: 832, spawnY: 449 },
       // Agrega más puertas según sea necesario
-    ]);
+    ], this.songs);
   }
 
   update() {
@@ -77,7 +78,10 @@ export default class MapRincon extends Phaser.Scene {
   }
 
   tryInteract() {
-    // Lógica de interacción (si es necesaria)
-    console.log("Intentando interactuar...");
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegate door interaction
+      return; // If there is a door, don’t check NPC interaction
+    }
+    this.npcManager.tryInteract();
   }
 }

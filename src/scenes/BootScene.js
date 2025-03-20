@@ -79,6 +79,14 @@ import joker3 from '../../assets/images/joker3.png';
 import joker4 from '../../assets/images/joker4.png'; 
 import joker5 from '../../assets/images/joker5.png';
 
+//import music
+import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
+import mapSceneMusic from '../../assets/audio/Space_Atmosphere.mp3';
+import olvidoMusic from '../../assets/audio/Night_of_the_Streets.mp3';
+import creditsMusic from '../../assets/audio/main_menu_music.ogg';
+import mainMenuMusic from '../../assets/audio/ambient_menu.mp3';
+import asadorMusic from '../../assets/audio/life_in_corrupted_binary.flac';
+
 export default class BootScene extends Phaser.Scene {
   constructor() {
     super('BootScene');
@@ -172,6 +180,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('joker3', joker3);
     this.load.image('joker4', joker4);
     this.load.image('joker5', joker5);
+
+    // Load the rain sound
+    this.load.audio('rain', rain);
+    this.load.audio('mapSceneMusic', mapSceneMusic);
+    this.load.audio('olvidoMusic', olvidoMusic);
+    this.load.audio('mainMenuMusic', mainMenuMusic);
+    this.load.audio('creditsMusic', creditsMusic);
+    this.load.audio('asadorMusic', asadorMusic);
   }
 
   create() {
