@@ -162,11 +162,7 @@ export default class MapScene extends Phaser.Scene {
 
     // Add NPCs
     const oveja = this.npcManager.addNPC('oveja', 154, 872, 'idle-down', false);
-    const helena = this.npcManager.addNPC('helena', 769, 1799, 'idle-down', false);
-    const pescador = this.npcManager.addNPC('pescador', 1739, 591, 'idle-down', true);
-    const padre = this.npcManager.addNPC('padre', 464, 837, 'idle-down', false);
-    const gemelos = this.npcManager.addNPC('gemelos', 897, 489, 'idle-down', true);
-
+    
     this.npcManager.getAllNPCs().forEach(npc => {
       npc.setPipeline('Light2D');
     });

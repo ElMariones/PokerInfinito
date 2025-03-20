@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapRincon extends Phaser.Scene {
   constructor() {
@@ -63,6 +64,12 @@ export default class MapRincon extends Phaser.Scene {
       this.tryInteract();
     });
 
+    // NPCs
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
+    this.npcManager.createAnimations();
+    const gemelos = this.npcManager.addNPC('gemelos', 1056, 156, 'idle-down', true);
+    this.npcArray = this.npcManager.getAllNPCs();
+
     this.songs = null;
     
     this.doorManager = new DoorManager(this, [
@@ -72,8 +79,8 @@ export default class MapRincon extends Phaser.Scene {
   }
 
   update() {
-    console.log(`Jugador en X: ${this.player.x}, Y: ${this.player.y}`);
     this.player.update();
+    this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
   }
 

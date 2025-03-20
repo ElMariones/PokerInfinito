@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapPuerto extends Phaser.Scene {
   constructor() {
@@ -63,6 +64,12 @@ export default class MapPuerto extends Phaser.Scene {
       this.tryInteract();
     });
 
+    // NPCs
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
+    this.npcManager.createAnimations();
+    const pescador = this.npcManager.addNPC('pescador', 370, 291, 'idle-down', true);
+    this.npcArray = this.npcManager.getAllNPCs();
+
     //Music
     this.songs = null;
 
@@ -75,6 +82,7 @@ export default class MapPuerto extends Phaser.Scene {
 
   update() {
     this.player.update();
+    this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
   }
 

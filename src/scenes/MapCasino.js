@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapCasino extends Phaser.Scene {
   constructor() {
@@ -66,6 +67,12 @@ export default class MapCasino extends Phaser.Scene {
 
     const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasCastle], 0, 0);
     
+    // NPCs
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
+    this.npcManager.createAnimations();
+    const padre = this.npcManager.addNPC('padre', 642, 142, 'idle-down', false);
+    this.npcArray = this.npcManager.getAllNPCs();
+
     // Music
     this.songs = null;
     this.doorManager = new DoorManager(this, [
@@ -76,6 +83,7 @@ export default class MapCasino extends Phaser.Scene {
   
   update() {
     this.player.update();
+    this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
   }
 

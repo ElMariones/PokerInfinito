@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapOlvido extends Phaser.Scene {
   constructor() {
@@ -65,7 +66,13 @@ export default class MapOlvido extends Phaser.Scene {
       this.tryInteract();
     });
 
-     // Music
+    // NPCs
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
+    this.npcManager.createAnimations();
+    const helena = this.npcManager.addNPC('helena', 177, 120, 'idle-down', false);
+    this.npcArray = this.npcManager.getAllNPCs();
+
+    // Music
     if (this.scene.sound) {
       this.scene.sound.stopAll();
     }
@@ -80,6 +87,7 @@ export default class MapOlvido extends Phaser.Scene {
 
   update() {
     this.player.update();
+    this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
   }
 

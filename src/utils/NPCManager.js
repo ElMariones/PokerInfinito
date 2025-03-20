@@ -224,8 +224,10 @@ export default class NPCManager {
       npc.body.setSize(20, 28);
       npc.body.setOffset(22, 36);
       }
-      if (name === 'samuel')
+      if (name === 'samuel' || name === 'helena' || name === 'pescador' || name === 'gemelos')
         interactDistance = 75;
+      else if (name === 'padre')
+        interactDistance = 150;
 
       // 1) Move along path if defined
       if (path && path.length > 0) {
@@ -329,8 +331,10 @@ export default class NPCManager {
     this.npcArray.forEach(npc => {
       const name = npc.getData('npcName');
       const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-      if (name === 'samuel')
+      if (name === 'samuel' || name === 'helena' || name === 'pescador' || name === 'gemelos')
         interactDistance = 100;
+      else if (name === 'padre')
+        interactDistance = 150;
       if (dist < interactDistance) {
         nearestNpc = npc;
         const name = npc.getData('npcName');
