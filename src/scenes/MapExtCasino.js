@@ -2,12 +2,10 @@ import Phaser from 'phaser'
 import NPCManager from '../utils/NPCManager.js'
 import Player from '../utils/Player.js'
 import DoorManager from '../utils/DoorManager.js'
-import Weather from '../utils/Weather.js';
 
-
-export default class MapScene extends Phaser.Scene {
+export default class MapExtCasino extends Phaser.Scene {
   constructor() {
-    super('MapScene')
+    super('MapExtCasino')
   }
 
   // Accept optional data with spawnX/spawnY
@@ -18,11 +16,11 @@ export default class MapScene extends Phaser.Scene {
     this.scene.launch('UIOverlay');
 
     // 1) Read spawn coordinates from data, or use defaults
-    const startX = data?.spawnX ?? 184
+    const startX = data?.spawnX ?? 1199
     const startY = data?.spawnY ?? 2530
 
     // 2) Create the tilemap
-    const map = this.make.tilemap({ key: 'ciudadMap' })
+    const map = this.make.tilemap({ key: 'extCasinoMap' })
 
     // tilesets
     const texturasCiudad = map.addTilesetImage('texturas_ciudad', 'texturas_ciudad')
@@ -51,7 +49,7 @@ export default class MapScene extends Phaser.Scene {
     layerEdificios2.setCollisionByExclusion([-1])
 
     // 2.1) Enable the Lights plugin for dynamic lighting
-    this.lights.enable().setAmbientColor(0x444444); // Darker ambient color
+    this.lights.enable().setAmbientColor(0x888888); // Brighter ambient color
     layerCalle.setPipeline('Light2D');
     layerAgua.setPipeline('Light2D');
     layerAguaWalkable.setPipeline('Light2D');
@@ -82,45 +80,39 @@ export default class MapScene extends Phaser.Scene {
       });
     }
 
-    // 3) Doors array
-    this.doors = [
-      {
-        x: 862,
-        y: 2397,
-        toScene: 'MapAsador',
-        spawnX: 320,
-        spawnY: 584
-      },
-      {
-        x: 720,
-        y: 1735,
-        toScene: 'MapOlvido',
-        spawnX: 320,
-        spawnY: 614
-      },
-      {
-        x: 1920,
-        y: 408,
-        toScene: 'MapPuerto',
-        spawnX: 478,
-        spawnY: 608
-      },
-      {
-        x: 1199,
-        y: 37,
-        toScene: 'MapExtCasino',
-        spawnX: 1199,
-        spawnY: 2510
-      },
-      {
-        x: 831,
-        y: 406,
-        toScene: 'MapRincon',
-        spawnX: 956,
-        spawnY: 928
-      }
-    ];
-    this.doorManager = new DoorManager(this, this.doors);
+    // New section for neon blue ("azul") lights:
+const azulLayer = map.getObjectLayer('azul');
+if (azulLayer && azulLayer.objects) {
+  // Optionally, create an array to hold these lights
+  this.neonAzulLights = [];
+  azulLayer.objects.forEach(lightObj => {
+    const lightX = lightObj.width ? lightObj.x + lightObj.width / 2 : lightObj.x;
+    const lightY = lightObj.height ? lightObj.y + lightObj.height / 2 : lightObj.y;
+    // Using a pure blue color (0x0000ff) with a higher intensity for a neon effect.
+    const newLight = this.lights.addLight(lightX, lightY, 300, 0x0000ff, 1);
+    this.neonAzulLights.push(newLight);
+  });
+}
+
+// New section for neon red ("rojo") lights:
+const rojoLayer = map.getObjectLayer('rojo');
+if (rojoLayer && rojoLayer.objects) {
+  // Optionally, create an array to hold these lights
+  this.neonRojoLights = [];
+  rojoLayer.objects.forEach(lightObj => {
+    const lightX = lightObj.width ? lightObj.x + lightObj.width / 2 : lightObj.x;
+    const lightY = lightObj.height ? lightObj.y + lightObj.height / 2 : lightObj.y;
+    // Using a pure red color (0xff0000) with a higher intensity for a neon effect.
+    const newLight = this.lights.addLight(lightX, lightY, 300, 0xff0000, 1);
+    this.neonRojoLights.push(newLight);
+  });
+}
+
+   this.doorManager = new DoorManager(this, [
+      { x: 1199, y: 1577, toScene: 'MapScene', spawnX: 1200, spawnY: 74 },
+      { x: 943, y: 524, toScene: 'MapCasino', spawnX: 637, spawnY: 1208 },
+      // Agrega más puertas según sea necesario
+    ]);
 
     // Collisions
     this.physics.add.collider(this.player, layerAgua);
@@ -135,40 +127,10 @@ export default class MapScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.player.setCollideWorldBounds(true);
 
-    //efectos
-    // Create the Weather object
-    this.weather = new Weather(this.game);
-    
-    // Add or remove weather effects as needed:
-    this.weather.addRain();
-    // this.weather.removeRain();
-    //this.weather.addFog();
-    // this.weather.removeFog();
-
     // 5) NPC Manager
     this.npcManager = new NPCManager(this, [layerAgua, layerEdificios1, layerEdificios2, layerDecoracionSuelo], this.player);
     this.npcManager.createAnimations();
     // Set pipeline for NPCs
-
-    // Add NPCs
-    const oveja = this.npcManager.addNPC('oveja', 154, 872, 'idle-down', false);
-    const helena = this.npcManager.addNPC('helena', 769, 1799, 'idle-down', false);
-    const pescador = this.npcManager.addNPC('pescador', 1739, 591, 'idle-down', true);
-    const padre = this.npcManager.addNPC('padre', 464, 837, 'idle-down', false);
-    const gemelos = this.npcManager.addNPC('gemelos', 897, 489, 'idle-down', true);
-
-    this.npcManager.getAllNPCs().forEach(npc => {
-      npc.setPipeline('Light2D');
-    });
-    // Example path for an NPC
-    this.npcManager.setNPCPath(oveja, [
-      { x: 154, y: 872 },
-      { x: 224, y: 872 },
-      { x: 224, y: 967 },
-      { x: 154, y: 967 },
-    ], 60, true);
-
-    this.npcArray = this.npcManager.getAllNPCs();
 
     // 6) Input for interaction
     this.input.keyboard.on('keydown-E', () => {

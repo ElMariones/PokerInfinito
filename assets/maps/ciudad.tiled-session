@@ -3,13 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/Users/mario/Desktop/tiled/ciudad2.json",
+    "activeFile": "ciudad3.tmj",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "": {
+            "scaleInEditor": 2
+        },
         "#texturas_ciudad": {
             "scaleInDock": 0.75
         },
@@ -17,7 +20,7 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 878,
+                "x": 1210,
                 "y": 410.6666666666666
             }
         },
@@ -166,15 +169,34 @@
             "scaleInDock": 1
         },
         "ciudad3.tmj": {
-            "scale": 1,
-            "selectedLayer": 3,
+            "expandedObjectLayers": [
+                10
+            ],
+            "scale": 3,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 348.5,
-                "y": 389
+                "x": 1776.5,
+                "y": 434.33333333333326
             }
         },
         "ciudad3.tmj#texturas_ciudad": {
-            "scaleInDock": 1.5
+            "scaleInDock": 1
+        },
+        "exterior_casino.tmj": {
+            "expandedObjectLayers": [
+                11,
+                10,
+                12
+            ],
+            "scale": 1.5,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 1184.3333333333333,
+                "y": 816
+            }
+        },
+        "exterior_casino.tmj#texturas_ciudad": {
+            "scaleInDock": 1
         }
     },
     "last.exportedFilePath": "C:/Users/mario/mariogit/PokerInfinito/assets/maps",
@@ -184,14 +206,17 @@
     "map.lastUsedFormat": "json",
     "map.width": 32,
     "openFiles": [
-        "ciudad.json",
-        "C:/Users/mario/Desktop/tiled/ciudad2.json"
+        "C:/Users/mario/Desktop/tiled/ciudad2.json",
+        "ciudad3.tmj",
+        "exterior_casino.tmj"
     ],
     "project": "ciudad.tiled-project",
     "property.type": "object",
     "recentFiles": [
-        "ciudad.json",
-        "C:/Users/mario/Desktop/tiled/ciudad2.json"
+        "C:/Users/mario/Desktop/tiled/ciudad2.json",
+        "exterior_casino.tmj",
+        "ciudad3.tmj",
+        "ciudad.json"
     ],
     "tileset.embedInMap": true
 }

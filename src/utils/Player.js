@@ -118,30 +118,25 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * Handles movement logic & plays correct animations.
    */
   update() {
-    //console.log(`Player at X: ${this.x}, Y: ${this.y}`);
-    const speed = 100;
+    const speed = 150;
     const up = this.cursors.up.isDown;
     const down = this.cursors.down.isDown;
     const left = this.cursors.left.isDown;
     const right = this.cursors.right.isDown;
 
-    // Count how many directions are pressed
-    const pressedCount = [up, down, left, right].filter(Boolean).length;
-
-    // If exactly one direction is pressed, update our lastDirection
-    if (pressedCount === 1) {
-      if (up) {
-        this.lastDirection = 'up';
-      } else if (down) {
-        this.lastDirection = 'down';
-      } else if (left) {
-        this.lastDirection = 'left';
-      } else if (right) {
-        this.lastDirection = 'right';
-      }
+    // Determine the last direction pressed
+    if (up) {
+      this.lastDirection = 'up';
+    } else if (down) {
+      this.lastDirection = 'down';
+    } else if (left) {
+      this.lastDirection = 'left';
+    } else if (right) {
+      this.lastDirection = 'right';
     }
+
     // If zero directions are pressed, go idle
-    else if (pressedCount === 0) {
+    if (!up && !down && !left && !right) {
       this.setVelocity(0);
       this.play(`idle-${this.lastDirection}`, true);
       return;
