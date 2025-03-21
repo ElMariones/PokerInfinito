@@ -12,7 +12,7 @@ const Jokers = [
   { id: 11, name: "Astuto del Trío", image: "astutoJoker", effect: "if (context.handType === 'Trío') context.chips += 100", price: 150 },
   { id: 12, name: "Listo de la Doble", image: "listoJoker", effect: "if (context.handType === 'Doble Pareja') context.chips += 80", price: 200 },
   { id: 13, name: "Tramposo de la Escalera", image: "tramposoJoker", effect: "if (context.handType === 'Escalera') context.chips += 100", price: 180 },
-  { id: 14, name: "Marañoso del Color", image: "marañosoJoker", effect: "if (context.handType === 'Color') context.chips += 80", price: 160 },
+  { id: 14, name: "Marañoso del Color", image: "maranosoJoker", effect: "if (context.handType === 'Color') context.chips += 80", price: 160 },
   { id: 15, name: "Sombra del Guasón", image: "sombraJoker", effect: "context.multiplier += context.emptyJokerSlots", price: 250 },
   { id: 16, name: "El Banderín", image: "banderinJoker", effect: "context.chips += 30 * context.remainingDiscards", price: 220 },
   { id: 17, name: "Cima Mística", image: "cimaJoker", effect: "if (context.remainingDiscards === 0) context.multiplier += 15", price: 100 },
