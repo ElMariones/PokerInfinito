@@ -146,9 +146,9 @@ export function evaluateHand(cards, playerContext, inventory) {
   applyJokerEffects(cards, playerContext, inventory);
 
   // Calculate final score with joker effects applied
-  const finalScore = Math.round((baseScore + chips + playerContext.chips) * (multiplier + playerContext.multiplier));
+  const finalScore = Math.round((baseScore + chips) * (multiplier + playerContext.multiplier));
 
-  console.log(`Final Score: ${finalScore}, Chips: ${chips}, playerContext Chips: ${playerContext.chips}, Multiplier: ${multiplier}, playerContext Multiplier: ${playerContext.multiplier}`);
+  console.log(`Final Score: ${finalScore}, Chips: ${chips}, Multiplier: ${multiplier}, playerContext Multiplier: ${playerContext.multiplier}`);
 
   return { handType, score: finalScore, winningCards };
 }

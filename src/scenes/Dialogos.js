@@ -66,7 +66,7 @@ export default class Dialogos extends Phaser.Scene {
                 case 'samuel':
                     if (stage === 0) {
                         // Initial dialog with Samuel at stage 0
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 10, rounds: 1, scene: this.gameScene };
+                        this.transitionData = { npc: 'samuel', pointsNeeded: 10, rounds: 5, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                             { character: "dante", text: "¿Cómo sabes mi nombre?" },
