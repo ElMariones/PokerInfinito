@@ -276,12 +276,43 @@ export default class GameScene extends Phaser.Scene {
                       // Player won the battle:
                       this.scene.stop('UIScene');
                       this.scene.stop('GameScene');
+
+                      // Calcular las monedas ganadas
+                      const coinsWon = this.score - this.pointsNeeded;
+
+                      // Actualizar las monedas en el registry
+                      const currentCoins = this.registry.get('coins') || 0;
+                      this.registry.set('coins', currentCoins + coinsWon);
+
+                      // Mostrar el mensaje en el centro de la pantalla
+                      const message = this.add.text(
+                        this.cameras.main.width / 2,
+                        this.cameras.main.height / 2,
+                        `¡Has ganado la partida!\nMonedas obtenidas: ${coinsWon}`,
+                        {
+                          fontSize: '36px',
+                          color: '#ffffff',
+                          backgroundColor: '#000000',
+                          padding: { x: 10, y: 10 },
+                          align: 'center'
+                        }
+                      ).setOrigin(0.5);
+
+                      // Destruir el mensaje después de unos segundos
+                      this.time.delayedCall(3000, () => {
+                        message.destroy();
+
+                        // Reanudar la escena principal o ir a la siguiente
+                        const currentMap = this.registry.get('currentMap');
+                        this.scene.resume(currentMap);
+                      });
+
+                      // Añadir la animación de partículas
+                      this.addWinningEffect();
+
                       this.scene.wake('UIOverlay');
                       const currentMap = this.registry.get('currentMap')
                       this.scene.resume(currentMap);
-                      const coins = this.registry.get('coins') || 0;
-                      const excessPoints = this.score - this.pointsNeeded;
-                      this.registry.set('coins', coins + excessPoints);
                     
                       // Launch or get the Dialogos scene, so it can show the post-battle dialog.
                       // If Dialogos is not already active, launch it with required data.
@@ -377,11 +408,42 @@ highlightWinningCards(result) {
         this.scene.stop('UIScene');
         this.scene.stop('GameScene');
         this.scene.wake('UIOverlay');
+
+        // Calcular las monedas ganadas
+        const coinsWon = this.score - this.pointsNeeded;
+
+        // Actualizar las monedas en el registry
+        const currentCoins = this.registry.get('coins') || 0;
+        this.registry.set('coins', currentCoins + coinsWon);
+
+        // Mostrar el mensaje en el centro de la pantalla
+        const message = this.add.text(
+          this.cameras.main.width / 2,
+          this.cameras.main.height / 2,
+          `¡Has ganado la partida!\nMonedas obtenidas: ${coinsWon}`,
+          {
+            fontSize: '36px',
+            color: '#ffffff',
+            backgroundColor: '#000000',
+            padding: { x: 10, y: 10 },
+            align: 'center'
+          }
+        ).setOrigin(0.5);
+
+        // Destruir el mensaje después de unos segundos
+        this.time.delayedCall(3000, () => {
+          message.destroy();
+
+          // Reanudar la escena principal o ir a la siguiente
+          const currentMap = this.registry.get('currentMap');
+          this.scene.resume(currentMap);
+        });
+
+        // Añadir la animación de partículas
+        this.addWinningEffect();
+
         const currentMap = this.registry.get('currentMap')
         this.scene.resume(currentMap);
-        const coins = this.registry.get('coins') || 0;
-        const excessPoints = this.score - this.pointsNeeded;
-        this.registry.set('coins', coins + excessPoints);
       
         // Launch or get the Dialogos scene, so it can show the post-battle dialog.
         // If Dialogos is not already active, launch it with required data.
@@ -558,6 +620,22 @@ highlightWinningCards(result) {
     this.time.delayedCall(2000, () => {
       text.destroy();
     });
+  }
+
+  addWinningEffect() {
+    const emitter = this.add.particles(this.cameras.main.width / 2, this.cameras.main.height / 2, 'star', {
+      angle: { min: 240, max: 300 },
+      speed: { min: 200, max: 300 },
+      lifespan: 4000,
+      gravityY: 180,
+      quantity: 2,
+      bounce: 0.4,
+      bounds: new Phaser.Geom.Rectangle(-100, -200, this.cameras.main.width + 200, this.cameras.main.height + 200)
+    });
+  
+    emitter.particleBringToTop = false;
+  
+    emitter.postFX.addBokeh(0.5, 10, 0.2);
   }
 }
 
