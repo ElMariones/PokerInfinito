@@ -153,6 +153,92 @@ export function evaluateHand(cards, playerContext, inventory) {
   return { handType, score: finalScore, winningCards };
 }
 
+export function estimateHand(cards) {
+  if (cards.length === 0) {
+    return { handType: 'Sin cartas', baseScore: 0, multiplier: 0 };
+  }
+
+  // Order to compare ranks
+  const ranksOrder = [
+    'ace', '2', '3', '4', '5', '6', '7', '8', '9', 'sota', 'caballo', 'rey'
+  ];
+
+  // Count ranks & suits
+  const rankCounts = {};
+  const suitCounts = {};
+
+  for (const card of cards) {
+    // Count rank
+    rankCounts[card.rank] = (rankCounts[card.rank] || 0) + 1;
+
+    // Count suit
+    suitCounts[card.suit] = (suitCounts[card.suit] || 0) + 1;
+  }
+
+  // Sort cards by rank index for straight checks
+  const sortedCards = [...cards].sort((a, b) => {
+    return ranksOrder.indexOf(a.rank) - ranksOrder.indexOf(b.rank);
+  });
+
+  // Check for flush (all suits the same)
+  const isFlush = Object.values(suitCounts).some(count => count === 5);
+
+  // Check for straight (consecutive ranks)
+  let isStraight = cards.length === 5;
+  for (let i = 0; i < cards.length - 1; i++) {
+    const currentIndex = ranksOrder.indexOf(sortedCards[i].rank);
+    const nextIndex = ranksOrder.indexOf(sortedCards[i + 1].rank);
+    if (nextIndex - currentIndex !== 1) {
+      isStraight = false;
+      break;
+    }
+  }
+
+  // Tally combos (pairs, 3-of-kind, etc.)
+  const counts = Object.values(rankCounts).sort((a, b) => b - a);
+
+  // Determine hand type, baseScore, and multiplier
+  let handType = 'Carta Alta';
+  let baseScore = 5; // Default score
+  let multiplier = 1;
+
+  if (isStraight && isFlush) {
+    handType = 'Escalera de Color';
+    baseScore = 100;
+    multiplier = 8;
+  } else if (counts[0] === 4) {
+    handType = 'Póker';
+    baseScore = 60;
+    multiplier = 7;
+  } else if (counts[0] === 3 && counts[1] === 2) {
+    handType = 'Full House';
+    baseScore = 40;
+    multiplier = 4;
+  } else if (isFlush) {
+    handType = 'Color';
+    baseScore = 35;
+    multiplier = 4;
+  } else if (isStraight) {
+    handType = 'Escalera';
+    baseScore = 30;
+    multiplier = 4;
+  } else if (counts[0] === 3) {
+    handType = 'Trío';
+    baseScore = 30;
+    multiplier = 3;
+  } else if (counts[0] === 2 && counts[1] === 2) {
+    handType = 'Doble Pareja';
+    baseScore = 20;
+    multiplier = 2;
+  } else if (counts[0] === 2) {
+    handType = 'Pareja';
+    baseScore = 10;
+    multiplier = 2;
+  }
+
+  return { handType, baseScore, multiplier };
+}
+
 /**
  * Apply joker effects to the hand
  */

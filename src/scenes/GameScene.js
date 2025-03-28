@@ -4,6 +4,7 @@ import { drawCards } from '../utils/HandManager.js';
 import { evaluateHand } from '../utils/PokerScoring.js';
 import Inventory from '../utils/Inventory.js';
 import JokerManager from '../utils/JokerManager.js';
+import { estimateHand } from '../utils/PokerScoring.js';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -375,7 +376,7 @@ export default class GameScene extends Phaser.Scene {
                       });
 
                       // Añadir la animación de partículas
-                      this.addWinningEffect();
+                      //this.addWinningEffect();
 
                       this.scene.wake('UIOverlay');
                       const currentMap = this.registry.get('currentMap')
@@ -507,7 +508,7 @@ highlightWinningCards(result) {
         });
 
         // Añadir la animación de partículas
-        this.addWinningEffect();
+        //this.addWinningEffect();
 
         const currentMap = this.registry.get('currentMap')
         this.scene.resume(currentMap);
@@ -591,7 +592,7 @@ highlightWinningCards(result) {
     const cardSpacing = 95;
     const totalWidth = (this.playerHand.length - 1) * cardSpacing;
     const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
-    const posY = this.cameras.main.height - 150;
+    const posY = this.cameras.main.height - 200;
 
     // For each card in the sorted array, find its sprite and tween it to the new position.
     this.playerHand.forEach((card, index) => {
@@ -626,7 +627,7 @@ highlightWinningCards(result) {
     const cardSpacing = 95;
     const totalWidth = (this.playerHand.length - 1) * cardSpacing;
     const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
-    const posY = this.cameras.main.height - 150;
+    const posY = this.cameras.main.height - 200;
 
     this.playerHand.forEach((card, index) => {
       const xPos = startX + index * cardSpacing;
@@ -668,6 +669,20 @@ highlightWinningCards(result) {
         sprite.setTint(0x808080);
       }
     }
+    // Si no hay cartas seleccionadas, actualizar el marcador a 0
+    if (this.selectedCards.length === 0) {
+      this.scene.get('UIScene').updateScoreMarker(0, 0);
+      return;
+    } 
+
+    // Estimar la mano seleccionada
+    const result = estimateHand(this.selectedCards);
+
+    // Actualizar el marcador en UIScene
+    const chips = result.baseScore || 0;
+    const multiplier = result.multiplier || 1;
+    this.scene.get('UIScene').updateScoreMarker(chips, multiplier);
+
     this.events.emit('cards-changed', this.selectedCards.length);
   }
 
@@ -677,9 +692,12 @@ highlightWinningCards(result) {
       this.cameras.main.height / 2 - 200,
       msg,
       {
-        fontSize: '36px',
-        color: '#ffff00',
-        backgroundColor: '#000000',
+        fontFamily: 'MarioKart', 
+        fontSize: '40px',
+        color: '#ffffff', 
+        stroke: '#000000', 
+        strokeThickness: 5,
+        align: 'center',
         padding: { x: 10, y: 5 },
       }
     ).setOrigin(0.5);
