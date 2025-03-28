@@ -276,7 +276,6 @@ export default class Dialogos extends Phaser.Scene {
             this.scene.pause(currentMap);
         }
         
-    
         // Display the dialog text
         this.showText();
     }

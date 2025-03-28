@@ -57,11 +57,9 @@ class Inventory {
   }
   
   // For debugging: add the first 5 jokers to inventory
-  addFirstFiveJokers() {
-    for (let i = 1; i <= 5; i++) {
-      this.addJoker(i);
-    }
-  }
+  //addJoker() {
+  //  this.addJoker(1);    
+  //}
 }
 
 export default Inventory;

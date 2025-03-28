@@ -54,7 +54,74 @@ export default class GameScene extends Phaser.Scene {
     const gameHeight = this.cameras.main.height;
 
     // Background
-    this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug').setOrigin(0, 0);
+    // Definir el shader directamente en el archivo
+    const fragmentShader = `
+    precision mediump float;
+
+    uniform float time;
+    uniform vec2 resolution;
+
+    #define PIXEL_SIZE_FAC 700.0
+    #define BLACK 0.6 * vec4(79.0 / 255.0, 99.0 / 255.0, 103.0 / 255.0, 1.0 / 0.6)
+
+    vec4 easing(vec4 t, float power) {
+        return vec4(pow(t.x, power), pow(t.y, power), pow(t.z, power), pow(t.w, power));
+    }
+
+    vec4 effect(vec3 screen_coords, float scale) {
+        vec2 uv = screen_coords.xy;
+        uv = floor(uv * (PIXEL_SIZE_FAC / 2.0)) / (PIXEL_SIZE_FAC / 2.0);
+        uv /= scale;
+        float uv_len = length(uv);
+
+        float speed = time * 1.0;
+        float new_pixel_angle = atan(uv.y, uv.x) + (2.2 + 0.4 * min(6.0, speed)) * uv_len - 1.0 - speed * 0.05 - min(6.0, speed) * speed * 0.02;
+        vec2 mid = (resolution.xy / length(resolution.xy)) / 2.0;
+        vec2 sv = vec2((uv_len * cos(new_pixel_angle) + mid.x), (uv_len * sin(new_pixel_angle) + mid.y)) - mid;
+
+        sv *= 30.0;
+        speed = time * (6.0) + 5.0;
+        vec2 uv2 = vec2(sv.x + sv.y);
+
+        for (int i = 0; i < 5; i++) {
+            uv2 += sin(max(sv.x, sv.y)) + sv;
+            sv += 0.5 * vec2(cos(5.1123314 + 0.353 * uv2.y + speed * 0.131121), sin(uv2.x - 0.113 * speed));
+            sv -= 1.0 * cos(sv.x + sv.y) - 1.0 * sin(sv.x * 0.711 - sv.y);
+        }
+
+        float smoke_res = min(2.0, max(-2.0, 1.5 + length(sv) * 0.12 - 0.17 * (min(10.0, time * 1.2 - 0.0))));
+        if (smoke_res < 0.2) {
+            smoke_res = (smoke_res - 0.2) * 0.6 + 0.2;
+        }
+
+        float c1p = max(0.0, 1.0 - 2.0 * abs(1.0 - smoke_res));
+        float c2p = max(0.0, 1.0 - 2.0 * (smoke_res));
+        float cb = 1.0 - min(1.0, c1p + c2p);
+
+        vec4 ret_col = vec4(0.996, 0.372, 0.333, 1.0) * c1p + vec4(0.0, 0.615, 1.0, 1.0) * c2p + vec4(cb * BLACK.rgb, cb * 1.0);
+        float mod_flash = max(0.0 * 0.8, max(c1p, c2p) * 5.0 - 4.4) + 0.0 * max(c1p, c2p);
+
+        return easing(ret_col * (1.0 - mod_flash) + mod_flash * vec4(1.0, 1.0, 1.0, 1.0), 1.5);
+    }
+
+    void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+        vec3 uv = vec3(fragCoord.xy / resolution.xy, 0.0);
+        uv -= 0.5;
+        uv.x *= resolution.x / resolution.y;
+
+        fragColor = effect(uv * vec3(1.0, 1.0, 0.0), 2.0);
+    }
+
+    void main() {
+        mainImage(gl_FragColor, gl_FragCoord.xy);
+    }
+    `;
+
+    // Crear el shader como un BaseShader
+    const baseShader = new Phaser.Display.BaseShader('fondoBatalla', fragmentShader);
+
+    // Añadir el shader como fondo
+    this.add.shader(baseShader, gameWidth / 2, gameHeight / 2, gameWidth, gameHeight).setOrigin(0.5);
 
     // --- Reset game state ---
     this.deck = [];
@@ -71,7 +138,7 @@ export default class GameScene extends Phaser.Scene {
     this.jokerManager = new JokerManager(this, this.inventory);
   
     // For testing: Add the first 5 jokers to inventory
-    this.inventory.addFirstFiveJokers();
+    this.inventory.addJoker();
     
     // Display jokers
     this.jokerManager.displayJokers();
