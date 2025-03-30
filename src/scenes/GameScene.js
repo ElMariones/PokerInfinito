@@ -239,7 +239,6 @@ export default class GameScene extends Phaser.Scene {
     const newScale = 1.0;
     const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
-    // Desplazar las cartas hacia la derecha para evitar superposición
     const offsetX = 85; // Ajustar este valor para desplazar las cartas a la derecha
     const startX = centerX - totalWidth / 2 + offsetX;
     //const startX = centerX - totalWidth / 2;
@@ -248,173 +247,145 @@ export default class GameScene extends Phaser.Scene {
     //this.cameras.main.flash(200);
 
     this.selectedCards.forEach((card, index) => {
-        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-        if (!sprite) return;
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
 
-        sprite.clearTint();
-        sprite.disableInteractive();
+      sprite.clearTint();
+      sprite.disableInteractive();
 
-        this.time.delayedCall(index * 100, () => {
-            if (!sprite.active) return; // Verifica que aún existe
+      this.time.delayedCall(index * 100, () => {
+        if (!sprite.active) return; // Verifica que aún existe
+
+        this.tweens.add({
+          targets: sprite,
+          scale: 1.4, 
+          angle: Math.random() * 10 - 5,
+          duration: 200,
+          ease: 'Back.easeOut',
+          yoyo: true,
+          onComplete: () => {
+            if (!sprite.active) return;
 
             this.tweens.add({
                 targets: sprite,
-                scale: 1.4, 
-                angle: Math.random() * 10 - 5,
-                duration: 200,
+                x: startX + index * spacing,
+                y: centerY,
+                scale: newScale,
+                duration: 600,
                 ease: 'Back.easeOut',
-                yoyo: true,
-                onComplete: () => {
-                    if (!sprite.active) return;
+            });
+          }
+        });
+      });
+    });
 
+    //Espera y luego ejecuta el ataque
+    this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
+      this.highlightWinningCards(result);
+
+      this.time.delayedCall(600, () => {
+        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+
+          this.time.delayedCall(1200, () => {
+            const opponentX = this.cameras.main.width / 2;
+            const opponentY = 100;
+
+            this.selectedCards.forEach((card, index) => {
+                const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+                if (!sprite) return;
+
+                this.time.delayedCall(index * 100, () => {
                     this.tweens.add({
                         targets: sprite,
-                        x: startX + index * spacing,
-                        y: centerY,
-                        scale: newScale,
-                        duration: 600,
-                        ease: 'Back.easeOut',
-                    });
-                }
-            });
-        });
-    });
+                        x: opponentX,
+                        y: opponentY,
+                        scale: 0.3,
+                        angle: Math.random() * 40 - 20,
+                        duration: 700,
+                        ease: 'Cubic.easeIn',
+                        onStart: () => {
+                            sprite.setDepth(10);
+                        },
+                        onComplete: () => {
+                            sprite.setVisible(false);
 
-    // ⏳ Espera y luego ejecuta el ataque
-    this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
-        this.highlightWinningCards(result);
+                            // **Flash para impacto**
+                            const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
+                            flash.setAlpha(0);
+                            this.tweens.add({
+                                targets: flash,
+                                alpha: { from: 0.7, to: 0 },
+                                duration: 200,
+                                onComplete: () => flash.destroy(),
+                            });
 
-        this.time.delayedCall(600, () => {
-          this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+                            // **Oscurecimiento rápido para efecto más fuerte**
+                            const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
+                            darken.setAlpha(0);
+                            this.tweens.add({
+                                targets: darken,
+                                alpha: { from: 0.5, to: 0 },
+                                duration: 600,
+                                onComplete: () => darken.destroy(),
+                            });
 
-            this.time.delayedCall(1200, () => {
-                const opponentX = this.cameras.main.width / 2;
-                const opponentY = 100;
-
-        
-                this.selectedCards.forEach((card, index) => {
-                    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-                    if (!sprite) return;
-
-                    this.time.delayedCall(index * 100, () => {
-                        this.tweens.add({
-                            targets: sprite,
-                            x: opponentX,
-                            y: opponentY,
-                            scale: 0.3,
-                            angle: Math.random() * 40 - 20,
-                            duration: 700,
-                            ease: 'Cubic.easeIn',
-                            onStart: () => {
-                                sprite.setDepth(10);
-                            },
-                            onComplete: () => {
-                                sprite.setVisible(false);
-
-                                // **Flash para impacto**
-                                const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
-                                flash.setAlpha(0);
-                                this.tweens.add({
-                                    targets: flash,
-                                    alpha: { from: 0.7, to: 0 },
-                                    duration: 200,
-                                    onComplete: () => flash.destroy(),
-                                });
-
-                                // **Oscurecimiento rápido para efecto más fuerte**
-                                const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
-                                darken.setAlpha(0);
-                                this.tweens.add({
-                                    targets: darken,
-                                    alpha: { from: 0.5, to: 0 },
-                                    duration: 600,
-                                    onComplete: () => darken.destroy(),
-                                });
-
-                                // **Pantalla vibra sin mostrar fondo**
-                                this.cameras.main.shake(500, 0.03);
-                            }
-                        });
+                            // **Pantalla vibra sin mostrar fondo**
+                            this.cameras.main.shake(500, 0.03);
+                        }
                     });
                 });
-
-                this.time.delayedCall(1300, () => {
-                  this.roundNumber++;
-                  if (this.roundNumber <= this.maxRounds) {
-                      this.replaceUsedCards();
-                  } else {
-                    if (this.score >= this.pointsNeeded) {
-                      // Player won the battle:
-                      this.scene.stop('UIScene');
-                      this.scene.stop('GameScene');
-
-                      // Calcular las monedas ganadas
-                      const coinsWon = this.score - this.pointsNeeded;
-
-                      // Actualizar las monedas en el registry
-                      const currentCoins = this.registry.get('coins') || 0;
-                      this.registry.set('coins', currentCoins + coinsWon);
-
-                      // Mostrar el mensaje en el centro de la pantalla
-                      const message = this.add.text(
-                        this.cameras.main.width / 2,
-                        this.cameras.main.height / 2,
-                        `¡Has ganado la partida!\nMonedas obtenidas: ${coinsWon}`,
-                        {
-                          fontSize: '36px',
-                          color: '#ffffff',
-                          backgroundColor: '#000000',
-                          padding: { x: 10, y: 10 },
-                          align: 'center'
-                        }
-                      ).setOrigin(0.5);
-
-                      // Destruir el mensaje después de unos segundos
-                      this.time.delayedCall(3000, () => {
-                        message.destroy();
-
-                        // Reanudar la escena principal o ir a la siguiente
-                        const currentMap = this.registry.get('currentMap');
-                        this.scene.resume(currentMap);
-                      });
-
-                      // Añadir la animación de partículas
-                      //this.addWinningEffect();
-
-                      this.scene.wake('UIOverlay');
-                      const currentMap = this.registry.get('currentMap')
-                      this.scene.resume(currentMap);
-                    
-                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                      // If Dialogos is not already active, launch it with required data.
-                      if (!this.scene.isActive('Dialogos')) {
-                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                      }
-                      // Call the afterBattle function (passing the npc name).
-                      this.scene.get('Dialogos').afterBattle(true);
-                    } else {
-                      // Player lost the battle:
-                      this.scene.stop('UIScene');
-                      this.scene.stop('GameScene');
-                      this.scene.wake('UIOverlay');
-                      const currentMap = this.registry.get('currentMap')
-                      this.scene.resume(currentMap);
-                    
-                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                      // If Dialogos is not already active, launch it with required data.
-                      if (!this.scene.isActive('Dialogos')) {
-                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                      }
-                      // Call the afterBattle function (passing the npc name).
-                      this.scene.get('Dialogos').afterBattle(false);
-                    }
-                  }
-              });
-              
             });
+
+            this.time.delayedCall(1300, () => {
+              this.roundNumber++;
+              if (this.roundNumber <= this.maxRounds && this.score < this.pointsNeeded) {
+                  this.replaceUsedCards();
+              } else {
+                if (this.score >= this.pointsNeeded) {
+                  // Player won the battle:
+                  this.scene.stop('UIScene');
+                  this.scene.stop('GameScene');
+
+                  // Calcular las monedas ganadas
+                  const coinsWon = this.score - this.pointsNeeded;
+
+                  // Actualizar las monedas en el registry
+                  const currentCoins = this.registry.get('coins') || 0;
+                  this.registry.set('coins', currentCoins + coinsWon);
+
+                  this.scene.wake('UIOverlay');
+                  const currentMap = this.registry.get('currentMap')
+                  this.scene.resume(currentMap);
+                
+                  // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+                  // If Dialogos is not already active, launch it with required data.
+                  if (!this.scene.isActive('Dialogos')) {
+                    this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+                  }
+                  // Call the afterBattle function (passing the npc name).
+                  this.scene.get('Dialogos').afterBattle(true);
+                } else {
+                  // Player lost the battle:
+                  this.scene.stop('UIScene');
+                  this.scene.stop('GameScene');
+                  this.scene.wake('UIOverlay');
+                  const currentMap = this.registry.get('currentMap')
+                  this.scene.resume(currentMap);
+                
+                  // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+                  // If Dialogos is not already active, launch it with required data.
+                  if (!this.scene.isActive('Dialogos')) {
+                    this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+                  }
+                  // Call the afterBattle function (passing the npc name).
+                  this.scene.get('Dialogos').afterBattle(false);
+                }
+              }
+          });
         });
+      });
     });
-}
+  }
 
 highlightWinningCards(result) {
     const winners = result.winningCards || [];
@@ -724,6 +695,25 @@ highlightWinningCards(result) {
     emitter.particleBringToTop = false;
   
     emitter.postFX.addBokeh(0.5, 10, 0.2);
+  }
+
+  // Helper para obtener el valor de la carta
+  getCardValue(card) {
+    const ranksOrder = {
+      'ace': 14,
+      '2': 2,
+      '3': 3,
+      '4': 4,
+      '5': 5,
+      '6': 6,
+      '7': 7,
+      '8': 8,
+      '9': 9,
+      'sota': 10,
+      'caballo': 11,
+      'rey': 12,
+    };
+    return ranksOrder[card.rank] || 0;
   }
 }
 
