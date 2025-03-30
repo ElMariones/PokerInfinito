@@ -59,6 +59,15 @@ import oveja from '../../assets/images/oveja.png';
 import padre from '../../assets/images/padre.png';
 import gemelos from '../../assets/images/gemelos.png';
 import pescador from '../../assets/images/pescador.png';
+import guardia from '../../assets/images/guardia.png';
+import hombre from '../../assets/images/hombre.png';
+import vaca from '../../assets/images/vaca.png';
+import gordo from '../../assets/images/gordo.png';
+
+import broken_car from '../../assets/images/broken_car.png';
+import cow from '../../assets/images/cow.png';
+import guard from '../../assets/images/guard.png';
+import big_man from '../../assets/images/big_man.png';
 
 
 // Load the font
@@ -177,6 +186,15 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('padre', padre);
     this.load.image('gemelos', gemelos);
     this.load.image('pescador', pescador);
+    this.load.image('guardia', guardia);
+    this.load.image('hombre', hombre);
+    this.load.image('vaca', vaca);
+    this.load.image('gordo', gordo);
+    
+    this.load.image('broken_car', broken_car);
+    this.load.image('cow', cow);
+    this.load.image('guard', guard);
+    this.load.image('big_man', big_man);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
