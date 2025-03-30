@@ -29,24 +29,25 @@ class JokerManager {
     }
     
     // Display them in a row at the top
-    const startX = 100;
     const spacing = 80;
-    const y = 50;
+    const totalWidth = (ownedJokers.length - 1) * spacing;
+    const startX = (this.scene.cameras.main.width / 2) - (totalWidth / 2);
+    const y = 75;
     
     ownedJokers.forEach((joker, index) => {
       const x = startX + (index * spacing);
       const sprite = this.scene.add.image(x, y, joker.image)
-        .setScale(0.5)
+        .setScale(0.3)
         .setInteractive();
         
       // Add hover effects to show joker details
       sprite.on('pointerover', () => {
-        sprite.setScale(0.6);
+        sprite.setScale(0.4);
         this.showJokerInfo(joker, x, y + 50);
       });
       
       sprite.on('pointerout', () => {
-        sprite.setScale(0.5);
+        sprite.setScale(0.3);
         if (this.jokerInfoText) {
           this.jokerInfoText.destroy();
           this.jokerInfoText = null;

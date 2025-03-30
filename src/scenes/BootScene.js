@@ -7,8 +7,9 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
+//import fondoBatallas from '../../assets/shaders/fondoBatallas.glsl.js';
 import button_default from '../../assets/images/button_default.png';
-
+import star from '../../assets/images/star.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
@@ -134,6 +135,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    //this.cache.shader.add('fondoBatallas', fondoBatallas);
     this.load.image('interactKey', interactKey);
     this.load.spritesheet('button_default', button_default, {
       frameWidth: 142,  // width of each frame
@@ -142,6 +144,8 @@ export default class BootScene extends Phaser.Scene {
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
     this.load.image('sortColor', sortColor);
+
+    this.load.image('star', star);
 
     //load sprites
     this.load.spritesheet('playerIdle', playerIdle, { frameWidth: 64, frameHeight: 64 });

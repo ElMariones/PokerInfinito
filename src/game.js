@@ -57,7 +57,7 @@ let config = {
     Dialogos,
     UIOverlay,
     Shop,
-    JokersInventoryScene
+    JokersInventoryScene,
   ],
 
   // Register the plugin so it loads in each scene

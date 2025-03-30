@@ -4,6 +4,7 @@ import { drawCards } from '../utils/HandManager.js';
 import { evaluateHand } from '../utils/PokerScoring.js';
 import Inventory from '../utils/Inventory.js';
 import JokerManager from '../utils/JokerManager.js';
+import { estimateHand } from '../utils/PokerScoring.js';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -28,7 +29,6 @@ export default class GameScene extends Phaser.Scene {
       baseScore: 0,
       winningCards: [],
       multiplier: 1,
-      //chips: 0,
       emptyJokerSlots: 0,
       remainingDiscards: 0,
       jokerCount: 0,
@@ -55,7 +55,74 @@ export default class GameScene extends Phaser.Scene {
     const gameHeight = this.cameras.main.height;
 
     // Background
-    this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug').setOrigin(0, 0);
+    // Definir el shader directamente en el archivo
+    const fragmentShader = `
+    precision mediump float;
+
+    uniform float time;
+    uniform vec2 resolution;
+
+    #define PIXEL_SIZE_FAC 700.0
+    #define BLACK 0.6 * vec4(79.0 / 255.0, 99.0 / 255.0, 103.0 / 255.0, 1.0 / 0.6)
+
+    vec4 easing(vec4 t, float power) {
+        return vec4(pow(t.x, power), pow(t.y, power), pow(t.z, power), pow(t.w, power));
+    }
+
+    vec4 effect(vec3 screen_coords, float scale) {
+        vec2 uv = screen_coords.xy;
+        uv = floor(uv * (PIXEL_SIZE_FAC / 2.0)) / (PIXEL_SIZE_FAC / 2.0);
+        uv /= scale;
+        float uv_len = length(uv);
+
+        float speed = time * 1.0;
+        float new_pixel_angle = atan(uv.y, uv.x) + (2.2 + 0.4 * min(6.0, speed)) * uv_len - 1.0 - speed * 0.05 - min(6.0, speed) * speed * 0.02;
+        vec2 mid = (resolution.xy / length(resolution.xy)) / 2.0;
+        vec2 sv = vec2((uv_len * cos(new_pixel_angle) + mid.x), (uv_len * sin(new_pixel_angle) + mid.y)) - mid;
+
+        sv *= 30.0;
+        speed = time * (6.0) + 5.0;
+        vec2 uv2 = vec2(sv.x + sv.y);
+
+        for (int i = 0; i < 5; i++) {
+            uv2 += sin(max(sv.x, sv.y)) + sv;
+            sv += 0.5 * vec2(cos(5.1123314 + 0.353 * uv2.y + speed * 0.131121), sin(uv2.x - 0.113 * speed));
+            sv -= 1.0 * cos(sv.x + sv.y) - 1.0 * sin(sv.x * 0.711 - sv.y);
+        }
+
+        float smoke_res = min(2.0, max(-2.0, 1.5 + length(sv) * 0.12 - 0.17 * (min(10.0, time * 1.2 - 0.0))));
+        if (smoke_res < 0.2) {
+            smoke_res = (smoke_res - 0.2) * 0.6 + 0.2;
+        }
+
+        float c1p = max(0.0, 1.0 - 2.0 * abs(1.0 - smoke_res));
+        float c2p = max(0.0, 1.0 - 2.0 * (smoke_res));
+        float cb = 1.0 - min(1.0, c1p + c2p);
+
+        vec4 ret_col = vec4(0.996, 0.372, 0.333, 1.0) * c1p + vec4(0.0, 0.615, 1.0, 1.0) * c2p + vec4(cb * BLACK.rgb, cb * 1.0);
+        float mod_flash = max(0.0 * 0.8, max(c1p, c2p) * 5.0 - 4.4) + 0.0 * max(c1p, c2p);
+
+        return easing(ret_col * (1.0 - mod_flash) + mod_flash * vec4(1.0, 1.0, 1.0, 1.0), 1.5);
+    }
+
+    void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+        vec3 uv = vec3(fragCoord.xy / resolution.xy, 0.0);
+        uv -= 0.5;
+        uv.x *= resolution.x / resolution.y;
+
+        fragColor = effect(uv * vec3(1.0, 1.0, 0.0), 2.0);
+    }
+
+    void main() {
+        mainImage(gl_FragColor, gl_FragCoord.xy);
+    }
+    `;
+
+    // Crear el shader como un BaseShader
+    const baseShader = new Phaser.Display.BaseShader('fondoBatalla', fragmentShader);
+
+    // Añadir el shader como fondo
+    this.add.shader(baseShader, gameWidth / 2, gameHeight / 2, gameWidth, gameHeight).setOrigin(0.5);
 
     // --- Reset game state ---
     this.deck = [];
@@ -72,7 +139,7 @@ export default class GameScene extends Phaser.Scene {
     this.jokerManager = new JokerManager(this, this.inventory);
   
     // For testing: Add the first 5 jokers to inventory
-    this.inventory.addFirstFiveJokers();
+    this.inventory.addJoker();
     
     // Display jokers
     this.jokerManager.displayJokers();
@@ -172,7 +239,10 @@ export default class GameScene extends Phaser.Scene {
     const newScale = 1.0;
     const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
-    const startX = centerX - totalWidth / 2;
+    // Desplazar las cartas hacia la derecha para evitar superposición
+    const offsetX = 85; // Ajustar este valor para desplazar las cartas a la derecha
+    const startX = centerX - totalWidth / 2 + offsetX;
+    //const startX = centerX - totalWidth / 2;
 
     // ⚡ Flash antes de la selección
     //this.cameras.main.flash(200);
@@ -277,12 +347,43 @@ export default class GameScene extends Phaser.Scene {
                       // Player won the battle:
                       this.scene.stop('UIScene');
                       this.scene.stop('GameScene');
+
+                      // Calcular las monedas ganadas
+                      const coinsWon = this.score - this.pointsNeeded;
+
+                      // Actualizar las monedas en el registry
+                      const currentCoins = this.registry.get('coins') || 0;
+                      this.registry.set('coins', currentCoins + coinsWon);
+
+                      // Mostrar el mensaje en el centro de la pantalla
+                      const message = this.add.text(
+                        this.cameras.main.width / 2,
+                        this.cameras.main.height / 2,
+                        `¡Has ganado la partida!\nMonedas obtenidas: ${coinsWon}`,
+                        {
+                          fontSize: '36px',
+                          color: '#ffffff',
+                          backgroundColor: '#000000',
+                          padding: { x: 10, y: 10 },
+                          align: 'center'
+                        }
+                      ).setOrigin(0.5);
+
+                      // Destruir el mensaje después de unos segundos
+                      this.time.delayedCall(3000, () => {
+                        message.destroy();
+
+                        // Reanudar la escena principal o ir a la siguiente
+                        const currentMap = this.registry.get('currentMap');
+                        this.scene.resume(currentMap);
+                      });
+
+                      // Añadir la animación de partículas
+                      //this.addWinningEffect();
+
                       this.scene.wake('UIOverlay');
                       const currentMap = this.registry.get('currentMap')
                       this.scene.resume(currentMap);
-                      const coins = this.registry.get('coins') || 0;
-                      const excessPoints = this.score - this.pointsNeeded;
-                      this.registry.set('coins', coins + excessPoints);
                     
                       // Launch or get the Dialogos scene, so it can show the post-battle dialog.
                       // If Dialogos is not already active, launch it with required data.
@@ -358,7 +459,7 @@ highlightWinningCards(result) {
     this.cardSprites = [];
     this.displayHand();
 
-    this.roundNumber++;
+    //this.roundNumber++; **Así ya no se incrementa de 2 en 2, en algún momento lo pusimos**
 
     // Show the sort button again.
     this.events.emit('toggle-sort-button', true);
@@ -373,40 +474,71 @@ highlightWinningCards(result) {
     }
 
     if (this.roundNumber > this.maxRounds) {
-if (this.score >= this.pointsNeeded) {
-                      // Player won the battle:
-                      this.scene.stop('UIScene');
-                      this.scene.stop('GameScene');
-                      this.scene.wake('UIOverlay');
-                      const currentMap = this.registry.get('currentMap')
-                      this.scene.resume(currentMap);
-                      const coins = this.registry.get('coins') || 0;
-                      const excessPoints = this.score - this.pointsNeeded;
-                      this.registry.set('coins', coins + excessPoints);
-                    
-                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                      // If Dialogos is not already active, launch it with required data.
-                      if (!this.scene.isActive('Dialogos')) {
-                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                      }
-                      // Call the afterBattle function (passing the npc name).
-                      this.scene.get('Dialogos').afterBattle(true);
-                    } else {
-                      // Player lost the battle:
-                      this.scene.stop('UIScene');
-                      this.scene.stop('GameScene');
-                      this.scene.wake('UIOverlay');
-                      const currentMap = this.registry.get('currentMap')
-                      this.scene.resume(currentMap);
-                    
-                      // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                      // If Dialogos is not already active, launch it with required data.
-                      if (!this.scene.isActive('Dialogos')) {
-                        this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                      }
-                      // Call the afterBattle function (passing the npc name).
-                      this.scene.get('Dialogos').afterBattle(false);
-}
+      if (this.score >= this.pointsNeeded) {
+        // Player won the battle:
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+        this.scene.wake('UIOverlay');
+
+        // Calcular las monedas ganadas
+        const coinsWon = this.score - this.pointsNeeded;
+
+        // Actualizar las monedas en el registry
+        const currentCoins = this.registry.get('coins') || 0;
+        this.registry.set('coins', currentCoins + coinsWon);
+
+        // Mostrar el mensaje en el centro de la pantalla
+        const message = this.add.text(
+          this.cameras.main.width / 2,
+          this.cameras.main.height / 2,
+          `¡Has ganado la partida!\nMonedas obtenidas: ${coinsWon}`,
+          {
+            fontSize: '36px',
+            color: '#ffffff',
+            backgroundColor: '#000000',
+            padding: { x: 10, y: 10 },
+            align: 'center'
+          }
+        ).setOrigin(0.5);
+
+        // Destruir el mensaje después de unos segundos
+        this.time.delayedCall(3000, () => {
+          message.destroy();
+
+          // Reanudar la escena principal o ir a la siguiente
+          const currentMap = this.registry.get('currentMap');
+          this.scene.resume(currentMap);
+        });
+
+        // Añadir la animación de partículas
+        //this.addWinningEffect();
+
+        const currentMap = this.registry.get('currentMap')
+        this.scene.resume(currentMap);
+      
+        // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+        // If Dialogos is not already active, launch it with required data.
+        if (!this.scene.isActive('Dialogos')) {
+          this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+        }
+        // Call the afterBattle function (passing the npc name).
+        this.scene.get('Dialogos').afterBattle(true);
+      } else {
+        // Player lost the battle:
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+        this.scene.wake('UIOverlay');
+        const currentMap = this.registry.get('currentMap')
+        this.scene.resume(currentMap);
+      
+        // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+        // If Dialogos is not already active, launch it with required data.
+        if (!this.scene.isActive('Dialogos')) {
+          this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+        }
+        // Call the afterBattle function (passing the npc name).
+        this.scene.get('Dialogos').afterBattle(false);
+      }
     }
   }
 
@@ -463,7 +595,7 @@ if (this.score >= this.pointsNeeded) {
     const cardSpacing = 95;
     const totalWidth = (this.playerHand.length - 1) * cardSpacing;
     const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
-    const posY = this.cameras.main.height - 150;
+    const posY = this.cameras.main.height - 200;
 
     // For each card in the sorted array, find its sprite and tween it to the new position.
     this.playerHand.forEach((card, index) => {
@@ -498,7 +630,7 @@ if (this.score >= this.pointsNeeded) {
     const cardSpacing = 95;
     const totalWidth = (this.playerHand.length - 1) * cardSpacing;
     const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
-    const posY = this.cameras.main.height - 150;
+    const posY = this.cameras.main.height - 200;
 
     this.playerHand.forEach((card, index) => {
       const xPos = startX + index * cardSpacing;
@@ -540,6 +672,20 @@ if (this.score >= this.pointsNeeded) {
         sprite.setTint(0x808080);
       }
     }
+    // Si no hay cartas seleccionadas, actualizar el marcador a 0
+    if (this.selectedCards.length === 0) {
+      this.scene.get('UIScene').updateScoreMarker(0, 0);
+      return;
+    } 
+
+    // Estimar la mano seleccionada
+    const result = estimateHand(this.selectedCards);
+
+    // Actualizar el marcador en UIScene
+    const chips = result.baseScore || 0;
+    const multiplier = result.multiplier || 1;
+    this.scene.get('UIScene').updateScoreMarker(chips, multiplier);
+
     this.events.emit('cards-changed', this.selectedCards.length);
   }
 
@@ -549,9 +695,12 @@ if (this.score >= this.pointsNeeded) {
       this.cameras.main.height / 2 - 200,
       msg,
       {
-        fontSize: '36px',
-        color: '#ffff00',
-        backgroundColor: '#000000',
+        fontFamily: 'MarioKart', 
+        fontSize: '40px',
+        color: '#ffffff', 
+        stroke: '#000000', 
+        strokeThickness: 5,
+        align: 'center',
         padding: { x: 10, y: 5 },
       }
     ).setOrigin(0.5);
@@ -559,6 +708,22 @@ if (this.score >= this.pointsNeeded) {
     this.time.delayedCall(2000, () => {
       text.destroy();
     });
+  }
+
+  addWinningEffect() {
+    const emitter = this.add.particles(this.cameras.main.width / 2, this.cameras.main.height / 2, 'star', {
+      angle: { min: 240, max: 300 },
+      speed: { min: 200, max: 300 },
+      lifespan: 4000,
+      gravityY: 180,
+      quantity: 2,
+      bounce: 0.4,
+      bounds: new Phaser.Geom.Rectangle(-100, -200, this.cameras.main.width + 200, this.cameras.main.height + 200)
+    });
+  
+    emitter.particleBringToTop = false;
+  
+    emitter.postFX.addBokeh(0.5, 10, 0.2);
   }
 }
 
