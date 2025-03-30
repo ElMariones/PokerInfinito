@@ -239,7 +239,10 @@ export default class GameScene extends Phaser.Scene {
     const newScale = 1.0;
     const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
-    const startX = centerX - totalWidth / 2;
+    // Desplazar las cartas hacia la derecha para evitar superposición
+    const offsetX = 85; // Ajustar este valor para desplazar las cartas a la derecha
+    const startX = centerX - totalWidth / 2 + offsetX;
+    //const startX = centerX - totalWidth / 2;
 
     // ⚡ Flash antes de la selección
     //this.cameras.main.flash(200);
