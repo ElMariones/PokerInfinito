@@ -264,11 +264,7 @@ export default class GameScene extends Phaser.Scene {
                     if (!sprite.active) return;
 
                     this.tweens.add({
-                        targets: sprite,
-                        x: startX + index * spacing,
-                        y: centerY,
-                        scale: 1.2,
-                        duration: 800,
+                     
                         ease: 'Back.easeOut',
                         onComplete: () => {
                             // After the card reaches the center, now show the number pop-out
@@ -282,7 +278,15 @@ export default class GameScene extends Phaser.Scene {
                             }).setOrigin(0.5);
 
                             // Animation to make the number pop out
-                            
+                            this.tweens.add({
+                                targets: valueText,
+                                y: sprite.y - 100, // Move the number up from the card's center
+                                scale: { from: 1.5, to: 1 }, // Shrink the number
+                                alpha: { from: 1, to: 0 }, // Fade out the number
+                                duration: 5000,
+                                ease: 'Back.easeOut',
+                                onComplete: () => valueText.destroy() // Destroy the text after animation
+                            });
                         }
                     });
                 }
