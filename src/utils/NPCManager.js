@@ -374,14 +374,14 @@ export default class NPCManager {
         npc.body.setSize(npc.width * 0.9, npc.height * 0.1); // Adjust size as needed
         npc.body.setOffset(npc.width * 0, npc.height * 0.85); // Adjust offset to be bottom-center ish
       } else if (name === 'barrier_cow') {
-        npc.body.setSize(npc.width * 0.7, npc.height * 0.6);
-        npc.body.setOffset(npc.width * 0.15, npc.height * 0.4);
+        npc.body.setSize(npc.width * 1, npc.height * 0.6);
+        npc.body.setOffset(npc.width * 0, npc.height * 0.4);
       } else if (name === 'barrier_guard') {
-        npc.body.setSize(npc.width * 0.6, npc.height * 0.8);
-        npc.body.setOffset(npc.width * 0.2, npc.height * 0.2);
+        npc.body.setSize(npc.width * 1.8, npc.height * 0.8);
+        npc.body.setOffset(npc.width * -0.3, npc.height * 0.2);
       } else if (name === 'barrier_big_man') {
-        npc.body.setSize(npc.width * 0.8, npc.height * 0.5);
-        npc.body.setOffset(npc.width * 0.1, npc.height * 0.5);
+        npc.body.setSize(npc.width * 1.2, npc.height * 0.5);
+        npc.body.setOffset(npc.width * -0.15, npc.height * 0.5);
       } else {
         // Default for other humanoids
         npc.body.setSize(20, 28);
@@ -485,11 +485,12 @@ export default class NPCManager {
 
     // 4) Show/hide the NPC "E" icon
     if (nearestNpc) {
+      const name = nearestNpc.getData('npcName');
       if (!this.interactUI) {
         // Ensure 'interactKey' texture is loaded
         if (this.scene.textures.exists('interactKey')) {
-          if (nearestNpc.name = 'barrier_car') {
-            this.interactUI = this.scene.add.image(1195, 2280, 'interactKey').setScale(0.07).setDepth(9999);
+          if (name.startsWith('barrier_car')) {
+            this.interactUI = this.scene.add.image(1202, 2300, 'interactKey').setScale(0.07).setDepth(9999);
           }
           else{
           this.interactUI = this.scene.add.image(nearestNpc.x, nearestNpc.y - 30, 'interactKey');
@@ -500,8 +501,8 @@ export default class NPCManager {
           console.warn("Texture 'interactKey' not loaded. Cannot display interaction UI.");
         }
       } else {
-        if (nearestNpc.name = 'barrier_car') {
-          this.interactUI.setPosition(1195, 2280, 'interactKey').setVisible(true).setDepth(9999);
+        if (name.startsWith('barrier_car')) {
+          this.interactUI.setPosition(1202, 2300, 'interactKey').setVisible(true).setDepth(9999);
         }
         else{
         this.interactUI.setPosition(nearestNpc.x, nearestNpc.y - 30);
@@ -609,7 +610,7 @@ export default class NPCManager {
       const name = npc.getData('npcName');
       interactDistance = 50; // Reset
       if (name === 'samuel') interactDistance = 75;
-      else if (name.startsWith('barrier_')) interactDistance = 60;
+      else if (name.startsWith('barrier_car')) interactDistance = 150;
 
       const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
       if (dist < interactDistance && dist < minDist) {

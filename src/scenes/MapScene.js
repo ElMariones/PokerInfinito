@@ -43,9 +43,12 @@ export default class MapScene extends Phaser.Scene {
     Player.createPlayerAnimations(this);
     // Create the player at the chosen spawn coords
     this.player = new Player(this, startX, startY, 'playerIdle');
+    this.player.setDepth(10);
 
     const layerTejados1 = map.createLayer('tejado (walkable)', [texturasCiudad], 0, 0)
     const layerTejados2 = map.createLayer('tejado 2 (walkable)', [texturasCiudad], 0, 0)
+    layerTejados1.setDepth(20);
+    layerTejados2.setDepth(20);
 
     // Enable collisions for solid layers
     layerAgua.setCollisionByExclusion([-1])
@@ -178,7 +181,7 @@ export default class MapScene extends Phaser.Scene {
             if (currentStage <= 0) {
                 // Use 'barrier_car' as the unique name for dialogue lookup
                 // Use 'broken_car' as the texture key (assuming 'broken_car.png' was loaded with this key)
-                const barrier1 = this.npcManager.addNPC('barrier_car', 1200, 2247, 'broken_car', false);
+                const barrier1 = this.npcManager.addNPC('barrier_car', 1210, 2247, 'broken_car', false);
                  if (barrier1) { // Check if NPC was created successfully
                      barrier1.setPipeline('Light2D');
                      this.barriers.push(barrier1);
@@ -188,12 +191,18 @@ export default class MapScene extends Phaser.Scene {
     
             // Barrier 2: Lost Cow (Blocks until stage 2)
             if (currentStage <= 1) {
-                const barrier2 = this.npcManager.addNPC('barrier_cow', 1200, 1400, 'cow', false);
+                const barrier2 = this.npcManager.addNPC('barrier_cow', 1200, 1500, 'cow', false);
                  if (barrier2) {
                      barrier2.setPipeline('Light2D');
                      this.barriers.push(barrier2);
                      console.log("Barrier 2 (Cow) created.");
                 }
+                const barrier2_2 = this.npcManager.addNPC('barrier_cow', 240, 1500, 'cow', false);
+                if (barrier2_2) {
+                    barrier2_2.setPipeline('Light2D');
+                    this.barriers.push(barrier2_2);
+                    console.log("Barrier 2_2 (Cow) created.");
+               }
             }
     
             // Barrier 3: Guard (Blocks until stage 3)
@@ -218,6 +227,10 @@ export default class MapScene extends Phaser.Scene {
                      console.log("Barrier 4 (Big Man) created.");
                 }
             }
+
+            this.barriers.forEach(barrier => {
+              barrier.setDepth(9);
+          });
              // --- END NEW ---
     
             // Set Light Pipeline for all NPCs (including barriers added via NPCManager)
