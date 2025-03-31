@@ -173,10 +173,13 @@ export default class GameScene extends Phaser.Scene {
       const randX = this.cameras.main.width / 2 + (Math.random() * 200 - 100);
       const randY = this.cameras.main.height / 2 + (Math.random() * 200 - 100);
 
+      // Apply multiple effects to make it more dynamic
       this.tweens.add({
         targets: sprite,
         x: randX,
         y: randY,
+        scale: { from: 1.1, to: 1.0 },  // Slight scaling to add emphasis
+        angle: { from: 0, to: 360 },    // Add rotation
         duration: duration,
         ease: 'Sine.easeInOut',
         yoyo: true,
@@ -186,7 +189,7 @@ export default class GameScene extends Phaser.Scene {
     this.time.delayedCall(duration * 2, () => {
       this.replaceSelectedCards();
     });
-  }
+}
 
   /**
    * Removes the selected cards from the player's hand and draws the same number
