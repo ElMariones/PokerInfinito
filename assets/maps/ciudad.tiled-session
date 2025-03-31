@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "ciudad3.tmj",
+    "activeFile": "C:/Users/mario/Desktop/tiled/ciudad2.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
         "."
@@ -20,8 +20,8 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1210,
-                "y": 410.6666666666666
+                "x": 2316.6666666666665,
+                "y": 416
             }
         },
         "C:/Users/mario/Desktop/tiled/ciudad2.json#texturas_ciudad": {
@@ -175,8 +175,8 @@
             "scale": 3,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 1776.5,
-                "y": 434.33333333333326
+                "x": 1314.8333333333333,
+                "y": 800.3333333333333
             }
         },
         "ciudad3.tmj#texturas_ciudad": {
@@ -184,9 +184,9 @@
         },
         "exterior_casino.tmj": {
             "expandedObjectLayers": [
-                11,
                 10,
-                12
+                12,
+                11
             ],
             "scale": 1.5,
             "selectedLayer": 9,
@@ -213,9 +213,9 @@
     "project": "ciudad.tiled-project",
     "property.type": "object",
     "recentFiles": [
-        "C:/Users/mario/Desktop/tiled/ciudad2.json",
         "exterior_casino.tmj",
         "ciudad3.tmj",
+        "C:/Users/mario/Desktop/tiled/ciudad2.json",
         "ciudad.json"
     ],
     "tileset.embedInMap": true

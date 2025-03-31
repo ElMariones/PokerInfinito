@@ -17,6 +17,9 @@ export default class MapScene extends Phaser.Scene {
     // Launch the UI overlay on top of this scene
     this.scene.launch('UIOverlay');
 
+    // --- Get current game stage ---
+    const currentStage = this.registry.get('stage') ?? 0;
+
     // 1) Read spawn coordinates from data, or use defaults
     const startX = data?.spawnX ?? 184
     const startY = data?.spawnY ?? 2530
@@ -40,9 +43,12 @@ export default class MapScene extends Phaser.Scene {
     Player.createPlayerAnimations(this);
     // Create the player at the chosen spawn coords
     this.player = new Player(this, startX, startY, 'playerIdle');
+    this.player.setDepth(10);
 
     const layerTejados1 = map.createLayer('tejado (walkable)', [texturasCiudad], 0, 0)
     const layerTejados2 = map.createLayer('tejado 2 (walkable)', [texturasCiudad], 0, 0)
+    layerTejados1.setDepth(20);
+    layerTejados2.setDepth(20);
 
     // Enable collisions for solid layers
     layerAgua.setCollisionByExclusion([-1])
@@ -167,6 +173,73 @@ export default class MapScene extends Phaser.Scene {
       { x: 224, y: 967 },
       { x: 154, y: 967 },
     ], 60, true);
+
+            // --- NEW: Add Barriers based on Stage ---
+            this.barriers = []; // Clear previous barriers if scene restarts
+
+            // Barrier 1: Broken Car (Blocks until stage 1)
+            if (currentStage <= 0) {
+                // Use 'barrier_car' as the unique name for dialogue lookup
+                // Use 'broken_car' as the texture key (assuming 'broken_car.png' was loaded with this key)
+                const barrier1 = this.npcManager.addNPC('barrier_car', 1210, 2247, 'broken_car', false);
+                 if (barrier1) { // Check if NPC was created successfully
+                     barrier1.setPipeline('Light2D');
+                     this.barriers.push(barrier1);
+                     console.log("Barrier 1 (Car) created.");
+                }
+            }
+    
+            // Barrier 2: Lost Cow (Blocks until stage 2)
+            if (currentStage <= 1) {
+                const barrier2 = this.npcManager.addNPC('barrier_cow', 1200, 1500, 'cow', false);
+                 if (barrier2) {
+                     barrier2.setPipeline('Light2D');
+                     this.barriers.push(barrier2);
+                     console.log("Barrier 2 (Cow) created.");
+                }
+                const barrier2_2 = this.npcManager.addNPC('barrier_cow', 240, 1500, 'cow', false);
+                if (barrier2_2) {
+                    barrier2_2.setPipeline('Light2D');
+                    this.barriers.push(barrier2_2);
+                    console.log("Barrier 2_2 (Cow) created.");
+               }
+            }
+    
+            // Barrier 3: Guard (Blocks until stage 3)
+            // Note: This blocks door at 831, 406. Place guard slightly in front.
+            if (currentStage <= 2) {
+                const barrier3 = this.npcManager.addNPC('barrier_guard', 830, 455, 'guard', false); // Positioned in front of door
+                if (barrier3) {
+                     barrier3.setPipeline('Light2D');
+                     // Optional: Make guard slightly smaller if sprite is large
+                     // barrier3.setScale(0.9);
+                     this.barriers.push(barrier3);
+                     console.log("Barrier 3 (Guard) created.");
+                }
+            }
+    
+            // Barrier 4: Sleeping Big Man (Blocks until stage 4)
+            if (currentStage <= 3) {
+                const barrier4 = this.npcManager.addNPC('barrier_big_man', 1200, 275, 'big_man', false);
+                 if (barrier4) {
+                     barrier4.setPipeline('Light2D');
+                     this.barriers.push(barrier4);
+                     console.log("Barrier 4 (Big Man) created.");
+                }
+            }
+
+            this.barriers.forEach(barrier => {
+              barrier.setDepth(9);
+          });
+             // --- END NEW ---
+    
+            // Set Light Pipeline for all NPCs (including barriers added via NPCManager)
+             this.npcManager.getAllNPCs().forEach(npc => {
+                // Check if pipeline exists before setting
+                 if (npc && npc.setPipeline) {
+                     npc.setPipeline('Light2D');
+                }
+            });
 
     this.npcArray = this.npcManager.getAllNPCs();
 
