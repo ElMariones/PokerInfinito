@@ -263,36 +263,7 @@ export default class GameScene extends Phaser.Scene {
                 onComplete: () => {
                     if (!sprite.active) return;
 
-                    this.tweens.add({
-                     
-                        ease: 'Back.easeOut',
-                        onComplete: () => {
-                            // After the card reaches the center, now show the number pop-out
-
-                            const valueText = this.add.text(sprite.x, sprite.y, `+${result.score}`, {
-                                fontSize: '32px',
-                                fontStyle: 'bold',
-                                color: '#ffeb3b',
-                                stroke: '#000',
-                                strokeThickness: 4,
-                            }).setOrigin(0.5);
-
-                            // Animation to make the number pop out
-                            this.tweens.add({
-                                targets: valueText,
-                                y: sprite.y - 100, // Move the number up from the card's center
-                                scale: { from: 1.5, to: 1 }, // Shrink the number
-                                alpha: { from: 1, to: 0 }, // Fade out the number
-                                duration: 5000,
-                                ease: 'Back.easeOut',
-                                onComplete: () => valueText.destroy() // Destroy the text after animation
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    });
+                    
 
 
 // After waiting for animations to complete, execute attack
