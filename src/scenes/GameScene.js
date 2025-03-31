@@ -273,13 +273,7 @@ export default class GameScene extends Phaser.Scene {
                         onComplete: () => {
                             // After the card reaches the center, now show the number pop-out
 
-                            const valueText = this.add.text(sprite.x, sprite.y, `+${result.score}`, {
-                                fontSize: '32px',
-                                fontStyle: 'bold',
-                                color: '#ffeb3b',
-                                stroke: '#000',
-                                strokeThickness: 4,
-                            }).setOrigin(0.5);
+                           
 
                             // Animation to make the number pop out
                             this.tweens.add({
