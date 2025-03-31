@@ -7,8 +7,9 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
+//import fondoBatallas from '../../assets/shaders/fondoBatallas.glsl.js';
 import button_default from '../../assets/images/button_default.png';
-
+import star from '../../assets/images/star.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
@@ -58,6 +59,15 @@ import oveja from '../../assets/images/oveja.png';
 import padre from '../../assets/images/padre.png';
 import gemelos from '../../assets/images/gemelos.png';
 import pescador from '../../assets/images/pescador.png';
+import guardia from '../../assets/images/guardia.png';
+import hombre from '../../assets/images/hombre.png';
+import vaca from '../../assets/images/vaca.png';
+import gordo from '../../assets/images/gordo.png';
+
+import broken_car from '../../assets/images/broken_car.png';
+import cow from '../../assets/images/cow.png';
+import guard from '../../assets/images/guard.png';
+import big_man from '../../assets/images/big_man.png';
 
 
 // Load the font
@@ -73,11 +83,45 @@ import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 import mapaextCasino from '../../assets/maps/exterior_casino.json';
 
 //importar jokers
-import joker1 from '../../assets/images/joker1.png';
-import joker2 from '../../assets/images/joker2.png';
-import joker3 from '../../assets/images/joker3.png';
-import joker4 from '../../assets/images/joker4.png'; 
-import joker5 from '../../assets/images/joker5.png';
+import joker1 from '../../assets/images/jokers/joker1.png';
+import gilitoJoker from '../../assets/images/jokers/gilitoJoker.png';
+import juanJoker from '../../assets/images/jokers/juanJoker.png';
+import espadachinJoker from '../../assets/images/jokers/espadachinJoker.png';
+import tragaldabasJoker from '../../assets/images/jokers/tragaldabasJoker.png';
+import locoJoker from '../../assets/images/jokers/locoJoker.png';
+import chifladoJoker from '../../assets/images/jokers/chifladoJoker.png';
+import piradoJoker from '../../assets/images/jokers/piradoJoker.png';
+import bufonJoker from '../../assets/images/jokers/bufonJoker.png';
+import zorroJoker from '../../assets/images/jokers/zorroJoker.png';
+import astutoJoker from '../../assets/images/jokers/astutoJoker.png';
+import listoJoker from '../../assets/images/jokers/listoJoker.png';
+import tramposoJoker from '../../assets/images/jokers/tramposoJoker.png';
+import maranosoJoker from '../../assets/images/jokers/maranosoJoker.png';
+import sombraJoker from '../../assets/images/jokers/sombraJoker.png';
+import banderinJoker from '../../assets/images/jokers/banderinJoker.png';
+import cimaJoker from '../../assets/images/jokers/cimaJoker.png';
+import abstractoJoker from '../../assets/images/jokers/abstractoJoker.png';
+import eruditoJoker from '../../assets/images/jokers/eruditoJoker.png';
+import caminanteJoker from '../../assets/images/jokers/caminanteJoker.png';
+import nobleJoker from '../../assets/images/jokers/nobleJoker.png';
+import baronJoker from '../../assets/images/jokers/baronJoker.png';
+import fotografiaJoker from '../../assets/images/jokers/fotografiaJoker.png';
+import juglarJoker from '../../assets/images/jokers/juglarJoker.png';
+import ahorradorJoker from '../../assets/images/jokers/ahorradorJoker.png';
+import caballistaJoker from '../../assets/images/jokers/caballistaJoker.png';
+import acrobataJoker from '../../assets/images/jokers/acrobataJoker.png';
+import duoJoker from '../../assets/images/jokers/duoJoker.png';
+import trioJoker from '../../assets/images/jokers/trioJoker.png';
+import familiaJoker from '../../assets/images/jokers/familiaJoker.png';
+import ordenJoker from '../../assets/images/jokers/ordenJoker.png';
+import tribuJoker from '../../assets/images/jokers/tribuJoker.png';
+import flechaJoker from '../../assets/images/jokers/flechaJoker.png';
+import gemaJoker from '../../assets/images/jokers/gemaJoker.png';
+import manchadoJoker from '../../assets/images/jokers/manchadoJoker.png';
+import trapecistaJoker from '../../assets/images/jokers/trapecistaJoker.png';
+import billeteJoker from '../../assets/images/jokers/billeteJoker.png';
+import cromosJoker from '../../assets/images/jokers/cromosJoker.png';
+import doradoJoker from '../../assets/images/jokers/doradoJoker.png';
 
 //import music
 import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
@@ -108,6 +152,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    //this.cache.shader.add('fondoBatallas', fondoBatallas);
     this.load.image('interactKey', interactKey);
     this.load.spritesheet('button_default', button_default, {
       frameWidth: 142,  // width of each frame
@@ -116,6 +161,8 @@ export default class BootScene extends Phaser.Scene {
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
     this.load.image('sortColor', sortColor);
+
+    this.load.image('star', star);
 
     //load sprites
     this.load.spritesheet('playerIdle', playerIdle, { frameWidth: 64, frameHeight: 64 });
@@ -147,6 +194,15 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('padre', padre);
     this.load.image('gemelos', gemelos);
     this.load.image('pescador', pescador);
+    this.load.image('guardia', guardia);
+    this.load.image('hombre', hombre);
+    this.load.image('vaca', vaca);
+    this.load.image('gordo', gordo);
+    
+    this.load.image('broken_car', broken_car);
+    this.load.image('cow', cow);
+    this.load.image('guard', guard);
+    this.load.image('big_man', big_man);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
@@ -174,26 +230,60 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
 
-    //Imágnes para los jokers
-    this.load.image('joker1', joker1);
-    this.load.image('joker2', joker2);
-    this.load.image('joker3', joker3);
-    this.load.image('joker4', joker4);
-    this.load.image('joker5', joker5);
-
-    // Load the rain sound
+    // Load music
     this.load.audio('rain', rain);
     this.load.audio('mapSceneMusic', mapSceneMusic);
     this.load.audio('olvidoMusic', olvidoMusic);
     this.load.audio('mainMenuMusic', mainMenuMusic);
     this.load.audio('creditsMusic', creditsMusic);
     this.load.audio('asadorMusic', asadorMusic);
+
+    //Imágnes para los jokers
+    this.load.image('joker1', joker1);
+    this.load.image('gilitoJoker', gilitoJoker);
+    this.load.image('juanJoker', juanJoker);
+    this.load.image('espadachinJoker', espadachinJoker);
+    this.load.image('tragaldabasJoker', tragaldabasJoker);
+    this.load.image('locoJoker', locoJoker);
+    this.load.image('chifladoJoker', chifladoJoker);
+    this.load.image('piradoJoker', piradoJoker);
+    this.load.image('bufonJoker', bufonJoker);
+    this.load.image('zorroJoker', zorroJoker);
+    this.load.image('astutoJoker', astutoJoker);
+    this.load.image('listoJoker', listoJoker);
+    this.load.image('tramposoJoker', tramposoJoker);
+    this.load.image('maranosoJoker', maranosoJoker);
+    this.load.image('sombraJoker', sombraJoker);
+    this.load.image('banderinJoker', banderinJoker);
+    this.load.image('cimaJoker', cimaJoker);
+    this.load.image('abstractoJoker', abstractoJoker);
+    this.load.image('eruditoJoker', eruditoJoker);
+    this.load.image('caminanteJoker', caminanteJoker);
+    this.load.image('nobleJoker', nobleJoker);
+    this.load.image('baronJoker', baronJoker);
+    this.load.image('fotografiaJoker', fotografiaJoker);
+    this.load.image('juglarJoker', juglarJoker);
+    this.load.image('ahorradorJoker', ahorradorJoker);
+    this.load.image('caballistaJoker', caballistaJoker);
+    this.load.image('acrobataJoker', acrobataJoker);
+    this.load.image('duoJoker', duoJoker);
+    this.load.image('trioJoker', trioJoker);
+    this.load.image('familiaJoker', familiaJoker);
+    this.load.image('ordenJoker', ordenJoker);
+    this.load.image('tribuJoker', tribuJoker);
+    this.load.image('flechaJoker', flechaJoker);
+    this.load.image('gemaJoker', gemaJoker);
+    this.load.image('manchadoJoker', manchadoJoker);
+    this.load.image('trapecistaJoker', trapecistaJoker);
+    this.load.image('billeteJoker', billeteJoker);
+    this.load.image('cromosJoker', cromosJoker);
+    this.load.image('doradoJoker', doradoJoker);
   }
 
   create() {
     // Start the IntroScene after preloading assets
     // In a BootScene or before starting game scenes
-    this.registry.set('coins', 200);  // start with 0 or loaded value
+    this.registry.set('coins', 2200);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
     this.registry.set('stage', 0);
     this.scene.start('IntroScene');

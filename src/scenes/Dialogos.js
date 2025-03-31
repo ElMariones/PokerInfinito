@@ -66,7 +66,7 @@ export default class Dialogos extends Phaser.Scene {
                 case 'samuel':
                     if (stage === 0) {
                         // Initial dialog with Samuel at stage 0
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 10, rounds: 1, scene: this.gameScene };
+                        this.transitionData = { npc: 'samuel', pointsNeeded: 10, rounds: 5, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                             { character: "dante", text: "¿Cómo sabes mi nombre?" },
@@ -201,6 +201,41 @@ export default class Dialogos extends Phaser.Scene {
                     { character: "oveja", text: "¡Baaa-aadios! Y recuerda, si alguien pregunta, ni me viste." }
                 ];
                 break;
+
+                case 'barrier_car':
+    this.transitionData = { npc: 'barrier_car', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Sin batalla, solo diálogo
+    this.dialogLines = [
+        { character: "hombre", text: "¡Mi coche se averió y no puedo moverlo!" },
+        { character: "dante", text: "Estás bloqueando la carretera." },
+        { character: "hombre", text: "Estoy trabajando en ello, pero necesito un rato. ¿Por qué no esperas en el asador?" },
+        { character: "dante", text: "Vale, espero que lo soluciones pronto." }
+    ];
+    break;
+
+case 'barrier_cow':
+    this.transitionData = { npc: 'barrier_cow', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Diálogo sin batalla
+    this.dialogLines = [
+        { character: "vaca", text: "Muuu!" },
+        { character: "dante", text: "Parece que te has perdido en medio de la carretera. Mejor regresaré más tarde." }
+    ];
+    break;
+
+case 'barrier_guard':
+    this.transitionData = { npc: 'barrier_guard', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Solo diálogo
+    this.dialogLines = [
+        { character: "guardia", text: "Lo siento, pero el edificio está cerrado en este momento." },
+        { character: "dante", text: "Entiendo, volveré más tarde entonces." }
+    ];
+    break;
+
+case 'barrier_big_man':
+    this.transitionData = { npc: 'barrier_big_man', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Diálogo sin batalla
+    this.dialogLines = [
+        { character: "gordo", text: "Zzz... Zzz..." },
+        { character: "dante", text: "Este grandullón está dormido aquí en medio. Mejor regreso más tarde." }
+    ];
+    break;
+
             default:
                 this.dialogLines = [];
                 this.startBattle();
@@ -276,7 +311,6 @@ export default class Dialogos extends Phaser.Scene {
             this.scene.pause(currentMap);
         }
         
-    
         // Display the dialog text
         this.showText();
     }
