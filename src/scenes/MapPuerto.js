@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
+import NPCManager from '../utils/NPCManager.js';
 
 export default class MapPuerto extends Phaser.Scene {
   constructor() {
@@ -63,22 +64,33 @@ export default class MapPuerto extends Phaser.Scene {
       this.tryInteract();
     });
 
-   
+    // NPCs
+    this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
+    this.npcManager.createAnimations();
+    const pescador = this.npcManager.addNPC('pescador', 370, 291, 'idle-down', true);
+    this.npcArray = this.npcManager.getAllNPCs();
+
+    //Music
+    this.songs = null;
 
     // Inicializar el DoorManager después de todas las capas
     this.doorManager = new DoorManager(this, [
       { x: 478, y: 608, toScene: 'MapScene', spawnX: 1920, spawnY: 444 },
       // Agrega más puertas según sea necesario
-    ]);
+    ], this.songs);
   }
 
   update() {
     this.player.update();
+    this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
   }
 
   tryInteract() {
-    // Lógica de interacción (si es necesaria)
-    console.log("Intentando interactuar...");
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegate door interaction
+      return; // If there is a door, don’t check NPC interaction
+    }
+    this.npcManager.tryInteract();
   }
 }
