@@ -345,13 +345,7 @@ export default class NPCManager {
    * Call this once per frame in your scene's update().
    */
   updateNPCs() {
-    // --- MINOR CHANGE: ADD interactDistance variable initialization ---
-    let interactDistance = 50; // Default interaction distance
-    let nearestNpc = null;
-    let minDist = Infinity;
-    // --- END OF MINOR CHANGE ---
-
-
+    
     this.npcArray.forEach(npc => {
       // Check if NPC sprite is still active/exists before processing
       if (!npc.active) {
@@ -388,13 +382,6 @@ export default class NPCManager {
         npc.body.setOffset(22, 36);
       }
       // --- End body size/offset adjustments ---
-
-      if (name === 'samuel' || name === 'helena' || name === 'pescador' || name === 'gemelos')
-        interactDistance = 100;
-      else if (name === 'padre' || name.startsWith('barrier_car')) {
-        interactDistance = 150; // Slightly larger interaction distance for barriers might be nice
-      }
-
 
       // 1) Move along path if defined (Barriers won't have paths)
       if (path && path.length > 0) {
@@ -472,14 +459,8 @@ export default class NPCManager {
         }
         // --- END FACE PLAYER CODE ---
       }
-
-      // 3) Check distance for interaction UI
-      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-      if (dist < interactDistance && dist < minDist) {
-        minDist = dist;
-        nearestNpc = npc;
-      }
     });
+    let nearestNpc = this.findNearestNPCToPlayer(); // Update nearest NPC reference
 
     // 4) Show/hide the NPC "E" icon
     if (nearestNpc) {
@@ -525,24 +506,7 @@ export default class NPCManager {
    * Attempts to interact with the nearest NPC within range.
    */
   tryInteract() {
-    let interactDistance = 50; // Default interaction distance
-    let nearestNpc = null;
-    let minDist = Infinity; // Use infinity to ensure first NPC in range is selected
-
-    this.npcArray.forEach(npc => {
-      if (!npc.active) return; // Skip inactive NPCs
-
-      const name = npc.getData('npcName');
-      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-      if (name === 'samuel' || name === 'helena' || name === 'pescador' || name === 'gemelos')
-        interactDistance = 100;
-      else if (name === 'padre')
-        interactDistance = 150;
-      if (dist < interactDistance) {
-        nearestNpc = npc;
-      }
-    });
-
+    let nearestNpc = this.findNearestNPCToPlayer(); // Use the helper function
     // If an NPC was found within range
     if (nearestNpc) {
       const name = nearestNpc.getData('npcName');
@@ -552,7 +516,6 @@ export default class NPCManager {
       if (this.player && typeof this.player.stopMovement === 'function') {
         this.player.stopMovement();
       }
-
       // Launch the dialogue scene
       // Ensure 'Dialogos' scene is registered in your game config
       if (this.scene.scene.get('Dialogos')) {
@@ -561,7 +524,6 @@ export default class NPCManager {
       } else {
         console.error("Scene 'Dialogos' not found or not running.");
       }
-
       // Hide interaction UI immediately after interaction
       if (this.interactUI) {
         this.interactUI.setVisible(false);
@@ -593,17 +555,18 @@ export default class NPCManager {
 
   // Helper function to find the nearest NPC (used after removing one)
   findNearestNPCToPlayer() {
-    let interactDistance = 50;
+    let interactDistance = null;
     let nearestNpc = null;
     let minDist = Infinity;
 
     this.npcArray.forEach(npc => {
       if (!npc.active) return;
       const name = npc.getData('npcName');
-      interactDistance = 50; // Reset
-      if (name === 'samuel') interactDistance = 75;
-      else if (name.startsWith('barrier_car')) interactDistance = 150;
-
+      const interactionDistances = {
+        'samuel': 100, 'helena': 100, 'pescador': 100, 'gemelos': 100,
+        'padre': 150, 'barrier_car': 150
+      };
+      interactDistance = interactionDistances[name] || 50;
       const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
       if (dist < interactDistance && dist < minDist) {
         minDist = dist;
