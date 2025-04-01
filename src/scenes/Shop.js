@@ -15,11 +15,11 @@ export default class ShopScene extends Phaser.Scene {
         this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
 
         // Title for the shop
-        this.add.text(width / 2, 50, "Tienda de Jokers", { font: "24px Arial", fill: "#fff" }).setOrigin(0.5);
+        this.add.text(width / 2, 50, "tienda de jokers", {font: '24px MarioKart', fill: '#fff', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
 
         // Create the Inventory helper and display player's coin count
         this.inventory = new Inventory(this);
-        this.coinText = this.add.text(20, 20, `Dinero: ${this.registry.get('coins')}`, { font: '18px Arial', fill: '#fff' });
+        this.coinText = this.add.text(20, 20, `dinero: ${this.registry.get('coins')}`, {font: '18px MarioKart', fill: '#fff', stroke: '#000000', strokeThickness: 2  });
 
         // Randomly select three unique jokers for sale
         let jokerOptions = [...Jokers];
@@ -64,34 +64,29 @@ export default class ShopScene extends Phaser.Scene {
 
             // Check if the player already owns the joker
             if (this.inventory.hasJoker(id)) {
-                const ownedButton = new UIButton(this, buttonX, buttonY, "Comprado", () => {});
-                ownedButton.bg.setFrame(3); // Set frame to a disabled state
+                const ownedButton = new UIButton(this, buttonX, buttonY, "comprado", "green", () => {});
                 ownedButton.disable();
             } else if (this.registry.get('jokers').length >= 5) {
-                const fullInventoryButton = new UIButton(this, buttonX, buttonY, "Inventario lleno", () => {});
-                fullInventoryButton.bg.setFrame(3); // Set frame to a disabled state
+                const fullInventoryButton = new UIButton(this, buttonX, buttonY, "inventario lleno", "green", () => {});
                 fullInventoryButton.disable();
             } else {
-                // Create a Buy button using UIButton
-                const buyButton = new UIButton(this, buttonX, buttonY, "Comprar", () => {
+                // Create a Buy button using UIButton with green type
+                const buyButton = new UIButton(this, buttonX, buttonY, "comprar", "green", () => {
                     const currentCoins = this.registry.get('coins');
                     if (currentCoins >= price && this.registry.get('jokers').length < 5) {
                         // Deduct the price, add the joker to inventory, and update the display
                         this.registry.set('coins', currentCoins - price);
                         this.inventory.addJoker(id);
                         this.coinText.setText(`Dinero: ${this.registry.get('coins')}`);
-                        buyButton.label.setText("Comprado");
-                        buyButton.bg.setFrame(3);
+                        buyButton.label.setText("comprado");
                         buyButton.disable();
                     } else if (this.registry.get('jokers').length >= 5) {
                         // Feedback for full inventory
-                        buyButton.label.setText("Inventario lleno");
-                        buyButton.bg.setFrame(3);
+                        buyButton.label.setText("inventario lleno");
                         buyButton.disable();
                         buyButton.label.setColor('#ff0000'); // Set text color to red
                     } else {
-                        buyButton.label.setText("Dinero insuficiente");
-                        buyButton.bg.setFrame(3);
+                        buyButton.label.setText("dinero insuficiente");
                         buyButton.disable();
                         buyButton.label.setColor('#ff0000'); // Set text color to red
                     }
@@ -99,12 +94,13 @@ export default class ShopScene extends Phaser.Scene {
             }
         });
 
-        // Add an Exit button at the bottom of the scene
+        // Add an Exit button at the bottom of the scene (red button)
         const exitButton = new UIButton(
             this,
             width / 2,
             height - 50,
-            "Cerrar",
+            "cerrar",
+            "red",
             () => {
                 const currentMap = this.registry.get('currentMap');
                 this.scene.stop('ShopScene');
