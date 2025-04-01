@@ -53,7 +53,6 @@ export default class MapAsador extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
 
     // Music
-    // Music
     if (this.scene.sound) {
       this.scene.sound.stopAll();
     }

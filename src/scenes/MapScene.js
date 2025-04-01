@@ -15,8 +15,10 @@ export default class MapScene extends Phaser.Scene {
   create(data) {
     // Register this map as the current active map
     this.registry.set('currentMap', this.scene.key);
-    // Launch the UI overlay on top of this scene
-    this.scene.launch('UIOverlay');
+    // Launch the UI overlay on top of this scene if it's not already launched
+    if (!this.scene.isActive('UIOverlay')) {
+      this.scene.launch('UIOverlay');
+    }
 
     // --- Get current game stage ---
     const currentStage = this.registry.get('stage') ?? 0;
@@ -89,14 +91,16 @@ export default class MapScene extends Phaser.Scene {
       });
     }
 
-    //Music
+    // Music
     this.songs = [];
-    this.rainAudio = this.sound.add('rain', { volume: 0.2, loop: true });
-    this.songs.push(this.rainAudio);
-    this.rainAudio.play();
-    this.music = this.sound.add('mapSceneMusic', { volume: 0.6, loop: true });
-    this.songs.push(this.music);
-    this.music.play();
+    if (this.registry.get('musicEnabled') === true) {
+      this.rainAudio = this.sound.add('rain', { volume: 0.2, loop: true });
+      this.songs.push(this.rainAudio);
+      this.rainAudio.play();
+      this.music = this.sound.add('mapSceneMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
+    }
 
     // 3) Doors array
     this.doors = [
