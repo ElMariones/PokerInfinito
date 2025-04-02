@@ -231,183 +231,149 @@ export default class GameScene extends Phaser.Scene {
   animateSelectedCards(result) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
-
+  
     this.events.emit('toggle-sort-button', false);
-
+  
     this.cardSprites.forEach(sprite => {
-        const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
-        if (!isSelected) sprite.setVisible(false);
+      const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
+      if (!isSelected) sprite.setVisible(false);
     });
-
-    const newScale = 1.0;
+  
+    this.animateCardsToCenter(result);
+  
+    this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
+      this.highlightWinningCards(result);
+      this.showScorePopups(result.winningCards, result.score);
+  
+      this.time.delayedCall(600, () => {
+        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+  
+        this.time.delayedCall(1200, () => {
+          this.executeAttackAnimation(centerX, centerY);
+  
+          this.time.delayedCall(1300, () => {
+            this.handleRoundEnd();
+          });
+        });
+      });
+    });
+  }
+  
+  
+  animateCardsToCenter(result) {
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
     const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
     const offsetX = 85;
     const startX = centerX - totalWidth / 2 + offsetX;
-
+  
     this.selectedCards.forEach((card, index) => {
-        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-        if (!sprite) return;
-
-        sprite.clearTint();
-        sprite.disableInteractive();
-
-        this.time.delayedCall(index * 100, () => {
-            if (!sprite.active) return; // Ensure sprite is active
-
-            // Step 1: Animate card movement and scaling
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      sprite.clearTint();
+      sprite.disableInteractive();
+  
+      this.time.delayedCall(index * 100, () => {
+        if (!sprite.active) return;
+  
+        this.tweens.add({
+          targets: sprite,
+          scale: 1.4,
+          angle: Math.random() * 10 - 5,
+          duration: 200,
+          ease: 'Back.easeOut',
+          yoyo: true,
+          onComplete: () => {
+            if (!sprite.active) return;
+  
             this.tweens.add({
-                targets: sprite,
-                scale: 1.4,
-                angle: Math.random() * 10 - 5,
-                duration: 200,
-                ease: 'Back.easeOut',
-                yoyo: true,
-                onComplete: () => {
-                    if (!sprite.active) return;
-
-                    this.tweens.add({
-                        targets: sprite,
-                        x: startX + index * spacing,
-                        y: centerY,
-                        scale: 1.2,
-                        duration: 800,
-                        ease: 'Back.easeOut',
-                        onComplete: () => {
-                            // After the card reaches the center, now show the number pop-out
-
-                            const valueText = this.add.text(sprite.x, sprite.y, `+${result.score}`, {
-                                fontSize: '32px',
-                                fontStyle: 'bold',
-                                color: '#ffeb3b',
-                                stroke: '#000',
-                                strokeThickness: 4,
-                            }).setOrigin(0.5);
-
-                            // Animation to make the number pop out
-                            this.tweens.add({
-                                targets: valueText,
-                                y: sprite.y - 100, // Move the number up from the card's center
-                                scale: { from: 1.5, to: 1 }, // Shrink the number
-                                alpha: { from: 1, to: 0 }, // Fade out the number
-                                duration: 7000,
-                                ease: 'Back.easeOut',
-                                onComplete: () => valueText.destroy() // Destroy the text after animation
-                            });
-                        }
-                    });
-                }
+              targets: sprite,
+              x: startX + index * spacing,
+              y: centerY,
+              scale: 1.0,
+              duration: 600,
+              ease: 'Back.easeOut',
             });
+          }
         });
+      });
     });
+  }
+  
+  
 
-
-// After waiting for animations to complete, execute attack
-
-    //Espera y luego ejecuta el ataque
-    this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
-      this.highlightWinningCards(result);
-
-      this.time.delayedCall(600, () => {
-        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
-
-          this.time.delayedCall(1200, () => {
-            const opponentX = this.cameras.main.width / 2;
-            const opponentY = 100;
-
-            this.selectedCards.forEach((card, index) => {
-                const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-                if (!sprite) return;
-
-                this.time.delayedCall(index * 100, () => {
-                    this.tweens.add({
-                        targets: sprite,
-                        x: opponentX,
-                        y: opponentY,
-                        scale: 0.3,
-                        angle: Math.random() * 40 - 20,
-                        duration: 700,
-                        ease: 'Cubic.easeIn',
-                        onStart: () => {
-                            sprite.setDepth(10);
-                        },
-                        onComplete: () => {
-                            sprite.setVisible(false);
-
-                            // **Flash para impacto**
-                            const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
-                            flash.setAlpha(0);
-                            this.tweens.add({
-                                targets: flash,
-                                alpha: { from: 0.7, to: 0 },
-                                duration: 200,
-                                onComplete: () => flash.destroy(),
-                            });
-
-                            // **Oscurecimiento rápido para efecto más fuerte**
-                            const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
-                            darken.setAlpha(0);
-                            this.tweens.add({
-                                targets: darken,
-                                alpha: { from: 0.5, to: 0 },
-                                duration: 600,
-                                onComplete: () => darken.destroy(),
-                            });
-
-                            // **Pantalla vibra sin mostrar fondo**
-                            this.cameras.main.shake(500, 0.03);
-                        }
-                    });
-                });
+  executeAttackAnimation(centerX, centerY) {
+    const opponentX = centerX;
+    const opponentY = 100;
+  
+    this.selectedCards.forEach((card, index) => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      this.time.delayedCall(index * 100, () => {
+        this.tweens.add({
+          targets: sprite,
+          x: opponentX,
+          y: opponentY,
+          scale: 0.3,
+          angle: Math.random() * 40 - 20,
+          duration: 700,
+          ease: 'Cubic.easeIn',
+          onStart: () => {
+            sprite.setDepth(10);
+          },
+          onComplete: () => {
+            sprite.setVisible(false);
+  
+            const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
+            flash.setAlpha(0);
+            this.tweens.add({
+              targets: flash,
+              alpha: { from: 0.7, to: 0 },
+              duration: 200,
+              onComplete: () => flash.destroy(),
             });
-
-            this.time.delayedCall(1300, () => {
-              this.roundNumber++;
-              if (this.roundNumber <= this.maxRounds && this.score < this.pointsNeeded) {
-                  this.replaceUsedCards();
-              } else {
-                if (this.score >= this.pointsNeeded) {
-                  // Player won the battle:
-                  this.scene.stop('UIScene');
-                  this.scene.stop('GameScene');
-
-                  // Calcular las monedas ganadas
-                  const coinsWon = this.score - this.pointsNeeded;
-
-                  // Actualizar las monedas en el registry
-                  const currentCoins = this.registry.get('coins') || 0;
-                  this.registry.set('coins', currentCoins + coinsWon);
-
-                  this.scene.wake('UIOverlay');
-                  const currentMap = this.registry.get('currentMap')
-                  this.scene.resume(currentMap);
-                
-                  // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                  // If Dialogos is not already active, launch it with required data.
-                  if (!this.scene.isActive('Dialogos')) {
-                    this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                  }
-                  // Call the afterBattle function (passing the npc name).
-                  this.scene.get('Dialogos').afterBattle(true);
-                } else {
-                  // Player lost the battle:
-                  this.scene.stop('UIScene');
-                  this.scene.stop('GameScene');
-                  this.scene.wake('UIOverlay');
-                  const currentMap = this.registry.get('currentMap')
-                  this.scene.resume(currentMap);
-                
-                  // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                  // If Dialogos is not already active, launch it with required data.
-                  if (!this.scene.isActive('Dialogos')) {
-                    this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                  }
-                  // Call the afterBattle function (passing the npc name).
-                  this.scene.get('Dialogos').afterBattle(false);
-                }
-              }
-          });
+  
+            const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
+            darken.setAlpha(0);
+            this.tweens.add({
+              targets: darken,
+              alpha: { from: 0.5, to: 0 },
+              duration: 600,
+              onComplete: () => darken.destroy(),
+            });
+  
+            this.cameras.main.shake(500, 0.03);
+          }
         });
+      });
+    });
+  }
+  
+//el +punticaion amarilla 
+  showScorePopups(winningCards, score) {
+    winningCards.forEach(card => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      const valueText = this.add.text(sprite.x, sprite.y, `+${score}`, {
+        fontSize: '32px',
+        fontStyle: 'bold',
+        color: '#ffeb3b',
+        stroke: '#000',
+        strokeThickness: 4,
+      }).setOrigin(0.5);
+  
+      this.tweens.add({
+        targets: valueText,
+        y: sprite.y - 100,
+        scale: { from: 1.5, to: 1 },
+        alpha: { from: 1, to: 0 },
+        duration: 5000,
+        ease: 'Back.easeOut',
+        onComplete: () => valueText.destroy()
       });
     });
   }
@@ -426,6 +392,53 @@ highlightWinningCards(result) {
     });
   }
 
+  handleRoundEnd() {
+    this.roundNumber++;
+    if (this.roundNumber <= this.maxRounds && this.score < this.pointsNeeded) {
+      this.replaceUsedCards();
+    } else {
+      if (this.score >= this.pointsNeeded) {
+        // Player won the battle:
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+  
+        // Calcular las monedas ganadas
+        const coinsWon = this.score - this.pointsNeeded;
+  
+        // Actualizar las monedas en el registry
+        const currentCoins = this.registry.get('coins') || 0;
+        this.registry.set('coins', currentCoins + coinsWon);
+  
+        this.scene.wake('UIOverlay');
+        const currentMap = this.registry.get('currentMap');
+        this.scene.resume(currentMap);
+  
+        // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+        // If Dialogos is not already active, launch it with required data.
+        if (!this.scene.isActive('Dialogos')) {
+          this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+        }
+        // Call the afterBattle function (passing the npc name).
+        this.scene.get('Dialogos').afterBattle(true);
+      } else {
+        // Player lost the battle:
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+        this.scene.wake('UIOverlay');
+        const currentMap = this.registry.get('currentMap');
+        this.scene.resume(currentMap);
+  
+        // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+        // If Dialogos is not already active, launch it with required data.
+        if (!this.scene.isActive('Dialogos')) {
+          this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+        }
+        // Call the afterBattle function (passing the npc name).
+        this.scene.get('Dialogos').afterBattle(false);
+      }
+    }
+  }
+  
   dealNewHand() {
     if (this.deck.length < 10 && this.score < this.pointsNeeded) {
       this.showResultMessage("No hay suficientes cartas para otra ronda. ¡Has perdido!");

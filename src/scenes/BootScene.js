@@ -7,6 +7,7 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
+import portada from '../../assets/images/AllLUM.png';
 //import fondoBatallas from '../../assets/shaders/fondoBatallas.glsl.js';
 import botones from '../../assets/images/botones.png';
 import star from '../../assets/images/star.png';
@@ -253,6 +254,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    this.load.image('portada', portada);
     //this.cache.shader.add('fondoBatallas', fondoBatallas);
     this.load.image('interactKey', interactKey);
     this.load.spritesheet('botones', botones, {
