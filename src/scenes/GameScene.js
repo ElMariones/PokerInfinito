@@ -259,8 +259,50 @@ export default class GameScene extends Phaser.Scene {
     });
   }
   
+  animateCardsToCenter(result) {
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+    const spacing = 180;
+    const totalWidth = (this.selectedCards.length - 1) * spacing;
+    const offsetX = 85;
+    const startX = centerX - totalWidth / 2 + offsetX;
+  
+    this.selectedCards.forEach((card, index) => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      sprite.clearTint();
+      sprite.disableInteractive();
+  
+      this.time.delayedCall(index * 100, () => {
+        if (!sprite.active) return;
+  
+        this.tweens.add({
+          targets: sprite,
+          scale: 1.4,
+          angle: Math.random() * 10 - 5,
+          duration: 200,
+          ease: 'Back.easeOut',
+          yoyo: true,
+          onComplete: () => {
+            if (!sprite.active) return;
+  
+            this.tweens.add({
+              targets: sprite,
+              x: startX + index * spacing,
+              y: centerY,
+              scale: 1.0,
+              duration: 600,
+              ease: 'Back.easeOut',
+            });
+          }
+        });
+      });
+    });
+  }
+  
 
-
+  
 highlightWinningCards(result) {
     const winners = result.winningCards || [];
     winners.forEach(card => {
