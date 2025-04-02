@@ -7,8 +7,10 @@ import submitBtn from '../../assets/images/submit.png';
 import shuffleBtn from '../../assets/images/shuffle.png';
 import interactKey from '../../assets/images/interact.png';
 import rug from '../../assets/images/rug.png';
-import button_default from '../../assets/images/button_default.png';
-
+import portada from '../../assets/images/AllLUM.png';
+//import fondoBatallas from '../../assets/shaders/fondoBatallas.glsl.js';
+import botones from '../../assets/images/botones.png';
+import star from '../../assets/images/star.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
@@ -58,10 +60,20 @@ import oveja from '../../assets/images/oveja.png';
 import padre from '../../assets/images/padre.png';
 import gemelos from '../../assets/images/gemelos.png';
 import pescador from '../../assets/images/pescador.png';
+import guardia from '../../assets/images/guardia.png';
+import hombre from '../../assets/images/hombre.png';
+import vaca from '../../assets/images/vaca.png';
+import gordo from '../../assets/images/gordo.png';
+
+import broken_car from '../../assets/images/broken_car.png';
+import cow from '../../assets/images/cow.png';
+import guard from '../../assets/images/guard.png';
+import big_man from '../../assets/images/big_man.png';
 
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
+import retroFontUrl from '../../assets/fonts/PressStart2P-Regular.ttf';
 
 //importar mapas
 import mapaCiudad from '../../assets/maps/ciudad3.json';
@@ -113,12 +125,121 @@ import billeteJoker from '../../assets/images/jokers/billeteJoker.png';
 import cromosJoker from '../../assets/images/jokers/cromosJoker.png';
 import doradoJoker from '../../assets/images/jokers/doradoJoker.png';
 
+//import music
+import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
+import mapSceneMusic from '../../assets/audio/Space_Atmosphere.mp3';
+import olvidoMusic from '../../assets/audio/Night_of_the_Streets.mp3';
+import creditsMusic from '../../assets/audio/main_menu_music.ogg';
+import mainMenuMusic from '../../assets/audio/ambient_menu.mp3';
+import asadorMusic from '../../assets/audio/life_in_corrupted_binary.flac';
+
 export default class BootScene extends Phaser.Scene {
   constructor() {
     super('BootScene');
   }
 
   preload() {
+    // Create loading bar
+    const width = this.cameras.main.width;
+    const height = this.cameras.main.height;
+    
+    // Set background to black for retro feel
+    this.cameras.main.setBackgroundColor('#000000');
+    
+    // Add retro-style title
+    const titleText = this.add.text(width / 2, height / 2 - 100, 'ALL IN: LA ULTIMA MANO', {
+      font: '32px "Courier New"',
+      fill: '#00ff00',
+      align: 'center',
+      stroke: '#003300',
+      strokeThickness: 4
+    });
+    titleText.setOrigin(0.5);
+
+    // Add loading text with blinking effect
+    const loadingText = this.add.text(width / 2, height / 2 - 50, 'CARGANDO...', {
+      font: '24px "Courier New"',
+      fill: '#00ff00',
+      align: 'center'
+    });
+    loadingText.setOrigin(0.5);
+
+    // Create blinking cursor effect
+    const cursor = this.add.text(width / 2 + 100, height / 2 - 50, '_', {
+      font: '24px "Courier New"',
+      fill: '#00ff00'
+    });
+    cursor.setOrigin(0.5);
+
+    // Blink cursor animation
+    this.time.addEvent({
+      delay: 500,
+      callback: () => {
+        cursor.setVisible(!cursor.visible);
+      },
+      loop: true
+    });
+
+    // Add retro-style progress bar frame
+    const progressFrame = this.add.graphics();
+    progressFrame.lineStyle(4, 0x00ff00);
+    progressFrame.strokeRect(width / 2 - 160, height / 2 - 25, 320, 50);
+
+    // Add progress bar background (darker green)
+    const progressBox = this.add.graphics();
+    progressBox.fillStyle(0x003300, 1);
+    progressBox.fillRect(width / 2 - 156, height / 2 - 21, 312, 42);
+
+    // Add progress bar
+    const progressBar = this.add.graphics();
+
+    // Add percentage text
+    const percentText = this.add.text(width / 2, height / 2 + 40, '0%', {
+      font: '20px "Courier New"',
+      fill: '#00ff00',
+      align: 'center'
+    });
+    percentText.setOrigin(0.5);
+
+    // Loading progress events
+    this.load.on('progress', (value) => {
+      progressBar.clear();
+      progressBar.fillStyle(0x00ff00, 1);
+      progressBar.fillRect(width / 2 - 156, height / 2 - 21, 312 * value, 42);
+      
+      // Update percentage text
+      percentText.setText(Math.round(value * 100) + '%');
+    });
+
+    this.load.on('complete', () => {
+      progressBar.destroy();
+      progressBox.destroy();
+      progressFrame.destroy();
+      loadingText.destroy();
+      cursor.destroy();
+      titleText.destroy();
+      percentText.destroy();
+      
+      // Add completion message
+      const completeText = this.add.text(width / 2, height / 2, 'LOAD COMPLETE', {
+        font: '24px "Courier New"',
+        fill: '#00ff00',
+        align: 'center'
+      });
+      completeText.setOrigin(0.5);
+      
+      // Fade out and start next scene
+      this.tweens.add({
+        targets: completeText,
+        alpha: 0,
+        duration: 1000,
+        onComplete: () => {
+          completeText.destroy();
+          this.scene.start('IntroScene');
+        }
+      });
+    });
+
     // Load all card images dynamically
     Object.entries(cards).forEach(([key, path]) => {
       this.load.image(key, path);
@@ -128,20 +249,23 @@ export default class BootScene extends Phaser.Scene {
     this.load.plugin('rexhorrifipipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexhorrifipipelineplugin.min.js', true); 
     this.load.plugin('rexdissolvepipelineplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdissolvepipelineplugin.min.js', true);
 
-    
     // Load other images
     this.load.image('playButton', playButton);
     this.load.image('submitBtn', submitBtn);
     this.load.image('shuffleBtn', shuffleBtn);
     this.load.image('rug', rug);
+    this.load.image('portada', portada);
+    //this.cache.shader.add('fondoBatallas', fondoBatallas);
     this.load.image('interactKey', interactKey);
-    this.load.spritesheet('button_default', button_default, {
-      frameWidth: 142,  // width of each frame
-      frameHeight: 28   // height of each frame (112 / 4)
+    this.load.spritesheet('botones', botones, {
+      frameWidth: 36,  // width of each frame
+      frameHeight: 18   // height of each frame (112 / 4)
     });
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
     this.load.image('sortColor', sortColor);
+
+    this.load.image('star', star);
 
     //load sprites
     this.load.spritesheet('playerIdle', playerIdle, { frameWidth: 64, frameHeight: 64 });
@@ -173,9 +297,19 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('padre', padre);
     this.load.image('gemelos', gemelos);
     this.load.image('pescador', pescador);
+    this.load.image('guardia', guardia);
+    this.load.image('hombre', hombre);
+    this.load.image('vaca', vaca);
+    this.load.image('gordo', gordo);
+    
+    this.load.image('broken_car', broken_car);
+    this.load.image('cow', cow);
+    this.load.image('guard', guard);
+    this.load.image('big_man', big_man);
 
     // Inject custom font into the page
     this.loadFont('Mleitod', fontUrl);
+    this.loadFont('RetroFont', retroFontUrl);
 
     // 2) Load each image used by your Tiled map
     //    The second argument is the actual path to the PNG in your project.
@@ -199,6 +333,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
+
+    // Load music
+    this.load.audio('rain', rain);
+    this.load.audio('mapSceneMusic', mapSceneMusic);
+    this.load.audio('olvidoMusic', olvidoMusic);
+    this.load.audio('mainMenuMusic', mainMenuMusic);
+    this.load.audio('creditsMusic', creditsMusic);
+    this.load.audio('asadorMusic', asadorMusic);
 
     //Imágnes para los jokers
     this.load.image('joker1', joker1);
@@ -248,8 +390,10 @@ export default class BootScene extends Phaser.Scene {
     this.registry.set('coins', 2200);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
     this.registry.set('stage', 0);
+    this.registry.set('musicEnabled', true);
     this.scene.start('IntroScene');
   }
+  
 
   // Function to inject the font into the document
   loadFont(name, url) {

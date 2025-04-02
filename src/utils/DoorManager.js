@@ -1,8 +1,9 @@
 export default class DoorManager {
-    constructor(scene, doors) {
+    constructor(scene, doors, music) {
       this.scene = scene;
       this.doors = doors;
       this.doorInteractUI = null;
+      this.songs = music;
   
       // Escuchar la tecla "E"
       this.scene.input.keyboard.on('keydown-E', () => {
@@ -41,10 +42,21 @@ export default class DoorManager {
       if (!this.nearestDoor) return;
   
       // Cambiar de escena
-      this.scene.scene.start(this.nearestDoor.toScene, {
+      if (this.scene.sound) {
+        this.scene.sound.stopAll();
+    }
+    
+      const currentSceneKey = this.scene.scene.key;
+      const nextSceneKey = this.nearestDoor.toScene;
+
+      // 📌 1️⃣ Asegurar que la escena actual se detiene
+      this.scene.scene.stop(currentSceneKey);
+
+      // 📌 2️⃣ Iniciar la nueva escena y pasarle la anterior
+      this.scene.scene.start(nextSceneKey, {
         spawnX: this.nearestDoor.spawnX,
         spawnY: this.nearestDoor.spawnY,
-        fromScene: this.scene.scene.key
+        fromScene: currentSceneKey // Guardamos la escena anterior
       });
     }
   }

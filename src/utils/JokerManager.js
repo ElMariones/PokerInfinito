@@ -29,9 +29,10 @@ class JokerManager {
     }
     
     // Display them in a row at the top
-    const startX = 100;
     const spacing = 80;
-    const y = 50;
+    const totalWidth = (ownedJokers.length - 1) * spacing;
+    const startX = (this.scene.cameras.main.width / 2) - (totalWidth / 2);
+    const y = 75;
     
     ownedJokers.forEach((joker, index) => {
       const x = startX + (index * spacing);

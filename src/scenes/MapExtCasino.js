@@ -108,11 +108,13 @@ if (rojoLayer && rojoLayer.objects) {
   });
 }
 
+  this.songs = null;
+
    this.doorManager = new DoorManager(this, [
       { x: 1199, y: 1577, toScene: 'MapScene', spawnX: 1200, spawnY: 74 },
       { x: 943, y: 524, toScene: 'MapCasino', spawnX: 637, spawnY: 1208 },
       // Agrega más puertas según sea necesario
-    ]);
+    ], this.songs);
 
     // Collisions
     this.physics.add.collider(this.player, layerAgua);
