@@ -94,7 +94,7 @@ export default class Dialogos extends Phaser.Scene {
                 case 'samuel':
                     if (stage === 0) {
                         // Initial dialog with Samuel at stage 0
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 10, rounds: 5, scene: this.gameScene };
+                        this.transitionData = { npc: 'samuel', pointsNeeded: 400, rounds: 3, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                             { character: "dante", text: "¿Cómo sabes mi nombre?" },
@@ -104,7 +104,7 @@ export default class Dialogos extends Phaser.Scene {
                         ];
                     } else if (stage === 1) {
                         // After Samuel has been defeated, his afterBattle dialog is shown.
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 100, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'samuel', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "samuel", text: "Bien jugado… La paciencia cocina la mejor jugada, y tú la serviste en su punto. Ahora, ve a enfrentar a Helena." }
                         ];
@@ -117,7 +117,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'helena':
                     if (stage === 1) {
-                        this.transitionData = { npc: 'helena', pointsNeeded: 80, rounds: 4, scene: this.gameScene };
+                        this.transitionData = { npc: 'helena', pointsNeeded: 550, rounds: 4, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
                             { character: "dante", text: "¿Tú también? ¿Cómo es que todos saben quién soy?" },
@@ -128,12 +128,12 @@ export default class Dialogos extends Phaser.Scene {
                         ];
                     } else if (stage > 1) {
                         // After Helena has been defeated
-                        this.transitionData = { npc: 'helena', pointsNeeded: 80, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'helena', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "helena", text: "Excelente, Dante. Has probado tu temple. Ahora, prepárate para enfrentar al Pescador." }
                         ];
                     } else {
-                        this.transitionData = { npc: 'helena', pointsNeeded: 80, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'helena', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "helena", text: "Ahora no es el momento para mí, Dante." }
                         ];
@@ -141,7 +141,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'pescador':
                     if (stage === 2) {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 60, rounds: 2, scene: this.gameScene };
+                        this.transitionData = { npc: 'pescador', pointsNeeded: 800, rounds: 4, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "pescador", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
                             { character: "dante", text: "Parece que mi reputación me precede." },
@@ -150,12 +150,12 @@ export default class Dialogos extends Phaser.Scene {
                             { character: "pescador", text: "La suerte es como el mar: caprichosa, despiadada... pero si sabes leer las corrientes, te lleva a la victoria." }
                         ];
                     } else if (stage > 2) {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 60, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'pescador', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "pescador", text: "Ya hemos pasado por este desafío, sigue adelante." }
                         ];
                     } else {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 60, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'pescador', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "pescador", text: "No es tu turno aún, Dante." }
                         ];
@@ -163,7 +163,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'gemelos':
                     if (stage === 3) {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 90, rounds: 3, scene: this.gameScene };
+                        this.transitionData = { npc: 'gemelos', pointsNeeded: 1250, rounds: 3, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "gemelos", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
                             { character: "gemelos", text: "Oh sí… creía que tardaría más en aparecer." },
@@ -174,12 +174,12 @@ export default class Dialogos extends Phaser.Scene {
                             { character: "gemelos", text: "O mejor dicho… pensar como dos." }
                         ];
                     } else if (stage > 3) {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 90, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'gemelos', pointsNeeded: 10, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "gemelos", text: "El juego avanza, Dante." }
                         ];
                     } else {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 90, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'gemelos', pointsNeeded: 10, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "gemelos", text: "Aún no te corresponde enfrentarte a nosotros." }
                         ];
@@ -187,7 +187,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'padre':
                     if (stage === 4) {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 3, scene: this.gameScene };
+                        this.transitionData = { npc: 'padre', pointsNeeded: 2500, rounds: 3, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "dante", text: "Papá." },
                             { character: "padre", text: "Has llegado, Dante. Tal como imaginé." },
@@ -208,12 +208,12 @@ export default class Dialogos extends Phaser.Scene {
                             { character: "padre", text: "Entonces, baraja, hijo mío… y demuestra lo que has aprendido." }
                         ];
                     } else if (stage > 4) {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'padre', pointsNeeded: 20, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "padre", text: "Tu duelo conmigo ya ha quedado atrás." }
                         ];
                     } else {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 70, rounds: 0, scene: this.gameScene };
+                        this.transitionData = { npc: 'padre', pointsNeeded: 20, rounds: 0, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "padre", text: "No es tu momento, Dante." }
                         ];
