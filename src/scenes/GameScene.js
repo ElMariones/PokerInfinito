@@ -341,50 +341,7 @@ export default class GameScene extends Phaser.Scene {
             });
 
             this.time.delayedCall(1300, () => {
-              this.roundNumber++;
-              if (this.roundNumber <= this.maxRounds && this.score < this.pointsNeeded) {
-                  this.replaceUsedCards();
-              } else {
-                if (this.score >= this.pointsNeeded) {
-                  // Player won the battle:
-                  this.scene.stop('UIScene');
-                  this.scene.stop('GameScene');
-
-                  // Calcular las monedas ganadas
-                  const coinsWon = this.score - this.pointsNeeded;
-
-                  // Actualizar las monedas en el registry
-                  const currentCoins = this.registry.get('coins') || 0;
-                  this.registry.set('coins', currentCoins + coinsWon);
-
-                  this.scene.wake('UIOverlay');
-                  const currentMap = this.registry.get('currentMap')
-                  this.scene.resume(currentMap);
-                
-                  // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                  // If Dialogos is not already active, launch it with required data.
-                  if (!this.scene.isActive('Dialogos')) {
-                    this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                  }
-                  // Call the afterBattle function (passing the npc name).
-                  this.scene.get('Dialogos').afterBattle(true);
-                } else {
-                  // Player lost the battle:
-                  this.scene.stop('UIScene');
-                  this.scene.stop('GameScene');
-                  this.scene.wake('UIOverlay');
-                  const currentMap = this.registry.get('currentMap')
-                  this.scene.resume(currentMap);
-                
-                  // Launch or get the Dialogos scene, so it can show the post-battle dialog.
-                  // If Dialogos is not already active, launch it with required data.
-                  if (!this.scene.isActive('Dialogos')) {
-                    this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
-                  }
-                  // Call the afterBattle function (passing the npc name).
-                  this.scene.get('Dialogos').afterBattle(false);
-                }
-              }
+              this.handleRoundEnd();
           });
         });
       });
@@ -430,6 +387,55 @@ highlightWinningCards(result) {
       shadow.depth = sprite.depth - 1;
     });
   }
+
+  handleRoundEnd() {
+    this.roundNumber++;
+    if (this.roundNumber <= this.maxRounds && this.score < this.pointsNeeded) {
+      this.replaceUsedCards();
+    } else {
+      if (this.score >= this.pointsNeeded) {
+        // Player won the battle:
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+  
+        // Calcular las monedas ganadas
+        const coinsWon = this.score - this.pointsNeeded;
+  
+        // Actualizar las monedas en el registry
+        const currentCoins = this.registry.get('coins') || 0;
+        this.registry.set('coins', currentCoins + coinsWon);
+  
+        this.scene.wake('UIOverlay');
+        const currentMap = this.registry.get('currentMap');
+        this.scene.resume(currentMap);
+  
+        // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+        // If Dialogos is not already active, launch it with required data.
+        if (!this.scene.isActive('Dialogos')) {
+          this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+        }
+        // Call the afterBattle function (passing the npc name).
+        this.scene.get('Dialogos').afterBattle(true);
+      } else {
+        // Player lost the battle:
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+        this.scene.wake('UIOverlay');
+        const currentMap = this.registry.get('currentMap');
+        this.scene.resume(currentMap);
+  
+        // Launch or get the Dialogos scene, so it can show the post-battle dialog.
+        // If Dialogos is not already active, launch it with required data.
+        if (!this.scene.isActive('Dialogos')) {
+          this.scene.launch('Dialogos', { scene: this.scene.get(currentMap) });
+        }
+        // Call the afterBattle function (passing the npc name).
+        this.scene.get('Dialogos').afterBattle(false);
+      }
+    }
+  }
+  
+  
 
   dealNewHand() {
     if (this.deck.length < 10 && this.score < this.pointsNeeded) {
