@@ -10,6 +10,7 @@ import rug from '../../assets/images/rug.png';
 import portada from '../../assets/images/AllLUM.png';
 //import fondoBatallas from '../../assets/shaders/fondoBatallas.glsl.js';
 import button_default from '../../assets/images/button_default.png';
+import botones from '../../assets/images/botones.png';
 import star from '../../assets/images/star.png';
 
 //import tilesets
@@ -156,9 +157,9 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('portada', portada);
     //this.cache.shader.add('fondoBatallas', fondoBatallas);
     this.load.image('interactKey', interactKey);
-    this.load.spritesheet('button_default', button_default, {
-      frameWidth: 142,  // width of each frame
-      frameHeight: 28   // height of each frame (112 / 4)
+    this.load.spritesheet('botones', botones, {
+      frameWidth: 36,  // width of each frame
+      frameHeight: 18   // height of each frame (112 / 4)
     });
     // NEW: Load sort button images
     this.load.image('sortNum', sortNum);
@@ -288,6 +289,7 @@ export default class BootScene extends Phaser.Scene {
     this.registry.set('coins', 2200);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
     this.registry.set('stage', 0);
+    this.registry.set('musicEnabled', true);
     this.scene.start('IntroScene');
   }
 

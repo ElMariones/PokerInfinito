@@ -36,6 +36,8 @@ export default class IntroScene extends Phaser.Scene {
       fontSize: '42px',
       color: '#ffffff',
       fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
 
