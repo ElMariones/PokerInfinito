@@ -70,7 +70,12 @@ export default class MapRincon extends Phaser.Scene {
     const gemelos = this.npcManager.addNPC('gemelos', 1056, 156, 'idle-down', true);
     this.npcArray = this.npcManager.getAllNPCs();
 
-    this.songs = null;
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.music = this.sound.add('rinconMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
+    }
     
     this.doorManager = new DoorManager(this, [
       { x: 956, y: 928, toScene: 'MapScene', spawnX: 832, spawnY: 449 },

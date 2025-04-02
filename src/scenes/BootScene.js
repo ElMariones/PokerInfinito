@@ -132,6 +132,11 @@ import olvidoMusic from '../../assets/audio/Night_of_the_Streets.mp3';
 import creditsMusic from '../../assets/audio/main_menu_music.ogg';
 import mainMenuMusic from '../../assets/audio/ambient_menu.mp3';
 import asadorMusic from '../../assets/audio/life_in_corrupted_binary.flac';
+import puertoMusic from '../../assets/audio/merchants_and_sea_salt.wav';
+import ocean from '../../assets/audio/midnight_sands.flac';
+import rinconMusic from '../../assets/audio/fato_shadow_-_mind_in_motion.mp3';
+import extCasinoMusic from '../../assets/audio/cold_silence.ogg';
+import casinoMusic from '../../assets/audio/Cave_Paintings.mp3';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -341,6 +346,11 @@ export default class BootScene extends Phaser.Scene {
     this.load.audio('mainMenuMusic', mainMenuMusic);
     this.load.audio('creditsMusic', creditsMusic);
     this.load.audio('asadorMusic', asadorMusic);
+    this.load.audio('puertoMusic', puertoMusic);
+    this.load.audio('ocean', ocean);
+    this.load.audio('rinconMusic', rinconMusic);
+    this.load.audio('extCasinoMusic', extCasinoMusic);
+    this.load.audio('casinoMusic', casinoMusic);
 
     //Imágnes para los jokers
     this.load.image('joker1', joker1);
