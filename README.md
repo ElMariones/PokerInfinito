@@ -122,7 +122,7 @@ Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina p
 
 ---
 
-##Playtest
+## Playtest
 - ¿Cuánto tardan en entrar al Asador del Rey?
 - ¿Hablan con la barrera?
 - ¿Ha entendido el jugador las barreras?
