@@ -121,3 +121,19 @@ Se asume que el jugador escoge 5 cartas de las 10 repartidas y que las combina p
   - Compra de **cartas especiales** (posibles comodines o restricciones únicas).
 
 ---
+
+##Playtest
+- ¿Cuánto tardan en entrar al Asador del Rey?
+- ¿Hablan con la barrera?
+- ¿Ha entendido el jugador las barreras?
+- ¿Han entendido la logística de las cartas?
+- ¿Ha sido confuso el tener que elegir 5 cartas?
+- ¿Si se usan lo botones de barajar y ordenar? ¿Son útiles?
+- ¿Antes de entrar al Olvido han visto las vacas?
+- Después del Olvido, ¿ha visto el jugador las barreras y cuánto tarda en ir para la zona del pescador?
+- Botones de UIOverlay, ¿se usan los botones de la tienda, las misiones, volumen e inventario?
+- Después del pescador, ¿van a hablar con "Snorlax" o se sienten confunsos?
+- ¿Se nota la barrera del bar de los bandidos?
+- Se encuentra bien el camino hacia el casino final?
+- ¿Qué te parecieron los diálogos? ¿Han estado bien en cuanto a longitud? ¿Te has entereado de la historia?
+- Comentario general de que le ha parecido y que mejoraría
