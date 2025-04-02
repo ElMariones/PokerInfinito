@@ -231,148 +231,35 @@ export default class GameScene extends Phaser.Scene {
   animateSelectedCards(result) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
-
+  
     this.events.emit('toggle-sort-button', false);
-
+  
     this.cardSprites.forEach(sprite => {
-        const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
-        if (!isSelected) sprite.setVisible(false);
+      const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
+      if (!isSelected) sprite.setVisible(false);
     });
-
-    const newScale = 1.0;
-    const spacing = 180;
-    const totalWidth = (this.selectedCards.length - 1) * spacing;
-    const offsetX = 85; // Ajustar este valor para desplazar las cartas a la derecha
-    const startX = centerX - totalWidth / 2 + offsetX;
-    //const startX = centerX - totalWidth / 2;
-
-    // ⚡ Flash antes de la selección
-    //this.cameras.main.flash(200);
-
-    this.selectedCards.forEach((card, index) => {
-      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-      if (!sprite) return;
-
-      sprite.clearTint();
-      sprite.disableInteractive();
-
-      this.time.delayedCall(index * 100, () => {
-        if (!sprite.active) return; // Verifica que aún existe
-
-        this.tweens.add({
-          targets: sprite,
-          scale: 1.4, 
-          angle: Math.random() * 10 - 5,
-          duration: 200,
-          ease: 'Back.easeOut',
-          yoyo: true,
-          onComplete: () => {
-            if (!sprite.active) return;
-
-            this.tweens.add({
-                targets: sprite,
-                x: startX + index * spacing,
-                y: centerY,
-                scale: newScale,
-                duration: 600,
-                ease: 'Back.easeOut',
-            });
-          }
-        });
-      });
-    });
-
-    //Espera y luego ejecuta el ataque
+  
+    this.animateCardsToCenter(result);
+  
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
       this.highlightWinningCards(result);
       this.showScorePopups(result.winningCards, result.score);
-
+  
       this.time.delayedCall(600, () => {
         this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
-
-          this.time.delayedCall(1200, () => {
-            const opponentX = this.cameras.main.width / 2;
-            const opponentY = 100;
-
-            this.selectedCards.forEach((card, index) => {
-                const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-                if (!sprite) return;
-
-                this.time.delayedCall(index * 100, () => {
-                    this.tweens.add({
-                        targets: sprite,
-                        x: opponentX,
-                        y: opponentY,
-                        scale: 0.3,
-                        angle: Math.random() * 40 - 20,
-                        duration: 700,
-                        ease: 'Cubic.easeIn',
-                        onStart: () => {
-                            sprite.setDepth(10);
-                        },
-                        onComplete: () => {
-                            sprite.setVisible(false);
-
-                            // **Flash para impacto**
-                            const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
-                            flash.setAlpha(0);
-                            this.tweens.add({
-                                targets: flash,
-                                alpha: { from: 0.7, to: 0 },
-                                duration: 200,
-                                onComplete: () => flash.destroy(),
-                            });
-
-                            // **Oscurecimiento rápido para efecto más fuerte**
-                            const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
-                            darken.setAlpha(0);
-                            this.tweens.add({
-                                targets: darken,
-                                alpha: { from: 0.5, to: 0 },
-                                duration: 600,
-                                onComplete: () => darken.destroy(),
-                            });
-
-                            // **Pantalla vibra sin mostrar fondo**
-                            this.cameras.main.shake(500, 0.03);
-                        }
-                    });
-                });
-            });
-
-            this.time.delayedCall(1300, () => {
-              this.handleRoundEnd();
+  
+        this.time.delayedCall(1200, () => {
+          this.executeAttackAnimation(centerX, centerY);
+  
+          this.time.delayedCall(1300, () => {
+            this.handleRoundEnd();
           });
         });
       });
     });
   }
+  
 
-//el +punticaion amarilla 
-  showScorePopups(winningCards, score) {
-    winningCards.forEach(card => {
-      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-      if (!sprite) return;
-  
-      const valueText = this.add.text(sprite.x, sprite.y, `+${score}`, {
-        fontSize: '32px',
-        fontStyle: 'bold',
-        color: '#ffeb3b',
-        stroke: '#000',
-        strokeThickness: 4,
-      }).setOrigin(0.5);
-  
-      this.tweens.add({
-        targets: valueText,
-        y: sprite.y - 100,
-        scale: { from: 1.5, to: 1 },
-        alpha: { from: 1, to: 0 },
-        duration: 5000,
-        ease: 'Back.easeOut',
-        onComplete: () => valueText.destroy()
-      });
-    });
-  }
 
 highlightWinningCards(result) {
     const winners = result.winningCards || [];
@@ -435,8 +322,6 @@ highlightWinningCards(result) {
     }
   }
   
-  
-
   dealNewHand() {
     if (this.deck.length < 10 && this.score < this.pointsNeeded) {
       this.showResultMessage("No hay suficientes cartas para otra ronda. ¡Has perdido!");
