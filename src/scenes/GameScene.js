@@ -219,7 +219,7 @@ export default class GameScene extends Phaser.Scene {
   // Called by the UI scene’s "Submit" button
   onSubmitHand() {
     if (this.selectedCards.length !== 5) {
-      this.showResultMessage('Selecciona 5 cartas para jugar');
+      this.showAlertMessage('Selecciona 5 cartas para jugar');
       return;
     }
 
@@ -701,11 +701,32 @@ highlightWinningCards(result) {
   showResultMessage(msg) {
     const text = this.add.text(
       this.cameras.main.width / 2,
-      this.cameras.main.height / 2 - 200,
+      this.cameras.main.height / 2 - 220,
       msg,
       {
-        fontFamily: 'MarioKart', 
-        fontSize: '40px',
+        fontFamily: 'RetroFont', 
+        fontSize: '20px',
+        color: '#ffffff', 
+        stroke: '#000000', 
+        strokeThickness: 5,
+        align: 'center',
+        padding: { x: 10, y: 5 },
+      }
+    ).setOrigin(0.5);
+
+    this.time.delayedCall(2000, () => {
+      text.destroy();
+    });
+  }
+
+  showAlertMessage(msg) {
+    const text = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2 - 100,
+      msg,
+      {
+        fontFamily: 'RetroFont', 
+        fontSize: '20px',
         color: '#ffffff', 
         stroke: '#000000', 
         strokeThickness: 5,
