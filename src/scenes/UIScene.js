@@ -1,3 +1,5 @@
+import UIButton from '../utils/Button.js';
+
 export default class UIScene extends Phaser.Scene {  
   constructor() {
     super({ key: 'UIScene', active: false });
@@ -140,6 +142,10 @@ export default class UIScene extends Phaser.Scene {
     this.gameScene.events.on('toggle-sort-button', (visible) => {
       this.sortButton.setVisible(visible);
     });
+ 
+    const ayudaButton = new UIButton(this, 820, buttonY, 'ayuda', 'green', () => {
+      this.showAyuda();
+    });
   }
 
   update() {
@@ -246,5 +252,62 @@ export default class UIScene extends Phaser.Scene {
     this.chipsText.setText(chips.toString());
     this.multiplierText.setText(`x${multiplier}`);
   }
-
+  
+  showAyuda() {
+    const width = this.cameras.main.width;
+    const height = this.cameras.main.height;
+  
+    // Create a semi-transparent background rectangle
+    const popupBg = this.add.rectangle(
+      width / 2,
+      height / 2,
+      width * 0.8,
+      height * 0.8,
+      0x000000,
+      0.7
+    );
+  
+    // Help text describing the card game logic
+    const helpText =
+      "Ayuda del Juego de Cartas:\n\n" +
+      "• El juego evalúa una mano de 5 cartas.\n" +
+      "• Orden de rangos: AS, 2, 3, 4, 5, 6, 7, 8, 9, Sota, Caballo, Rey.\n\n" +
+      "Tipos de mano:\n" +
+      "  - Escalera de Color: Cinco cartas consecutivas del mismo palo.\n" +
+      "  - Póker: Cuatro cartas del mismo rango.\n" +
+      "  - Full House: Tres cartas de un rango y un par de otro.\n" +
+      "  - Color: Todas las cartas del mismo palo.\n" +
+      "  - Escalera: Cinco cartas consecutivas en rango.\n" +
+      "  - Trío: Tres cartas del mismo rango.\n" +
+      "  - Doble Pareja: Dos pares de cartas.\n" +
+      "  - Pareja: Un par de cartas.\n" +
+      "  - Carta Alta: Si no se cumple ninguna combinación.\n\n" +
+      "Cada mano tiene un puntaje base y un multiplicador. Además, se suman los valores de las cartas para determinar los chips.";
+  
+    // Create a text object to display the help information
+    const helpDisplay = this.add.text(width / 2, height / 2 - 30, helpText, {
+      font: '20px Arial',
+      fill: '#fff',
+      align: 'center',
+      stroke: '#000000',
+      strokeThickness: 2,
+      wordWrap: { width: width * 0.75 }
+    }).setOrigin(0.5);
+  
+    // Create a smaller hint text at the bottom center to close the popup
+    const closeHint = this.add.text(width / 2, height * 0.75 + 75, '(haz click para cerrar)', {
+      font: '14px MarioKart',
+      fill: '#fff',
+      align: 'center',
+      stroke: '#000000',
+      strokeThickness: 2
+    }).setOrigin(0.5);
+  
+    // Group all popup elements into a container for easier management
+    const popupContainer = this.add.container(0, 0, [popupBg, helpDisplay, closeHint]);
+  
+    // Allow clicking on the background to close the popup
+    popupBg.setInteractive().on('pointerdown', () => popupContainer.destroy());
+  }
+  
 }
