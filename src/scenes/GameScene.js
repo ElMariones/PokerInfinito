@@ -99,10 +99,7 @@ export default class GameScene extends Phaser.Scene {
         float c2p = max(0.0, 1.0 - 2.0 * (smoke_res));
         float cb = 1.0 - min(1.0, c1p + c2p);
 
-        vec4 beige_dark = vec4(166.0 / 255.0, 139.0 / 255.0, 109.0 / 255.0, 1.0); // Beige oscuro
-        vec4 brown_light = vec4(217.0 / 255.0, 194.0 / 255.0, 169.0 / 255.0, 1.0); // Marrón claro
-
-        vec4 ret_col = beige_dark * c1p + brown_light * c2p + vec4(cb * BLACK.rgb, cb * 1.0);
+        vec4 ret_col = vec4(0.996, 0.372, 0.333, 1.0) * c1p + vec4(0.0, 0.615, 1.0, 1.0) * c2p + vec4(cb * BLACK.rgb, cb * 1.0);
         float mod_flash = max(0.0 * 0.8, max(c1p, c2p) * 5.0 - 4.4) + 0.0 * max(c1p, c2p);
 
         return easing(ret_col * (1.0 - mod_flash) + mod_flash * vec4(1.0, 1.0, 1.0, 1.0), 1.5);
@@ -119,10 +116,7 @@ export default class GameScene extends Phaser.Scene {
     void main() {
         mainImage(gl_FragColor, gl_FragCoord.xy);
     }
-`;
-
-
-
+    `;
 
     // Crear el shader como un BaseShader
     const baseShader = new Phaser.Display.BaseShader('fondoBatalla', fragmentShader);
@@ -248,71 +242,50 @@ export default class GameScene extends Phaser.Scene {
     const newScale = 1.0;
     const spacing = 180;
     const totalWidth = (this.selectedCards.length - 1) * spacing;
-    const offsetX = 85;
+    const offsetX = 85; // Ajustar este valor para desplazar las cartas a la derecha
     const startX = centerX - totalWidth / 2 + offsetX;
+    //const startX = centerX - totalWidth / 2;
+
+    // ⚡ Flash antes de la selección
+    //this.cameras.main.flash(200);
 
     this.selectedCards.forEach((card, index) => {
-        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-        if (!sprite) return;
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
 
-        sprite.clearTint();
-        sprite.disableInteractive();
+      sprite.clearTint();
+      sprite.disableInteractive();
 
-        this.time.delayedCall(index * 100, () => {
-            if (!sprite.active) return; // Ensure sprite is active
+      this.time.delayedCall(index * 100, () => {
+        if (!sprite.active) return; // Verifica que aún existe
 
-            // Step 1: Animate card movement and scaling
+        this.tweens.add({
+          targets: sprite,
+          scale: 1.4, 
+          angle: Math.random() * 10 - 5,
+          duration: 200,
+          ease: 'Back.easeOut',
+          yoyo: true,
+          onComplete: () => {
+            if (!sprite.active) return;
+
             this.tweens.add({
                 targets: sprite,
-                scale: 1.4,
-                angle: Math.random() * 10 - 5,
-                duration: 200,
+                x: startX + index * spacing,
+                y: centerY,
+                scale: newScale,
+                duration: 600,
                 ease: 'Back.easeOut',
-                yoyo: true,
-                onComplete: () => {
-                    if (!sprite.active) return;
-
-                    this.tweens.add({
-                        targets: sprite,
-                        x: startX + index * spacing,
-                        y: centerY,
-                        scale: 1.2,
-                        duration: 800,
-                        ease: 'Back.easeOut',
-                        onComplete: () => {
-                            // After the card reaches the center, now show the number pop-out
-
-                            const valueText = this.add.text(sprite.x, sprite.y, `+${result.score}`, {
-                                fontSize: '32px',
-                                fontStyle: 'bold',
-                                color: '#ffeb3b',
-                                stroke: '#000',
-                                strokeThickness: 4,
-                            }).setOrigin(0.5);
-
-                            // Animation to make the number pop out
-                            this.tweens.add({
-                                targets: valueText,
-                                y: sprite.y - 100, // Move the number up from the card's center
-                                scale: { from: 1.5, to: 1 }, // Shrink the number
-                                alpha: { from: 1, to: 0 }, // Fade out the number
-                                duration: 7000,
-                                ease: 'Back.easeOut',
-                                onComplete: () => valueText.destroy() // Destroy the text after animation
-                            });
-                        }
-                    });
-                }
             });
+          }
         });
+      });
     });
-
-
-// After waiting for animations to complete, execute attack
 
     //Espera y luego ejecuta el ataque
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
       this.highlightWinningCards(result);
+      this.showScorePopups(result.winningCards, result.score);
 
       this.time.delayedCall(600, () => {
         this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
@@ -414,6 +387,32 @@ export default class GameScene extends Phaser.Scene {
               }
           });
         });
+      });
+    });
+  }
+
+
+  showScorePopups(winningCards, score) {
+    winningCards.forEach(card => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      const valueText = this.add.text(sprite.x, sprite.y, `+${score}`, {
+        fontSize: '32px',
+        fontStyle: 'bold',
+        color: '#ffeb3b',
+        stroke: '#000',
+        strokeThickness: 4,
+      }).setOrigin(0.5);
+  
+      this.tweens.add({
+        targets: valueText,
+        y: sprite.y - 100,
+        scale: { from: 1.5, to: 1 },
+        alpha: { from: 1, to: 0 },
+        duration: 5000,
+        ease: 'Back.easeOut',
+        onComplete: () => valueText.destroy()
       });
     });
   }
