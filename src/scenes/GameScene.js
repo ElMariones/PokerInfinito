@@ -391,7 +391,7 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
-
+//el +punticaion amarilla 
   showScorePopups(winningCards, score) {
     winningCards.forEach(card => {
       const sprite = this.cardSprites.find(s => s.texture.key === card.key);
