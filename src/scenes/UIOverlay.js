@@ -12,16 +12,16 @@ export default class UIOverlay extends Phaser.Scene {
         const height = this.scale.height;
 
         // 1. Coin display (icon + text in top-left)
-        this.coinText = this.add.text(50, 15, 'dinero: ' + this.registry.get('coins'), {
-            font: '25px MarioKart', fill: '#fff', stroke: '#000000', strokeThickness: 2 
+        this.coinText = this.add.text(50, 15, 'Dinero: ' + this.registry.get('coins'), {
+            font: '25px RetroFont', fill: '#fff', stroke: '#000000', strokeThickness: 2 
         }).setOrigin(0).setScrollFactor(0);
         // Update coin text when the global coin count changes
         this.registry.events.on('changedata-coins', (parent, value) => {
-            this.coinText.setText('dinero: ' + value);
+            this.coinText.setText('Dinero: ' + value);
         });
 
         // 2. Shop Button (next to coin count)
-        const shopButton = new UIButton(this, 85, 70, 'tienda', 'green', () => {
+        const shopButton = new UIButton(this, 85, 70, 'Tienda', 'green', () => {
             // Retrieve the key of the currently active map from the registry
             const currentMap = this.registry.get('currentMap');
             if (currentMap) {
@@ -53,7 +53,7 @@ export default class UIOverlay extends Phaser.Scene {
         }, isToggled);
         
         // 3. Jokers Button (bottom-right corner)
-        const jokersButton = new UIButton(this, width - 120, height - 40, 'jokers', 'green', () => {
+        const jokersButton = new UIButton(this, width - 120, height - 40, 'Jokers', 'green', () => {
             const currentMap = this.registry.get('currentMap');
             if (currentMap) {
             this.scene.pause(currentMap);
@@ -63,7 +63,7 @@ export default class UIOverlay extends Phaser.Scene {
         });
         
         // 4. Deck Button (above Jokers button in bottom-right)
-        const deckButton = new UIButton(this, width - 120, height - 100, 'misiones', 'green', () => {
+        const deckButton = new UIButton(this, width - 120, height - 100, 'Misión', 'green', () => {
             this.showMisionesPopup();
         });
 
@@ -88,22 +88,22 @@ showMisionesPopup() {
     // Select the mission text based on the current stage
     switch (stage) {
         case 0:
-            missionText = 'deberías ir al asador y derrotar al dueño.';
+            missionText = 'Deberías ir al asador\ny derrotar al dueño.';
             break;
         case 1:
-            missionText = 'el siguiente paso es el olvido, alguien te espera dentro.';
+            missionText = 'El siguiente paso es El Olvido,\nalguien te espera dentro.';
             break;
         case 2:
-            missionText = 'deberias ir al barco y luchar contra el capitán.';
+            missionText = 'Deberias ir al barco\ny luchar contra el capitán.';
             break;
         case 3:
-            missionText = 'Los gemelos te esperan en el Rincon del bandido';
+            missionText = 'Los gemelos te esperan\nen el Rincon del Bandido';
             break;
         case 4:
-            missionText = 've al casino y enfrentate a su lider.';
+            missionText = 'Ve al casino\ny enfrentate a su lider.';
             break;
         case 5:
-            missionText = 'enhorabuena. has completado el juego...';
+            missionText = 'Enhorabuena.\nHas completado el juego...';
             break;
         default:
             missionText = 'Mision desconocida.';
@@ -111,7 +111,7 @@ showMisionesPopup() {
 
     // Create a text object for displaying the mission
     const missionDisplay = this.add.text(width / 2, height / 2, missionText, {
-        font: '18px MarioKart',
+        font: '16px RetroFont',
         fill: '#fff',
         align: 'center',
         stroke: '#000000',
@@ -119,8 +119,8 @@ showMisionesPopup() {
     }).setOrigin(0.5);
 
     // Create a smaller hint text at the bottom center
-    const closeHint = this.add.text(width / 2, height * 0.75, '(haz click para cerrar)', {
-        font: '14px MarioKart',
+    const closeHint = this.add.text(width / 2, height * 0.75, '(Haz click para cerrar)', {
+        font: '14px RetroFont',
         fill: '#fff',
         align: 'center',
         stroke: '#000000',

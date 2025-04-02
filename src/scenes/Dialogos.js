@@ -11,6 +11,7 @@ export default class Dialogos extends Phaser.Scene {
         this.currentStep = 0; 
         this.transitionData = {};
         this.gameScene = null;
+        this.fontFamily = 'RetroFont';
         console.log("Creando dialogos");
         
     }
@@ -22,8 +23,8 @@ export default class Dialogos extends Phaser.Scene {
         this.windowAlpha = opts.windowAlpha || 0.9;
         this.windowHeight = opts.windowHeight || 180;
         this.padding = opts.padding || 32;
-        this.fontSize = opts.fontSize || 26;
-        this.fontFamily = opts.fontFamily || 'serif';
+        this.fontSize = opts.fontSize || 16;
+        this.fontFamily = opts.fontFamily || 'RetroFont';
         this.gameScene = opts.scene;
 
         this.npc = opts.npc || null;
@@ -45,16 +46,43 @@ export default class Dialogos extends Phaser.Scene {
         let rectWidth = width - (this.padding * 2);
         let rectHeight = this.windowHeight;
 
-        this.graphics = this.add.graphics();
-        this.graphics.fillStyle(this.windowColor, this.windowAlpha);
-        this.graphics.fillRoundedRect(x, y, rectWidth, rectHeight, 8);
-        this.graphics.lineStyle(this.borderThickness, this.borderColor);
-        this.graphics.strokeRoundedRect(x, y, rectWidth, rectHeight, 8);
-
-        this.container = this.add.container(0, 0, [this.graphics]);
+        // Create main container
+        this.container = this.add.container(0, 0);
         this.container.setAlpha(0);
         this.container.setVisible(false);
 
+        // Create background with gradient
+        this.graphics = this.add.graphics();
+        
+        // Main background
+        this.graphics.fillStyle(0x222222, this.windowAlpha);
+        this.graphics.fillRoundedRect(x, y, rectWidth, rectHeight, 8);
+        
+        // Create gradient effect using multiple rectangles
+        const gradientSteps = 5;
+        const stepHeight = rectHeight / gradientSteps;
+        for (let i = 0; i < gradientSteps; i++) {
+            const alpha = 0.3 - (i * 0.05); // Gradually decrease alpha
+            this.graphics.fillStyle(0x000000, alpha);
+            this.graphics.fillRoundedRect(x, y + (i * stepHeight), rectWidth, stepHeight, 8);
+        }
+
+        // Create retro-style border
+        const borderThickness = this.borderThickness;
+        const borderColor = this.borderColor;
+        
+        // Main border
+        this.graphics.lineStyle(borderThickness, borderColor);
+        this.graphics.strokeRoundedRect(x, y, rectWidth, rectHeight, 8);
+
+        // Add subtle inner glow
+        this.graphics.lineStyle(1, 0xFFFFFF, 0.1);
+        this.graphics.strokeRoundedRect(x + 1, y + 1, rectWidth - 2, rectHeight - 2, 7);
+
+        // Add container to main container
+        this.container.add([this.graphics]);
+
+        // Make container interactive
         this.container.setInteractive(new Phaser.Geom.Rectangle(x, y, rectWidth, rectHeight), Phaser.Geom.Rectangle.Contains);
         this.container.on('pointerdown', () => this.nextDialogLine());
     }
@@ -351,16 +379,22 @@ case 'barrier_big_man':
         if (this.cutsceneImage) this.cutsceneImage.destroy();
     
         const currentLine = this.dialogLines[this.currentIndex];
+        
+        // Capitalize first letter of character name
+        const formattedCharacterName = currentLine.character.charAt(0).toUpperCase() + currentLine.character.slice(1);
     
-        this.characterName = this.add.text(x, y - 10, `🂠 ${currentLine.character}:`, {
-            fontSize: `${this.fontSize + 4}px`,
-            fontFamily: this.fontFamily,
-            color: '#FFD700'
+        this.characterName = this.add.text(x, y - 10, `🂠 ${formattedCharacterName}:`, {
+            fontSize: `${this.fontSize + 5}px`,
+            fontFamily: 'RetroFont',
+            color: '#FFD700',
+            stroke: '#000000',
+            strokeThickness: 2,
+            letterSpacing: -2 // Negative letter spacing to make text more compact
         });
     
         this.text = this.add.text(x, y + 25, "", {
             fontSize: `${this.fontSize}px`,
-            fontFamily: this.fontFamily,
+            fontFamily: 'RetroFont',
             wordWrap: { width: this.sys.game.canvas.width - (this.padding * 2) - 20, useAdvancedWrap: true },
             color: '#FFFFFF'
         });

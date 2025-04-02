@@ -14,15 +14,15 @@ export default class JokersInventoryScene extends Phaser.Scene {
         this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.8);
 
         // Title for the inventory scene
-        this.add.text(width / 2, 50, "tus jokers:", {font: '25px MarioKart', fill: '#fff', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
+        this.add.text(width / 2, 50, "Tus jokers:", {font: '25px RetroFont', fill: '#fff', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
 
         // Create an Inventory helper instance and get the owned jokers (IDs)
         const inventory = new Inventory(this);
         const ownedIds = this.registry.get('jokers') || [];
 
         if (ownedIds.length === 0) {
-            this.add.text(width / 2, height / 2, "aún no tienes ningún joker.",
-                {font: '16px MarioKart', fill: '#ff0000', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
+            this.add.text(width / 2, height / 2, "Aún no tienes ningún joker.",
+                {font: '16px RetroFont', fill: '#ff0000', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
         } else {
             // Limit display to a maximum of 5 jokers
             const displayIds = ownedIds.slice(0, 5);
@@ -50,7 +50,7 @@ export default class JokersInventoryScene extends Phaser.Scene {
                 // Display the joker name below the image.
                 // The image height is 210 pixels (original) scaled by 2 → 420 pixels tall,
                 // so we offset by half that height plus a margin (e.g., 20 pixels).
-                this.add.text(x, y + (210) / 2 + 20, joker.name, { font: '18px MarioKart', fill: '#fff', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
+                this.add.text(x, y + (210) / 2 + 20, joker.name, { font: '18px RetroFont', fill: '#fff', stroke: '#000000', strokeThickness: 2 }).setOrigin(0.5);
             };
 
             // --- Display Row 1 ---
@@ -80,7 +80,7 @@ export default class JokersInventoryScene extends Phaser.Scene {
             this,
             width / 2,
             height - 50,
-            "cerrar",
+            "Salir",
             'red',
             () => {
                 const currentMap = this.registry.get('currentMap');

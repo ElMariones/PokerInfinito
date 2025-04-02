@@ -19,8 +19,8 @@ export default class UIScene extends Phaser.Scene {
 
     // Shared style for text
     const textStyle = {
-      fontFamily: 'MarioKart',
-      fontSize: '24px',
+      fontFamily: 'RetroFont',
+      fontSize: '18px',
       color: '#ffffff',
       stroke: '#000000',
       strokeThickness: 2,
@@ -29,15 +29,15 @@ export default class UIScene extends Phaser.Scene {
     this.createScoreMarker(textStyle);
 
     // Score & Round Text
-    this.scoreText = this.add.text(20, 20, 'puntos: 0', textStyle);
-    this.roundText = this.add.text(20, 60, 'ronda: 1', textStyle);
+    this.scoreText = this.add.text(20, 20, 'Puntos: 0', textStyle);
+    this.roundText = this.add.text(20, 60, 'Ronda: 1', textStyle);
 
     // NPC Goal & Rounds Text
     this.npcGoalText = this.add.text(20, 100, '', textStyle);
     this.npcRoundsText = this.add.text(20, 140, '', textStyle);
 
     // Deck Count Text
-    this.cardsLeftText = this.add.text(20, 180, 'cartas restantes: 0', textStyle);
+    this.cardsLeftText = this.add.text(20, 180, 'Cartas restantes: 0', textStyle);
 
     // -------------------------
     // UI BUTTONS
@@ -52,7 +52,6 @@ export default class UIScene extends Phaser.Scene {
       .setScale(0.35)
       .setInteractive()
       .setAlpha(0.5);
-    this.submitButton.disableInteractive();
 
     this.submitButton.on('pointerover', () => {
       this.submitButton.setTint(0xaaaaaa);
@@ -130,7 +129,6 @@ export default class UIScene extends Phaser.Scene {
       }
       // For the submit button - enabled only if exactly 5 cards are selected.
       if (selectedCount !== 5 && this.submitButton.active) {
-        this.submitButton.disableInteractive();
         this.submitButton.setAlpha(0.5);
       } else if (this.submitButton.active) {
         this.submitButton.setInteractive();
@@ -143,7 +141,7 @@ export default class UIScene extends Phaser.Scene {
       this.sortButton.setVisible(visible);
     });
  
-    const ayudaButton = new UIButton(this, 820, buttonY, 'ayuda', 'green', () => {
+    const ayudaButton = new UIButton(this, 820, buttonY, 'Ayuda', 'green', () => {
       this.showAyuda();
     });
   }
@@ -152,15 +150,15 @@ export default class UIScene extends Phaser.Scene {
     const gameScene = this.scene.get('GameScene');
     if (!gameScene) return; // Optionally, skip if GameScene isn't available.
     
-    this.scoreText.setText(`puntos: ${gameScene.score}`);
-    this.roundText.setText(`ronda: ${gameScene.roundNumber}`);
+    this.scoreText.setText(`Puntos: ${gameScene.score}`);
+    this.roundText.setText(`Ronda: ${gameScene.roundNumber}`);
   
     const pointsNeeded = gameScene.pointsNeeded || 0;
     const maxRounds = gameScene.maxRounds || 0;
-    this.npcGoalText.setText(`objetivo: ${pointsNeeded} puntos`);
-    this.npcRoundsText.setText(`max rondas: ${maxRounds}`);
+    this.npcGoalText.setText(`Objetivo: ${pointsNeeded} puntos`);
+    this.npcRoundsText.setText(`Max rondas: ${maxRounds}`);
     
-    this.cardsLeftText.setText(`cartas restantes: ${gameScene.deck.length}`);
+    this.cardsLeftText.setText(`Cartas restantes: ${gameScene.deck.length}`);
   }
   
 
@@ -203,7 +201,7 @@ export default class UIScene extends Phaser.Scene {
     this.add.text(
       markerX + markerWidth / 2,
       markerY - markerPadding / 2, // Ajustar posición más cerca del rectángulo
-      'chips',
+      'Chips',
       {
         ...textStyle,
         fontSize: '24px', // Tamaño de fuente
@@ -215,7 +213,7 @@ export default class UIScene extends Phaser.Scene {
     this.add.text(
       markerX + markerWidth / 2,
       markerY + markerHeight + markerPadding - markerPadding / 2, // Ajustar posición más cerca del rectángulo
-      'multi',
+      'Multi',
       {
         ...textStyle,
         fontSize: '24px', // Tamaño de fuente
@@ -295,8 +293,8 @@ export default class UIScene extends Phaser.Scene {
     }).setOrigin(0.5);
   
     // Create a smaller hint text at the bottom center to close the popup
-    const closeHint = this.add.text(width / 2, height * 0.75 + 75, '(haz click para cerrar)', {
-      font: '14px MarioKart',
+    const closeHint = this.add.text(width / 2, height * 0.75 + 75, '(Haz click para cerrar)', {
+      font: '14px RetroFont',
       fill: '#fff',
       align: 'center',
       stroke: '#000000',

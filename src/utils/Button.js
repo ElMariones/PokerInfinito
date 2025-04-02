@@ -32,15 +32,21 @@ export default class UIButton extends Phaser.GameObjects.Container {
         const frames = UIButton.BUTTON_FRAMES[this.buttonType] || { normal: 1, hover: 2, down: 3 };
         this.bg = scene.add.sprite(0, 0, 'botones', frames.normal).setOrigin(0.5);
         
-        // Set the button size (36x18 scaled by 2.2).
-        this.bg.setDisplaySize(36 * 2.2, 18 * 2.2);
+        // Calculate the base width (36 pixels) and the minimum width needed for the text
+        const baseWidth = 36 * 2.2;
+        const textWidth = labelText.length * 8; // Approximate width per character
+        const minWidth = Math.max(baseWidth, textWidth + 20); // Add some padding
+        
+        // Set the button size with dynamic width
+        this.bg.setDisplaySize(minWidth, 18 * 2.2);
         
         // Create the text label to display on the button.
         this.label = scene.add.text(0, 0, labelText, { 
-            font: '15px MarioKart', 
+            font: '11px RetroFont', 
             fill: '#fff', 
             stroke: '#000000', 
-            strokeThickness: 2 
+            strokeThickness: 2,
+            letterSpacing: -2 // Negative letter spacing to make text more compact
         }).setOrigin(0.5, 1);
         
         // Add both the background and the label to the container.

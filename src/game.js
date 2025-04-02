@@ -31,7 +31,7 @@ let config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true,
+      debug: false,
       gravity: { y: 0 }
     }
   },
@@ -40,7 +40,7 @@ let config = {
   maxLights: 100,
 
   
-  backgroundColor: '#006400',
+  backgroundColor: '#000000',
   scene: [
     BootScene,
     IntroScene,
