@@ -740,5 +740,7 @@ highlightWinningCards(result) {
     };
     return ranksOrder[card.rank] || 0;
   }
+  
+
 }
 
