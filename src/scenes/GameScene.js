@@ -259,6 +259,7 @@ export default class GameScene extends Phaser.Scene {
     });
   }
   
+  
   animateCardsToCenter(result) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
@@ -301,10 +302,56 @@ export default class GameScene extends Phaser.Scene {
     });
   }
   
-
-
   
 
+  executeAttackAnimation(centerX, centerY) {
+    const opponentX = centerX;
+    const opponentY = 100;
+  
+    this.selectedCards.forEach((card, index) => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      this.time.delayedCall(index * 100, () => {
+        this.tweens.add({
+          targets: sprite,
+          x: opponentX,
+          y: opponentY,
+          scale: 0.3,
+          angle: Math.random() * 40 - 20,
+          duration: 700,
+          ease: 'Cubic.easeIn',
+          onStart: () => {
+            sprite.setDepth(10);
+          },
+          onComplete: () => {
+            sprite.setVisible(false);
+  
+            const flash = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0xffffff);
+            flash.setAlpha(0);
+            this.tweens.add({
+              targets: flash,
+              alpha: { from: 0.7, to: 0 },
+              duration: 200,
+              onComplete: () => flash.destroy(),
+            });
+  
+            const darken = this.add.rectangle(centerX, centerY, this.cameras.main.width, this.cameras.main.height, 0x000000);
+            darken.setAlpha(0);
+            this.tweens.add({
+              targets: darken,
+              alpha: { from: 0.5, to: 0 },
+              duration: 600,
+              onComplete: () => darken.destroy(),
+            });
+  
+            this.cameras.main.shake(500, 0.03);
+          }
+        });
+      });
+    });
+  }
+  
 //el +punticaion amarilla 
   showScorePopups(winningCards, score) {
     winningCards.forEach(card => {
