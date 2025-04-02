@@ -99,7 +99,10 @@ export default class GameScene extends Phaser.Scene {
         float c2p = max(0.0, 1.0 - 2.0 * (smoke_res));
         float cb = 1.0 - min(1.0, c1p + c2p);
 
-        vec4 ret_col = vec4(0.996, 0.372, 0.333, 1.0) * c1p + vec4(0.0, 0.615, 1.0, 1.0) * c2p + vec4(cb * BLACK.rgb, cb * 1.0);
+        vec4 beige_dark = vec4(166.0 / 255.0, 139.0 / 255.0, 109.0 / 255.0, 1.0); // Beige oscuro
+        vec4 brown_light = vec4(217.0 / 255.0, 194.0 / 255.0, 169.0 / 255.0, 1.0); // Marrón claro
+
+        vec4 ret_col = beige_dark * c1p + brown_light * c2p + vec4(cb * BLACK.rgb, cb * 1.0);
         float mod_flash = max(0.0 * 0.8, max(c1p, c2p) * 5.0 - 4.4) + 0.0 * max(c1p, c2p);
 
         return easing(ret_col * (1.0 - mod_flash) + mod_flash * vec4(1.0, 1.0, 1.0, 1.0), 1.5);
@@ -116,7 +119,10 @@ export default class GameScene extends Phaser.Scene {
     void main() {
         mainImage(gl_FragColor, gl_FragCoord.xy);
     }
-    `;
+`;
+
+
+
 
     // Crear el shader como un BaseShader
     const baseShader = new Phaser.Display.BaseShader('fondoBatalla', fragmentShader);

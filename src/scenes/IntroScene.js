@@ -27,7 +27,7 @@ export default class IntroScene extends Phaser.Scene {
       this.playMusic(); // Si el contexto no está suspendido, reproducir directamente
     }
     // Background
-    const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'rug')
+    const background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'portada')
     .setOrigin(0, 0);
 
     // Title with custom font
