@@ -302,7 +302,35 @@ export default class GameScene extends Phaser.Scene {
   }
   
 
+
   
+
+//el +punticaion amarilla 
+  showScorePopups(winningCards, score) {
+    winningCards.forEach(card => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      const valueText = this.add.text(sprite.x, sprite.y, `+${score}`, {
+        fontSize: '32px',
+        fontStyle: 'bold',
+        color: '#ffeb3b',
+        stroke: '#000',
+        strokeThickness: 4,
+      }).setOrigin(0.5);
+  
+      this.tweens.add({
+        targets: valueText,
+        y: sprite.y - 100,
+        scale: { from: 1.5, to: 1 },
+        alpha: { from: 1, to: 0 },
+        duration: 5000,
+        ease: 'Back.easeOut',
+        onComplete: () => valueText.destroy()
+      });
+    });
+  }
+
 highlightWinningCards(result) {
     const winners = result.winningCards || [];
     winners.forEach(card => {
