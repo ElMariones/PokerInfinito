@@ -4,7 +4,8 @@ export default class UIButton extends Phaser.GameObjects.Container {
     static BUTTON_FRAMES = {
         green: { normal: 1, hover: 2, down: 3 },
         red:   { normal: 4, hover: 5, down: 6 },
-        sound: { normal: 7, hover: 8, down: 9 }
+        sound: { normal: 7, hover: 8, down: 9 },
+        yellow: { normal: 10, hover: 11, down: 12 }
     };
 
     /**
@@ -153,7 +154,6 @@ export default class UIButton extends Phaser.GameObjects.Container {
     disable() {
         this.disabled = true;
         this.bg.setFrame(0);
-        this.disableInteractive();
         this.label.setY(5);
     }
 
@@ -175,5 +175,6 @@ export default class UIButton extends Phaser.GameObjects.Container {
             ),
             Phaser.Geom.Rectangle.Contains
         );
+        this.label.setY(0);
     }
 }

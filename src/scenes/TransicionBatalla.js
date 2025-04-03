@@ -34,6 +34,12 @@ export default class TransicionBatalla extends Phaser.Scene {
   }
 
   create() {
+    // Stop the scene registered in the registry 'currentMap'.
+    const currentMap = this.registry.get('currentMap');
+    if (currentMap) {
+      this.scene.pause(currentMap);
+    }
+
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
 
