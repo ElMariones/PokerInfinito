@@ -82,9 +82,11 @@ export default class Dialogos extends Phaser.Scene {
         // Add container to main container
         this.container.add([this.graphics]);
 
-        // Make container interactive
-        this.container.setInteractive(new Phaser.Geom.Rectangle(x, y, rectWidth, rectHeight), Phaser.Geom.Rectangle.Contains);
-        this.container.on('pointerdown', () => this.nextDialogLine());
+        // Make the entire game screen interactive
+        this.input.on('pointerdown', () => this.nextDialogLine());
+        
+        // Add keyboard input for 'E' key
+        this.input.keyboard.on('keydown-E', () => this.nextDialogLine());
     }
 
     startDialog(npc, background) {
