@@ -3,6 +3,7 @@ import UIButton from '../utils/Button.js';
 export default class UIScene extends Phaser.Scene {  
   constructor() {
     super({ key: 'UIScene', active: false });
+    this.helpPopupVisible = false;
   }
 
   create() {
@@ -28,6 +29,8 @@ export default class UIScene extends Phaser.Scene {
 
     this.createScoreMarker(textStyle);
 
+    this.barajarPuntos = 10;
+
     // Score & Round Text
     this.scoreText = this.add.text(20, 20, 'Puntos: 0', textStyle);
     this.roundText = this.add.text(20, 60, 'Ronda: 1', textStyle);
@@ -46,103 +49,84 @@ export default class UIScene extends Phaser.Scene {
     const buttonSpacing = 150;
     const buttonY = this.cameras.main.height - 200 + 150;
 
-    // Submit Button - initially disabled (low opacity)
-    this.submitButton = this.add.image(this.cameras.main.width / 2 - buttonSpacing, buttonY, 'submitBtn')
-      .setOrigin(0.5)
-      .setScale(0.35)
-      .setInteractive()
-      .setAlpha(0.5);
-
-    this.submitButton.on('pointerover', () => {
-      this.submitButton.setTint(0xaaaaaa);
-      this.submitButton.setScale(0.40);
-    });
-    this.submitButton.on('pointerout', () => {
-      this.submitButton.clearTint();
-      this.submitButton.setScale(0.35);
-    });
-    this.submitButton.on('pointerdown', () => {
-      this.submitButton.setTint(0x333333);
+    // Submit Button
+    this.submitButton = new UIButton(this, this.cameras.main.width / 2 - buttonSpacing, buttonY, 'Enviar', 'green', () => {
       this.gameScene.onSubmitHand();
     });
+    this.submitButton.disable();
+    this.submitButton.setScale(2);
 
-    // Shuffle Button - initially disabled (low opacity)
-    this.shuffleButton = this.add.image(this.cameras.main.width / 2 + buttonSpacing, buttonY, 'shuffleBtn')
-      .setOrigin(0.5)
-      .setScale(0.35)
-      .setInteractive()
-      .setAlpha(0.5);
-    this.shuffleButton.disableInteractive();
-
-    this.shuffleButton.on('pointerover', () => {
-      if (this.shuffleButton.input.enabled) {
-        this.shuffleButton.setTint(0xaaaaaa);
-        this.shuffleButton.setScale(0.40);
-      }
-    });
-    this.shuffleButton.on('pointerout', () => {
-      this.shuffleButton.clearTint();
-      this.shuffleButton.setScale(0.35);
-    });
-    this.shuffleButton.on('pointerdown', () => {
-      if (this.shuffleButton.input.enabled) {
-        this.gameScene.score -= 10;
+    // Shuffle Button
+    this.shuffleButton = new UIButton(this, this.cameras.main.width / 2 + buttonSpacing, buttonY, 'Cambiar', 'red', () => {
+      if (!this.shuffleButton.disabled) {
+        this.gameScene.score -= this.barajarPuntos;
+        this.barajarPuntos = this.barajarPuntos * 2;
+        this.shuffleButton.disable();
         this.gameScene.shuffleAnimation();
       }
     });
+    this.shuffleButton.disable();
+    this.shuffleButton.setScale(2);
 
-    // Sort Button - positioned as before
-    this.sortButton = this.add.image(this.cameras.main.width / 2, buttonY, 'sortColor')
-      .setOrigin(0.5)
-      .setScale(0.2)
-      .setInteractive();
-
-    this.sortButton.on('pointerover', () => {
-      this.sortButton.setTint(0xaaaaaa);
-      this.sortButton.setScale(0.25);
-    });
-    this.sortButton.on('pointerout', () => {
-      this.sortButton.clearTint();
-      this.sortButton.setScale(0.2);
-    });
-    this.sortButton.on('pointerdown', () => {
-      this.sortButton.setTint(0x333333);
-      // Toggle the sort method in GameScene.
+    // Sort Button
+    this.sortButton = new UIButton(this, this.cameras.main.width / 2, buttonY, 'Palo', 'yellow', () => {
       this.gameScene.toggleSortMethod();
-      // Update the button texture to reflect the new sort method.
-      if (this.gameScene.sortMethod === 'number') {
-        this.sortButton.setTexture('sortColor');
-      } else {
-        this.sortButton.setTexture('sortNum');
-      }
+      // Update the button text based on the new sort method
+      this.sortButton.label.setText(this.gameScene.sortMethod === 'number' ? 'Palo' : 'Número');
     });
+
+    // Store a reference to the "Ordenar por:" text
+    const ordenarPorText = this.add.text(
+      this.cameras.main.width / 2,
+      buttonY - 30,
+      'Ordenar por:',
+      {
+        font: '11px RetroFont',
+        fill: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 2
+      }
+    ).setOrigin(0.5);
 
     // Listen for card selection changes to enable/disable buttons.
     this.gameScene.events.on('cards-changed', (selectedCount) => {
-      // For the shuffle button
-      if (selectedCount === 0 && this.shuffleButton.active) {
-        this.shuffleButton.disableInteractive();
-        this.shuffleButton.setAlpha(0.5);
-      } else if (this.shuffleButton.active) {
-        this.shuffleButton.setInteractive();
-        this.shuffleButton.setAlpha(1);
+      // For the shuffle button - enabled only when cards are selected
+      if (selectedCount === 0) {
+        this.shuffleButton.disable();
+      } else if (this.shuffleButton.disabled) {
+        this.shuffleButton.enable();
       }
-      // For the submit button - enabled only if exactly 5 cards are selected.
-      if (selectedCount !== 5 && this.submitButton.active) {
-        this.submitButton.setAlpha(0.5);
-      } else if (this.submitButton.active) {
-        this.submitButton.setInteractive();
-        this.submitButton.setAlpha(1);
+      
+      // For the submit button - enabled only if exactly 5 cards are selected
+      if (selectedCount !== 5) {
+        this.submitButton.disable();
+      } else {
+        this.submitButton.enable();
       }
     });
 
-    // Listen for the toggle event to hide/show the sort button during animations.
+    // Listen for shuffle animation completion to re-enable shuffle button
+    this.gameScene.events.on('shuffle-complete', () => {
+      this.shuffleButton.enable();
+    });
+
+    // Listen for the toggle event to hide/show the sort button, text, and all buttons during animations
     this.gameScene.events.on('toggle-sort-button', (visible) => {
       this.sortButton.setVisible(visible);
+      ordenarPorText.setVisible(visible);
+
+      // Toggle visibility and enable state for all buttons
+      [this.submitButton, this.shuffleButton, this.sortButton, ayudaButton].forEach(button => {
+        button.setVisible(visible);
+      });
     });
  
     const ayudaButton = new UIButton(this, 820, buttonY, 'Ayuda', 'green', () => {
-      this.showAyuda();
+      if (this.helpPopupVisible) {
+        this.closeAyuda();
+      } else {
+        this.showAyuda();
+      }
     });
   }
 
@@ -252,6 +236,8 @@ export default class UIScene extends Phaser.Scene {
   }
   
   showAyuda() {
+    if (this.helpPopupVisible) return;
+    
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
   
@@ -302,10 +288,18 @@ export default class UIScene extends Phaser.Scene {
     }).setOrigin(0.5);
   
     // Group all popup elements into a container for easier management
-    const popupContainer = this.add.container(0, 0, [popupBg, helpDisplay, closeHint]);
+    this.helpPopupContainer = this.add.container(0, 0, [popupBg, helpDisplay, closeHint]);
+    this.helpPopupVisible = true;
   
     // Allow clicking on the background to close the popup
-    popupBg.setInteractive().on('pointerdown', () => popupContainer.destroy());
+    popupBg.setInteractive().on('pointerdown', () => this.closeAyuda());
   }
   
+  closeAyuda() {
+    if (this.helpPopupContainer) {
+      this.helpPopupContainer.destroy();
+      this.helpPopupContainer = null;
+      this.helpPopupVisible = false;
+    }
+  }
 }

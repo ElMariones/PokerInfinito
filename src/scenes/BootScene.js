@@ -11,6 +11,7 @@ import portada from '../../assets/images/AllLUM.png';
 //import fondoBatallas from '../../assets/shaders/fondoBatallas.glsl.js';
 import botones from '../../assets/images/botones.png';
 import star from '../../assets/images/star.png';
+import moneda from '../../assets/images/moneda.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
@@ -266,6 +267,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('sortColor', sortColor);
 
     this.load.image('star', star);
+    this.load.image('moneda', moneda);
 
     //load sprites
     this.load.spritesheet('playerIdle', playerIdle, { frameWidth: 64, frameHeight: 64 });

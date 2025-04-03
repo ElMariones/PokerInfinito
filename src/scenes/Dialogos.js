@@ -82,9 +82,11 @@ export default class Dialogos extends Phaser.Scene {
         // Add container to main container
         this.container.add([this.graphics]);
 
-        // Make container interactive
-        this.container.setInteractive(new Phaser.Geom.Rectangle(x, y, rectWidth, rectHeight), Phaser.Geom.Rectangle.Contains);
-        this.container.on('pointerdown', () => this.nextDialogLine());
+        // Make the entire game screen interactive
+        this.input.on('pointerdown', () => this.nextDialogLine());
+        
+        // Add keyboard input for 'E' key
+        this.input.keyboard.on('keydown-E', () => this.nextDialogLine());
     }
 
     startDialog(npc, background) {
@@ -94,7 +96,7 @@ export default class Dialogos extends Phaser.Scene {
                 case 'samuel':
                     if (stage === 0) {
                         // Initial dialog with Samuel at stage 0
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 10, rounds: 5, scene: this.gameScene };
+                        this.transitionData = { npc: 'samuel', pointsNeeded: 400, rounds: 3, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                             { character: "dante", text: "¿Cómo sabes mi nombre?" },

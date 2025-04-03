@@ -132,6 +132,13 @@ export default class GameScene extends Phaser.Scene {
     this.roundNumber = 1;
     this.cardSprites = [];
 
+        // --- LAUNCH UI SCENE ---
+        if (this.scene.isActive('UIScene')) {
+          this.scene.stop('UIScene');
+        }
+        this.scene.start('UIScene');
+        this.scene.bringToTop('UIScene');
+
     // Inventario del jugador
     this.inventory = new Inventory(this);
 
@@ -151,13 +158,6 @@ export default class GameScene extends Phaser.Scene {
 
     // Deal initial hand of 10 cards
     this.dealNewHand();
-
-    // --- LAUNCH UI SCENE ---
-    if (this.scene.isActive('UIScene')) {
-      this.scene.stop('UIScene');
-    }
-    this.scene.launch('UIScene');
-    this.scene.bringToTop('UIScene');
   }
 
   // Called by the UI scene’s "Shuffle" button
@@ -684,6 +684,7 @@ highlightWinningCards(result) {
     // Si no hay cartas seleccionadas, actualizar el marcador a 0
     if (this.selectedCards.length === 0) {
       this.scene.get('UIScene').updateScoreMarker(0, 0);
+      this.scene.get('UIScene').shuffleButton.disable();
       return;
     } 
 
