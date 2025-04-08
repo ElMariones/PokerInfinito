@@ -52,6 +52,15 @@ import gemelosWalk from '../../assets/images/sprites/gemelos/Walk.png';
 import ovejaIdle from '../../assets/images/sprites/oveja/Idle.png';
 import ovejaWalk from '../../assets/images/sprites/oveja/Walk.png';
 
+import alienIdle from '../../assets/images/sprites/alien/Idle.png';
+import rubioIdle from '../../assets/images/sprites/rubio/Idle.png';
+import calvoIdle from '../../assets/images/sprites/calvo/Idle.png';
+import hermenegildoIdle from '../../assets/images/sprites/hermenegildo/Idle.png';
+import chicaIdle from '../../assets/images/sprites/chica/Idle.png';
+import pacoIdle from '../../assets/images/sprites/paco/Idle.png';
+import robertoIdle from '../../assets/images/sprites/roberto/Idle.png';
+import pelirrojoIdle from '../../assets/images/sprites/pelirrojo/Idle.png';
+
 //import pictures dialogos
 
 import samuel from '../../assets/images/samuel.png';
@@ -71,6 +80,14 @@ import cow from '../../assets/images/cow.png';
 import guard from '../../assets/images/guard.png';
 import big_man from '../../assets/images/big_man.png';
 
+import alien from '../../assets/images/alien.png';
+import rubio from '../../assets/images/rubio.png';
+import calvo from '../../assets/images/calvo.png';
+import hermenegildo from '../../assets/images/hermenegildo.png';
+import chica from '../../assets/images/chica.png';
+import paco from '../../assets/images/paco.png';
+import roberto from '../../assets/images/roberto.png';
+import pelirrojo from '../../assets/images/pelirrojo.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -296,6 +313,15 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('ovejaIdle', ovejaIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('ovejaWalk', ovejaWalk, { frameWidth: 64, frameHeight: 64 });
 
+    this.load.spritesheet('alienIdle', alienIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('rubioIdle', rubioIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('calvoIdle', calvoIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('hermenegildoIdle', hermenegildoIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('chicaIdle', chicaIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('pacoIdle', pacoIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('robertoIdle', robertoIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('pelirrojoIdle', pelirrojoIdle, { frameWidth: 64, frameHeight: 64 });
+
     // Load the dialog pictures
     this.load.image('samuel', samuel);
     this.load.image('dante', dante);
@@ -308,6 +334,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('hombre', hombre);
     this.load.image('vaca', vaca);
     this.load.image('gordo', gordo);
+    this.load.image('alien', alien);
+    this.load.image('rubio', rubio);
+    this.load.image('calvo', calvo);
+    this.load.image('hermenegildo', hermenegildo);
+    this.load.image('chica', chica);
+    this.load.image('paco', paco);
+    this.load.image('roberto', roberto);
+    this.load.image('pelirrojo', pelirrojo);
     
     this.load.image('broken_car', broken_car);
     this.load.image('cow', cow);
@@ -401,7 +435,7 @@ export default class BootScene extends Phaser.Scene {
     // In a BootScene or before starting game scenes
     this.registry.set('coins', 150);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
-    this.registry.set('stage', 0);
+    this.registry.set('stage', 4);
     this.registry.set('musicEnabled', true);
     this.scene.start('IntroScene');
   }
