@@ -70,6 +70,8 @@ export default class MapOlvido extends Phaser.Scene {
     this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
     this.npcManager.createAnimations();
     const helena = this.npcManager.addNPC('helena', 177, 120, 'idle-down', false);
+    const pelirrojo = this.npcManager.addNPC('pelirrojo', 401, 380, 'idle-down', true);
+    //401, 380
     this.npcArray = this.npcManager.getAllNPCs();
 
     // Music

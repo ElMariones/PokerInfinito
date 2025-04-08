@@ -172,7 +172,20 @@ export default class MapScene extends Phaser.Scene {
 
     // Add NPCs
     const oveja = this.npcManager.addNPC('oveja', 154, 872, 'idle-down', false);
-    
+    const rubio = this.npcManager.addNPC('rubio', 1295, 543, 'idle-down', true);
+    const alien = this.npcManager.addNPC('alien', 945, 1900, 'idle-down', true);
+    const hermenegildo = this.npcManager.addNPC('hermenegildo', 950, 845, 'idle-down', true);
+    const chica = this.npcManager.addNPC('chica', 1002, 1148, 'idle-down', true);
+    const paco = this.npcManager.addNPC('paco', 481, 476, 'idle-down', true);
+    //tienda 950, 845
+    //bajo mesa parque 817, 1020
+    //arriba parque 466, 796
+    //casa arriba 481, 476
+    //farola al lado bandido 1072, 508
+    //parque abajo fuera 1002, 1148
+    //abajo olvido 145, 1948
+    //calle abajo dispenser 583, 2428
+
     this.npcManager.getAllNPCs().forEach(npc => {
       npc.setPipeline('Light2D');
     });
