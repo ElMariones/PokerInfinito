@@ -63,7 +63,7 @@ class JokerManager {
       this.jokerInfoText.destroy();
     }
     
-    this.jokerInfoText = this.scene.add.text(x, y, joker.name, {
+    this.jokerInfoText = this.scene.add.text(x, y, joker.description, {
       fontSize: '16px',
       backgroundColor: '#000000',
       padding: { x: 5, y: 5 },

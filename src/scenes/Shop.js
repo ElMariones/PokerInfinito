@@ -34,7 +34,7 @@ export default class ShopScene extends Phaser.Scene {
 
         // Loop through each selected joker and display its details
         jokerOptions.forEach((joker, index) => {
-            const { id, name, image, effect, price } = joker;
+            const { id, name, image, description, price } = joker;
             const yPos = startY + index * rowHeight;
 
             // Create a plane for the joker image with the provided postFX effect
@@ -54,7 +54,7 @@ export default class ShopScene extends Phaser.Scene {
             // Display the Joker's name above the image
             this.add.text(textX, yPos - 60, name, { font: '20px RetroFont', fill: '#fff' }).setOrigin(0, 0);
             // Display the Joker's effect as a description
-            this.add.text(textX, yPos - 30, effect, { font: '10px RetroFont', fill: '#ddd' }).setOrigin(0, 0);
+            this.add.text(textX, yPos - 30, description, { font: '10px RetroFont', fill: '#ddd' }).setOrigin(0, 0);
             // Display the Joker's price
             this.add.text(textX, yPos, `Precio: ${price} monedas`, { font: '16px RetroFont', fill: '#fff' }).setOrigin(0, 0);
 

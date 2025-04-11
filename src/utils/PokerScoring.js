@@ -143,12 +143,12 @@ export function evaluateHand(cards, playerContext, inventory) {
     chips += cardValue;
   });
 
-  applyJokerEffects(cards, playerContext, inventory);
+  applyJokerEffects(cards, playerContext, inventory, handType);
 
   // Calculate final score with joker effects applied
-  const finalScore = Math.round((baseScore + chips) * (multiplier + playerContext.multiplier));
+  const finalScore = Math.round((baseScore + chips + playerContext.chips) * (multiplier + playerContext.multiplier));
 
-  console.log(`Final Score: ${finalScore}, Chips: ${chips}, Multiplier: ${multiplier}, playerContext Multiplier: ${playerContext.multiplier}`);
+  console.log(`Final Score: ${finalScore},baseScore: ${baseScore}, Chips: ${chips}, Multiplier: ${multiplier}, playerContext Multiplier: ${playerContext.multiplier}`);
 
   return { handType, score: finalScore, winningCards };
 }
@@ -242,7 +242,7 @@ export function estimateHand(cards) {
 /**
  * Apply joker effects to the hand
  */
-function applyJokerEffects(cards, context, inventory) {
+function applyJokerEffects(cards, context, inventory, handType) {
   // Get the player's owned jokers from the registry
   const ownedJokers = inventory.getOwnedJokers();
   if (ownedJokers.length === 0) return; // No jokers to apply
@@ -253,10 +253,10 @@ function applyJokerEffects(cards, context, inventory) {
     
     try {
       // Create a function from the effect string
-      const effectFn = new Function('cards', 'context', joker.effect);
+      const effectFn = new Function('cards', 'context', 'handType', 'ownedJokers.length', joker.effect);
       
       // Apply the effect to the context
-      effectFn(cards, context);
+      effectFn(cards, context, handType, ownedJokers.length);
     } catch (error) {
       console.error(`Error applying joker effect for ${joker.name}:`, error);
     }
