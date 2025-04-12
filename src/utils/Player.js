@@ -1,42 +1,28 @@
 import Phaser from 'phaser';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  /**
-   * @param {Phaser.Scene} scene - The scene that this player belongs to
-   * @param {number} x - Initial X position
-   * @param {number} y - Initial Y position
-   * @param {string} textureKey - The texture key (e.g. 'playerIdle') loaded in preload()
-   */
   constructor(scene, x, y, textureKey) {
     super(scene, x, y, textureKey);
 
-    // 1) Add the player to the scene and enable physics
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    // 3) Adjust the hitbox if needed
     this.body.setSize(20, 28);
     this.body.setOffset(22, 36);
 
-    // 4) Keep track of last direction so we know which idle animation to show
     this.lastDirection = 'down';
-
-    // 5) Setup default animation
     this.play('idle-down');
 
-    // 6) Create the input keys for movement (W, A, S, D)
     this.cursors = scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D
     });
+
+    this.speed = 180; // Velocidad constante
   }
 
-  /**
-   * Static method to define all player animations.
-   * Call this once in your scene (e.g., in create()) before creating the Player.
-   */
   static createPlayerAnimations(scene) {
     // Idle animations
     if (!scene.anims.exists('idle-up')) {
@@ -75,7 +61,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       });
     }
 
-    // Walk animations (based on your Walk.png sprite, 8 frames per direction)
+    // Walk animations
     if (!scene.anims.exists('walk-up')) {
       scene.anims.create({
         key: 'walk-up',
@@ -113,53 +99,37 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  /**
-   * Called every frame from the Scene’s update().
-   * Handles movement logic & plays correct animations.
-   */
   update() {
-    const speed = 200;
-    const up = this.cursors.up.isDown;
-    const down = this.cursors.down.isDown;
-    const left = this.cursors.left.isDown;
-    const right = this.cursors.right.isDown;
+    const { up, down, left, right } = this.cursors;
+    const velocity = new Phaser.Math.Vector2(0, 0);
 
-    // Determine the last direction pressed
-    if (up) {
+    if (up.isDown) {
+      velocity.y = -1;
       this.lastDirection = 'up';
-    } else if (down) {
+    } else if (down.isDown) {
+      velocity.y = 1;
       this.lastDirection = 'down';
-    } else if (left) {
+    }
+
+    if (left.isDown) {
+      velocity.x = -1;
       this.lastDirection = 'left';
-    } else if (right) {
+    } else if (right.isDown) {
+      velocity.x = 1;
       this.lastDirection = 'right';
     }
 
-    // If zero directions are pressed, go idle
-    if (!up && !down && !left && !right) {
-      this.setVelocity(0);
-      this.play(`idle-${this.lastDirection}`, true);
-      return;
-    }
+    velocity.normalize().scale(this.speed);
+    this.setVelocity(velocity.x, velocity.y);
 
-    // Move in the lastDirection we have stored
-    switch (this.lastDirection) {
-      case 'up':
-        this.setVelocity(0, -speed);
-        this.play('walk-up', true);
-        break;
-      case 'down':
-        this.setVelocity(0, speed);
-        this.play('walk-down', true);
-        break;
-      case 'left':
-        this.setVelocity(-speed, 0);
-        this.play('walk-left', true);
-        break;
-      case 'right':
-        this.setVelocity(speed, 0);
-        this.play('walk-right', true);
-        break;
+    // Elegir animación según movimiento
+    if (velocity.length() === 0) {
+      this.play(`idle-${this.lastDirection}`, true);
+    } else {
+      const animKey = `walk-${this.lastDirection}`;
+      if (this.anims.currentAnim?.key !== animKey) {
+        this.play(animKey, true);
+      }
     }
   }
 }
