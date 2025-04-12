@@ -80,7 +80,6 @@ export default class MapCocinaDante extends Phaser.Scene {
   }
 
   update() {
-    console.log("x: " + this.player.x + " y: " + this.player.y)
     this.player.update();
     this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
