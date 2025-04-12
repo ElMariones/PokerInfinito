@@ -26,6 +26,7 @@ export default class GameScene extends Phaser.Scene {
     // Contexto del jugador
     this.playerContext = {
       handType: '',
+      chips: 0,
       baseScore: 0,
       winningCards: [],
       multiplier: 1,
@@ -146,7 +147,7 @@ export default class GameScene extends Phaser.Scene {
     this.jokerManager = new JokerManager(this, this.inventory);
   
     // For testing: Add the first 5 jokers to inventory
-    this.inventory.addJoker();
+    this.inventory.addFiveJokers();
     
     // Display jokers
     this.jokerManager.displayJokers();
