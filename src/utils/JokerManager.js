@@ -29,25 +29,24 @@ class JokerManager {
     }
     
     // Display them in a row at the top
-    const spacing = 80;
-    const totalWidth = (ownedJokers.length - 1) * spacing;
-    const startX = (this.scene.cameras.main.width / 2) - (totalWidth / 2);
-    const y = 75;
+    const spacing = 100;
+    const startX = this.scene.cameras.main.width - (ownedJokers.length * spacing) - 20; 
+    const y = 100; 
     
     ownedJokers.forEach((joker, index) => {
       const x = startX + (index * spacing);
       const sprite = this.scene.add.image(x, y, joker.image)
-        .setScale(0.3)
+        .setScale(0.7)
         .setInteractive();
         
       // Add hover effects to show joker details
       sprite.on('pointerover', () => {
-        sprite.setScale(0.4);
-        this.showJokerInfo(joker, x, y + 50);
+        sprite.setScale(0.9);
+        this.showJokerInfo(joker);
       });
       
       sprite.on('pointerout', () => {
-        sprite.setScale(0.3);
+        sprite.setScale(0.7);
         if (this.jokerInfoText) {
           this.jokerInfoText.destroy();
           this.jokerInfoText = null;
@@ -58,18 +57,22 @@ class JokerManager {
     });
   }
   
-  showJokerInfo(joker, x, y) {
+  showJokerInfo(joker) {
     if (this.jokerInfoText) {
       this.jokerInfoText.destroy();
     }
+
+    const x = this.scene.cameras.main.width - 125;
+    const y = 175; 
     
     this.jokerInfoText = this.scene.add.text(x, y, joker.description, {
       fontSize: '16px',
       backgroundColor: '#000000',
       padding: { x: 5, y: 5 },
       color: '#ffffff',
-      align: 'center'
-    }).setOrigin(0.5);
+      align: 'left',
+      wordWrap: { width: 300 }
+    }).setOrigin(1, 0);
   }
   
   // Animate joker effect when it's applied
