@@ -57,12 +57,12 @@ export default class MapCocinaDante extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
 
     // Music
-    if (this.scene.sound) {
-      this.scene.sound.stopAll();
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.music = this.sound.add('cocinaMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
     }
-     this.music = this.sound.add('asadorMusic', { volume: 0.5, loop: true });
-     this.music.play();
-
     this.doorManager = new DoorManager(this, [
       { x: 726, y: 470, toScene: 'MapScene', spawnX: 187, spawnY: 2448 },
       { x: 726, y: 260, toScene: 'MapScene', spawnX: 187, spawnY: 2448 }, //Cuarto de Dante
