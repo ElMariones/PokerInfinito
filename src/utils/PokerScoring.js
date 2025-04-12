@@ -253,10 +253,10 @@ function applyJokerEffects(cards, context, inventory, handType) {
     
     try {
       // Create a function from the effect string
-      const effectFn = new Function('cards', 'context', 'handType', 'ownedJokers.length', joker.effect);
+      const effectFn = new Function('cards', 'context', 'handType', 'ownedJokers', 'inventory', joker.effect);
       
       // Apply the effect to the context
-      effectFn(cards, context, handType, ownedJokers.length);
+      effectFn(cards, context, handType, ownedJokers, inventory);
     } catch (error) {
       console.error(`Error applying joker effect for ${joker.name}:`, error);
     }
