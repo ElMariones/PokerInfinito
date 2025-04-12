@@ -153,7 +153,7 @@ import doradoJoker from '../../assets/images/jokers/doradoJoker.png';
 import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
 import mapSceneMusic from '../../assets/audio/Space_Atmosphere.mp3';
 import olvidoMusic from '../../assets/audio/Night_of_the_Streets.mp3';
-import creditsMusic from '../../assets/audio/main_menu_music.ogg';
+import cocinaMusic from '../../assets/audio/main_menu_music.ogg';
 import mainMenuMusic from '../../assets/audio/ambient_menu.mp3';
 import asadorMusic from '../../assets/audio/life_in_corrupted_binary.flac';
 import puertoMusic from '../../assets/audio/merchants_and_sea_salt.wav';
@@ -392,7 +392,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.audio('mapSceneMusic', mapSceneMusic);
     this.load.audio('olvidoMusic', olvidoMusic);
     this.load.audio('mainMenuMusic', mainMenuMusic);
-    this.load.audio('creditsMusic', creditsMusic);
+    this.load.audio('cocinaMusic', cocinaMusic);
     this.load.audio('asadorMusic', asadorMusic);
     this.load.audio('puertoMusic', puertoMusic);
     this.load.audio('ocean', ocean);
