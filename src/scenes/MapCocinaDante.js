@@ -31,6 +31,7 @@ export default class MapCocinaDante extends Phaser.Scene {
 
     // 4) Set collisions
     layerSuelos.setCollisionByProperty({}); // Vacío: ningún tile cumple con ninguna propiedad, así que nada colisiona
+    layerAdornos.setCollisionByProperty({});
     layerPared.setCollisionByExclusion([-1]);
     layerMobiliario.setCollisionByExclusion([-1]);
 
@@ -42,6 +43,11 @@ export default class MapCocinaDante extends Phaser.Scene {
     // Collisions with the solid layers
     this.physics.add.collider(this.player, layerPared);
     this.physics.add.collider(this.player, layerMobiliario);
+
+    layerMobiliario.setDepth(1); // o cualquier valor más bajo
+    layerAdornos.setDepth(999); // para que esté por encima de Dante
+    this.player.setDepth(this.player.y); // para que el jugador quede "entre" los layers correctamente
+
    
     // Camera settings
     this.cameras.main.startFollow(this.player);
@@ -58,7 +64,8 @@ export default class MapCocinaDante extends Phaser.Scene {
      this.music.play();
 
     this.doorManager = new DoorManager(this, [
-      { x: 320, y: 614, toScene: 'MapScene', spawnX: 862, spawnY: 2431 },
+      { x: 726, y: 470, toScene: 'MapScene', spawnX: 187, spawnY: 2448 },
+      { x: 726, y: 260, toScene: 'MapScene', spawnX: 187, spawnY: 2448 }, //Cuarto de Dante
       // Agrega más puertas según sea necesario
     ], this.music);
 
@@ -73,6 +80,7 @@ export default class MapCocinaDante extends Phaser.Scene {
   }
 
   update() {
+    console.log("x: " + this.player.x + " y: " + this.player.y)
     this.player.update();
     this.npcManager.updateNPCs();
     this.doorManager.update(this.player);

@@ -139,7 +139,7 @@ export default class IntroScene extends Phaser.Scene {
         }
 
         this.sound.stopAll();
-        this.scene.start('MapCocinaDante');
+        this.scene.start('MapScene');
       }
     );
 

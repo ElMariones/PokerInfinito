@@ -138,7 +138,15 @@ export default class MapScene extends Phaser.Scene {
         toScene: 'MapRincon',
         spawnX: 956,
         spawnY: 928
+      },
+      {
+        x: 187, 
+        y: 2410, 
+        toScene: 'MapCocinaDante', 
+        spawnX: 705, 
+        spawnY: 489 
       }
+
     ];
     this.doorManager = new DoorManager(this, this.doors, this.songs);
 
@@ -262,6 +270,7 @@ export default class MapScene extends Phaser.Scene {
   }
 
   update() {
+    console.log("x: " + this.player.x + " y: " + this.player.y)
     this.player.update();
     this.npcManager.updateNPCs();
     this.doorManager.update(this.player);
