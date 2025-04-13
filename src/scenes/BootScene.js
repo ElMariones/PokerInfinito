@@ -26,6 +26,18 @@ import rpg from '../../assets/maps/images/rpg.png';
 import tavernCooking from '../../assets/maps/images/tavern-cooking.png';
 import taverDeco from '../../assets/maps/images/tavern-deco.png';
 
+import bookShelf from '../../assets/maps/images/bookshelf-brown.png';
+import drawerShelf from '../../assets/maps/images/drawer_shelf-brown.png';
+import habitacionInside1 from '../../assets/maps/images/house_inside.png';
+import suelos from '../../assets/maps/images/Inside_A2.png';
+import paredes from '../../assets/maps/images/Inside_A4.png';
+import habitacionInside2 from '../../assets/maps/images/Inside_B.png';
+import TV from '../../assets/maps/images/pixelart-tv-iso_0.png';
+import windows from '../../assets/maps/images/windows.png';
+import TVBig from '../../assets/maps/images/tv.png';
+
+
+
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
 import sortColor from '../../assets/images/sortcolor.png';
@@ -84,7 +96,7 @@ import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 import mapaextCasino from '../../assets/maps/exterior_casino.json';
-
+import mapaHabitacion from '../../assets/maps/habitacion.json';
 //importar jokers
 import joker1 from '../../assets/images/jokers/joker1.png';
 import gilitoJoker from '../../assets/images/jokers/gilitoJoker.png';
@@ -331,6 +343,16 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('rpg', rpg);
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
+    this.load.image('bookShelf', bookShelf);
+    this.load.image('drawerShelf', drawerShelf);
+    this.load.image('habitacionInside1', habitacionInside1);
+    this.load.image('suelos', suelos);
+    this.load.image('paredes', paredes);
+    this.load.image('habitacionInside2', habitacionInside2);
+    this.load.image('TV', TV);
+    this.load.image('windows', windows);
+    this.load.image('TVBig', TVBig);
+
 
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
@@ -340,6 +362,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
+    this.load.tilemapTiledJSON('habitacionMap', mapaHabitacion);
 
     // Load music
     this.load.audio('rain', rain);
