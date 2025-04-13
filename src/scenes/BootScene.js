@@ -408,6 +408,8 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
     this.load.tilemapTiledJSON('cocinaDanteMap', mapCocinaDante);
+    this.load.tilemapTiledJSON('habitacionMap', mapaHabitacion);
+
 
     // Load music
     this.load.audio('rain', rain);
