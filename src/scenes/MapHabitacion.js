@@ -49,3 +49,63 @@ const layerDecoracionPared = map.createLayer('walldecoration', todosLosTilesets,
 const layerVentanas = map.createLayer('windows', todosLosTilesets, 0, 0);
 const layerMobiliario = map.createLayer('furniture', todosLosTilesets, 0, 0);
 const layerEncimaMobiliario = map.createLayer('onTopOfFurniture', todosLosTilesets, 0, 0);
+// 4) Set collisions
+layerPared.setCollisionByExclusion([-1]);
+layerMobiliario.setCollisionByExclusion([-1]);
+layerEncimaMobiliario.setCollisionByExclusion([-1]);
+
+
+    // 5) Player logic
+    Player.createPlayerAnimations(this);
+    // Create player at the specified (or default) position
+    this.player = new Player(this, startX, startY, 'playerIdle');
+
+// 4b) Add physics collisions
+this.physics.add.collider(this.player, layerPared);
+this.physics.add.collider(this.player, layerMobiliario);
+this.physics.add.collider(this.player, layerEncimaMobiliario);
+
+    // Camera settings
+    this.cameras.main.startFollow(this.player);
+    this.cameras.main.setZoom(2);
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.player.setCollideWorldBounds(true);
+
+    // Music
+    if (this.scene.sound) {
+      this.scene.sound.stopAll();
+    }
+     this.music = this.sound.add('asadorMusic', { volume: 0.5, loop: true });
+     this.music.play();
+
+    this.doorManager = new DoorManager(this, [
+      { x: 320, y: 614, toScene: 'MapScene', spawnX: 862, spawnY: 2431 },
+      // Agrega más puertas según sea necesario
+    ], this.music);
+
+    //this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)
+    //this.npcManager.createAnimations()
+
+    //this.npcArray = this.npcManager.getAllNPCs()
+
+    this.input.keyboard.on('keydown-E', () => {
+      this.tryInteract()
+    });
+  }
+
+  update() {
+    this.player.update();
+    //this.npcManager.updateNPCs();
+    this.doorManager.update(this.player);
+  }
+
+  tryInteract() {
+    if (this.doorManager.nearestDoor) {
+      this.doorManager.tryInteract(); // Delegamos la interacción con puertas
+      return; // Si hay una puerta, no se verifica lo de los NPCs
+    }
+    
+    //this.npcManager.tryInteract();
+  }
+}
