@@ -116,6 +116,7 @@ import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 import mapaextCasino from '../../assets/maps/exterior_casino.json';
 import mapCocinaDante from '../../assets/maps/interior_cocinaDante.json';
+import mapaHabitacion from '../../assets/maps/habitacion.json';
 
 //importar jokers
 import joker1 from '../../assets/images/jokers/joker1.png';
