@@ -15,6 +15,7 @@ import MapRicon from './scenes/MapRincon.js';
 import MapOlvido from './scenes/MapOlvido.js';
 import MapCasino from './scenes/MapCasino.js';
 import MapCocinaDante from './scenes/MapCocinaDante.js';
+import MapHabitacion from './scenes/MapHabitacion.js';
 import UIOverlay from './scenes/UIOverlay.js';
 import Shop from './scenes/Shop.js';
 import JokersInventoryScene from './scenes/JokersInventoryScene.js';
@@ -60,6 +61,7 @@ let config = {
     UIOverlay,
     Shop,
     JokersInventoryScene,
+    MapHabitacion,
   ],
 
   // Register the plugin so it loads in each scene
