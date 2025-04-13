@@ -178,7 +178,7 @@ export default class TransicionBatalla extends Phaser.Scene {
         onStart: (fromScene, toScene, duration) => {
           DissolveMainCamera(fromScene, duration);
         },
-        data: { pointsNeeded: this.pointsNeeded, rounds: this.rounds, scene: this.gameScene, npc: this.npc  }
+        data: { pointsNeeded: this.pointsNeeded, rounds: this.rounds, scene: this.gameScene}
       });
     });
   }

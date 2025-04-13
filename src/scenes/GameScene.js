@@ -245,7 +245,33 @@ this.score += result.score;
 this.animateSelectedCards(result);
   }
 
- 
+  popUpCopas() {
+    const popup = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2 - 180,
+      '💔 ¡Las copas no puntúan contra Samuel!',
+      {
+        fontSize: '28px',
+        fontStyle: 'bold',
+        color: '#ff0033',
+        stroke: '#000000',
+        strokeThickness: 5,
+        fontFamily: 'RetroFont',
+        align: 'center'
+      }
+    ).setOrigin(0.5);
+
+    this.tweens.add({
+      targets: popup,
+      y: popup.y - 80,
+      alpha: { from: 1, to: 0 },
+      scale: { from: 1.2, to: 1 },
+      ease: 'Back.easeOut',
+      duration: 6000,
+      onComplete: () => popup.destroy()
+    });
+  }
+
   
 
   animateSelectedCards(result) {
