@@ -67,7 +67,7 @@ this.physics.add.collider(this.player, layerEncimaMobiliario);
 
     // Camera settings
     this.cameras.main.startFollow(this.player);
-    this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(4);
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.player.setCollideWorldBounds(true);
@@ -79,10 +79,16 @@ this.physics.add.collider(this.player, layerEncimaMobiliario);
      this.music = this.sound.add('asadorMusic', { volume: 0.5, loop: true });
      this.music.play();
 
-    this.doorManager = new DoorManager(this, [
-      { x: 320, y: 614, toScene: 'MapScene', spawnX: 862, spawnY: 2431 },
-      // Agrega más puertas según sea necesario
-    ], this.music);
+     this.doorManager = new DoorManager(this, [
+        {
+          x: 150, // misma x del spawn
+          y: 240, // misma y del spawn
+          toScene: 'MapCocinaDante',
+          spawnX: 726,
+          spawnY: 260
+        }
+      ], this.music);
+      
 
     //this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)
     //this.npcManager.createAnimations()
