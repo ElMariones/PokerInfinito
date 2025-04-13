@@ -49,6 +49,8 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.gameScene = data.scene;
+    this.npc = data.npc || null; // ← Añadimos esto
+
   }
 
   create() {
@@ -132,6 +134,10 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
+
+    this.playerContext.opponent = this.npc;
+    console.log('🎯 NPC actual:', this.npc);
+
 
         // --- LAUNCH UI SCENE ---
         if (this.scene.isActive('UIScene')) {
@@ -223,11 +229,24 @@ export default class GameScene extends Phaser.Scene {
       this.showAlertMessage('Selecciona 5 cartas para jugar');
       return;
     }
-
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
-    this.score += result.score;
-    this.animateSelectedCards(result);
+
+  // Castigo de Samuel: Si hay una copa, el resultado entero es 0
+  if (this.playerContext.opponent === 'samuel') {
+    const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
+    if (hasCopas ) {
+      result.score = 0;
+      this.popUpCopas();
+    
   }
+}
+
+this.score += result.score;
+this.animateSelectedCards(result);
+  }
+
+ 
+  
 
   animateSelectedCards(result) {
     const centerX = this.cameras.main.width / 2;
