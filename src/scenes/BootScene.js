@@ -25,6 +25,11 @@ import interior from '../../assets/maps/images/Interior.png';
 import rpg from '../../assets/maps/images/rpg.png';
 import tavernCooking from '../../assets/maps/images/tavern-cooking.png';
 import taverDeco from '../../assets/maps/images/tavern-deco.png';
+import paredes from '../../assets/maps/images/Inside_A4.png';
+import suelos from '../../assets/maps/images/Inside_A2.png';
+import muebles from '../../assets/maps/images/Inside_B.png';
+import paredes2 from '../../assets/maps/images/walls.png';
+import interior2 from '../../assets/maps/images/castle.png';
 
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
@@ -101,6 +106,7 @@ import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 import mapaextCasino from '../../assets/maps/exterior_casino.json';
+import mapCocinaDante from '../../assets/maps/interior_cocinaDante.json';
 
 //importar jokers
 import joker1 from '../../assets/images/jokers/joker1.png';
@@ -147,7 +153,7 @@ import doradoJoker from '../../assets/images/jokers/doradoJoker.png';
 import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
 import mapSceneMusic from '../../assets/audio/Space_Atmosphere.mp3';
 import olvidoMusic from '../../assets/audio/Night_of_the_Streets.mp3';
-import creditsMusic from '../../assets/audio/main_menu_music.ogg';
+import cocinaMusic from '../../assets/audio/main_menu_music.ogg';
 import mainMenuMusic from '../../assets/audio/ambient_menu.mp3';
 import asadorMusic from '../../assets/audio/life_in_corrupted_binary.flac';
 import puertoMusic from '../../assets/audio/merchants_and_sea_salt.wav';
@@ -365,6 +371,11 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('rpg', rpg);
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
+    this.load.image('paredes', paredes);
+    this.load.image('suelos', suelos);
+    this.load.image('muebles', muebles);
+    this.load.image('paredes2', paredes2);
+    this.load.image('interior2', interior2);
 
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
@@ -374,13 +385,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
+    this.load.tilemapTiledJSON('cocinaDanteMap', mapCocinaDante);
 
     // Load music
     this.load.audio('rain', rain);
     this.load.audio('mapSceneMusic', mapSceneMusic);
     this.load.audio('olvidoMusic', olvidoMusic);
     this.load.audio('mainMenuMusic', mainMenuMusic);
-    this.load.audio('creditsMusic', creditsMusic);
+    this.load.audio('cocinaMusic', cocinaMusic);
     this.load.audio('asadorMusic', asadorMusic);
     this.load.audio('puertoMusic', puertoMusic);
     this.load.audio('ocean', ocean);

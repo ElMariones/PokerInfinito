@@ -91,6 +91,10 @@ export default class MapScene extends Phaser.Scene {
       });
     }
 
+    // Luz que sigue al jugador
+    this.playerLight = this.lights.addLight(this.player.x, this.player.y, 120, 0xffffff, 0.65);
+
+
     // Music
     this.songs = [];
     if (this.registry.get('musicEnabled') === true) {
@@ -138,7 +142,15 @@ export default class MapScene extends Phaser.Scene {
         toScene: 'MapRincon',
         spawnX: 956,
         spawnY: 928
+      },
+      {
+        x: 187, 
+        y: 2410, 
+        toScene: 'MapCocinaDante', 
+        spawnX: 705, 
+        spawnY: 489 
       }
+
     ];
     this.doorManager = new DoorManager(this, this.doors, this.songs);
 
@@ -283,6 +295,8 @@ export default class MapScene extends Phaser.Scene {
     this.flickerLights.forEach(light => {
       light.intensity = 0.5 + (Math.random() - 0.5) * 0.05; // Intensity fluctuates roughly between 0.4 and 0.6
     });
+    // Actualizar la posición de la luz del jugador
+    this.playerLight.setPosition(this.player.x, this.player.y);
   }
 
   tryInteract() {

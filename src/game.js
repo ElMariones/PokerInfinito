@@ -14,6 +14,7 @@ import MapPuerto from './scenes/MapPuerto.js';
 import MapRicon from './scenes/MapRincon.js';
 import MapOlvido from './scenes/MapOlvido.js';
 import MapCasino from './scenes/MapCasino.js';
+import MapCocinaDante from './scenes/MapCocinaDante.js';
 import UIOverlay from './scenes/UIOverlay.js';
 import Shop from './scenes/Shop.js';
 import JokersInventoryScene from './scenes/JokersInventoryScene.js';
@@ -44,6 +45,7 @@ let config = {
   scene: [
     BootScene,
     IntroScene,
+    MapCocinaDante,
     MapScene,
     MapAsador,
     MapPuerto,
