@@ -56,6 +56,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
+    this.SamuelCastigo = false; // Variable para el castigo de Samuel
 
     // Background
     // Definir el shader directamente en el archivo
@@ -237,10 +238,8 @@ export default class GameScene extends Phaser.Scene {
     if (hasCopas ) {
       result.score = 0;
       this.popUpCopas();
-    
   }
 }
-
 this.score += result.score;
 this.animateSelectedCards(result);
   }
@@ -251,7 +250,7 @@ this.animateSelectedCards(result);
       this.cameras.main.height / 2 - 180,
       '💔 ¡Las copas no puntúan contra Samuel!',
       {
-        fontSize: '28px',
+        fontSize: '20px',
         fontStyle: 'bold',
         color: '#ff0033',
         stroke: '#000000',
@@ -267,7 +266,7 @@ this.animateSelectedCards(result);
       alpha: { from: 1, to: 0 },
       scale: { from: 1.2, to: 1 },
       ease: 'Back.easeOut',
-      duration: 6000,
+      duration: 8000,
       onComplete: () => popup.destroy()
     });
   }
@@ -286,8 +285,16 @@ this.animateSelectedCards(result);
     });
   
     this.animateCardsToCenter(result);
-  
+    if (this.playerContext.opponent === 'samuel') {
+      this.tintarCopas();
+    }
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
+      if (this.SamuelCastigo) {
+        this.time.delayedCall(1000, () => {
+          this.handleRoundEnd();
+        });
+        return;
+      }
       this.highlightWinningCards(result);
       this.showScorePopups2(result.winningCards, result.score);
   
@@ -305,6 +312,36 @@ this.animateSelectedCards(result);
     });
   }
   
+  tintarCopas() {
+    let found = false;
+    this.selectedCards.forEach(card => {
+      if (card.suit === 'copas') {
+        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+        if (sprite) {
+          sprite.setTint(0x880000); // rojo oscuro
+          found = true;
+          // Efecto visual: parpadeo leve para remarcar
+          this.tweens.add({
+            targets: sprite,
+            alpha: { from: 1, to: 0.4 },
+            yoyo: true,
+            repeat: 2,
+            duration: 200,
+            ease: 'Sine.easeInOut',
+            onComplete: () => {
+              sprite.setAlpha(1);
+            }
+          });
+        }
+      }
+    });
+    if (found) {
+      console.log("[SAMUEL] Castigo aplicado: cartas de copas detectadas");
+      this.SamuelCastigo = true;
+    } else {
+      this.SamuelCastigo = false;
+    }
+  }
   
   animateCardsToCenter(result) {
     const centerX = this.cameras.main.width / 2;
