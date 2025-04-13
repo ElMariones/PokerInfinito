@@ -31,6 +31,15 @@ import muebles from '../../assets/maps/images/Inside_B.png';
 import paredes2 from '../../assets/maps/images/walls.png';
 import interior2 from '../../assets/maps/images/castle.png';
 
+import bookShelf from '../../assets/maps/images/bookshelf-brown.png';
+import drawerShelf from '../../assets/maps/images/drawer_shelf-brown.png';
+import habitacionInside1 from '../../assets/maps/images/house_inside.png';
+import habitacionInside2 from '../../assets/maps/images/Inside_B.png';
+import TV from '../../assets/maps/images/pixelart-tv-iso_0.png';
+import windows from '../../assets/maps/images/windows.png';
+import TVBig from '../../assets/maps/images/tv.png';
+
+
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
 import sortColor from '../../assets/images/sortcolor.png';
