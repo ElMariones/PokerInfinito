@@ -266,6 +266,76 @@ case 'barrier_big_man':
     ];
     break;
 
+case 'calvo':
+    this.transitionData = { npc: 'calvo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "calvo", text: "¿Vas a hacer la ruta hasta el Casino Ébano? Mucha suerte, jovenzuelo... y recuerda: no todo lo que brilla son fichas." },
+        { character: "dante", text: "¿Usted ha estado allí? Hay algo en su mirada que me dice que ha visto cosas que no caben en una partida." },
+        { character: "calvo", text: "Vi más de lo que quise... y perdí más de lo que tenía. Si llegas, no te olvides de quién fuiste antes de la última mano." }
+    ];
+    break;
+
+case 'rubio':
+    this.transitionData = { npc: 'rubio', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "rubio", text: "¿Has ido ya al Puerto Azul? Está aquí al lado, hacia la derecha. Buen sitio para perder… o encontrar secretos." }
+    ];
+    break;
+
+case 'alien':
+    this.transitionData = { npc: 'alien', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "alien", text: "¡He venido desde Urano para enfrentarme a Helena… y me ha puesto en mi sitio! Lleva cuidado, y compra un Joker antes." },
+        { character: "dante", text: "¿Un alienígena que juega a las cartas? Esto ya está yendo más allá de lo que esperaba." },
+        { character: "alien", text: "Lo mismo pensé yo cuando llegué aquí." }
+    ];
+    break;
+
+case 'hermenegildo':
+    this.transitionData = { npc: 'hermenegildo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "hermenegildo", text: "Esto antes era una tienda de Jokers, ¡pero ahora ya todo el mundo compra online! Incluso han puesto un botón para comprar arriba a la izquierda… ¡Qué vergüenza!" },
+        { character: "dante", text: "Supongo que es más cómodo que venir aquí cada vez que quieres un Joker." },
+        { character: "hermenegildo", text: "Maldita modernidad." }
+    ];
+    break;
+
+case 'paco':
+    this.transitionData = { npc: 'paco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "paco", text: "Acabo de perder contra los gemelos en el Rincón del Bandido… esto de las cartas no es lo mío. Mejor vuelvo a estudiar." },
+        { character: "dante", text: "No es tan malo perder si aprendes algo… ¿Qué vas a estudiar?" },
+        { character: "paco", text: "Geografía. Los mapas no te gritan 'all-in' cuando te equivocas." }
+    ];
+    break;
+
+case 'roberto':
+    this.transitionData = { npc: 'roberto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "roberto", text: "¿Sabías que si no tienes cartas para una buena mano durante una batalla de cartas, siempre puedes barajar y conseguir nuevas cartas?" },
+        { character: "dante", text: "Interesante… ¿y qué pasa si lo haces demasiado?" },
+        { character: "roberto", text: "Pues vas perdiendo puntos... y cartas también. Es arriesgado pero puede valer la pena." }
+    ];
+    break;
+
+case 'chica':
+    this.transitionData = { npc: 'chica', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "chica", text: "¿Cuánto dinero tienes? ¿Sabes que tras una batalla, la diferencia de puntos entre los tuyos y el objetivo es el dinero que ganas? El otro día gané por más de 1000 puntos de diferencia y me saqué un sobresueldo." },
+        { character: "dante", text: "Entonces no solo se gana respeto… se gana también para la merienda." },
+        { character: "chica", text: "Exacto. Aquí todos jugamos por fama, fortuna o porque no hay otra forma de pagar el alquiler." }
+    ];
+    break;
+
+case 'pelirrojo':
+    this.transitionData = { npc: 'pelirrojo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "pelirrojo", text: "Estoy aquí practicando las escaleras de color para poder ganarle a Helena. El problema es que siempre me confundo… ¿Después del 6 va el 8 o el 9?" },
+        { character: "dante", text: "Creo que el 7 está entre esos dos." },
+        { character: "pelirrojo", text: "¿El 7? ¿Es que no sabes contar?" }
+    ];
+    break;
+
             default:
                 this.dialogLines = [];
                 this.startBattle();
