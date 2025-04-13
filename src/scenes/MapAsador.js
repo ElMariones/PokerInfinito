@@ -52,12 +52,12 @@ export default class MapAsador extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.player.setCollideWorldBounds(true);
 
-    // Music
-    if (this.scene.sound) {
-      this.scene.sound.stopAll();
-    }
-     this.music = this.sound.add('asadorMusic', { volume: 0.5, loop: true });
-     this.music.play();
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.music = this.sound.add('asadorMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
+    };
 
     this.doorManager = new DoorManager(this, [
       { x: 320, y: 614, toScene: 'MapScene', spawnX: 862, spawnY: 2431 },

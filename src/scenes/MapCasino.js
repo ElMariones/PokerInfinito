@@ -74,7 +74,12 @@ export default class MapCasino extends Phaser.Scene {
     this.npcArray = this.npcManager.getAllNPCs();
 
     // Music
-    this.songs = null;
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.music = this.sound.add('casinoMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
+    }
     this.doorManager = new DoorManager(this, [
         { x: 637, y: 1208, toScene: 'MapExtCasino', spawnX: 939, spawnY: 570 },
         // Agrega más puertas según sea necesario

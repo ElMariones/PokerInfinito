@@ -81,36 +81,41 @@ export default class MapExtCasino extends Phaser.Scene {
     }
 
     // New section for neon blue ("azul") lights:
-const azulLayer = map.getObjectLayer('azul');
-if (azulLayer && azulLayer.objects) {
-  // Optionally, create an array to hold these lights
-  this.neonAzulLights = [];
-  azulLayer.objects.forEach(lightObj => {
-    const lightX = lightObj.width ? lightObj.x + lightObj.width / 2 : lightObj.x;
-    const lightY = lightObj.height ? lightObj.y + lightObj.height / 2 : lightObj.y;
-    // Using a pure blue color (0x0000ff) with a higher intensity for a neon effect.
-    const newLight = this.lights.addLight(lightX, lightY, 300, 0x0000ff, 1);
-    this.neonAzulLights.push(newLight);
-  });
-}
+    const azulLayer = map.getObjectLayer('azul');
+    if (azulLayer && azulLayer.objects) {
+      // Optionally, create an array to hold these lights
+      this.neonAzulLights = [];
+      azulLayer.objects.forEach(lightObj => {
+        const lightX = lightObj.width ? lightObj.x + lightObj.width / 2 : lightObj.x;
+        const lightY = lightObj.height ? lightObj.y + lightObj.height / 2 : lightObj.y;
+        // Using a pure blue color (0x0000ff) with a higher intensity for a neon effect.
+        const newLight = this.lights.addLight(lightX, lightY, 300, 0x0000ff, 1);
+        this.neonAzulLights.push(newLight);
+      });
+    }
 
-// New section for neon red ("rojo") lights:
-const rojoLayer = map.getObjectLayer('rojo');
-if (rojoLayer && rojoLayer.objects) {
-  // Optionally, create an array to hold these lights
-  this.neonRojoLights = [];
-  rojoLayer.objects.forEach(lightObj => {
-    const lightX = lightObj.width ? lightObj.x + lightObj.width / 2 : lightObj.x;
-    const lightY = lightObj.height ? lightObj.y + lightObj.height / 2 : lightObj.y;
-    // Using a pure red color (0xff0000) with a higher intensity for a neon effect.
-    const newLight = this.lights.addLight(lightX, lightY, 300, 0xff0000, 1);
-    this.neonRojoLights.push(newLight);
-  });
-}
+    // New section for neon red ("rojo") lights:
+    const rojoLayer = map.getObjectLayer('rojo');
+    if (rojoLayer && rojoLayer.objects) {
+      // Optionally, create an array to hold these lights
+      this.neonRojoLights = [];
+      rojoLayer.objects.forEach(lightObj => {
+        const lightX = lightObj.width ? lightObj.x + lightObj.width / 2 : lightObj.x;
+        const lightY = lightObj.height ? lightObj.y + lightObj.height / 2 : lightObj.y;
+        // Using a pure red color (0xff0000) with a higher intensity for a neon effect.
+        const newLight = this.lights.addLight(lightX, lightY, 300, 0xff0000, 1);
+        this.neonRojoLights.push(newLight);
+      });
+    }
 
-  this.songs = null;
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.music = this.sound.add('extCasinoMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
+    }
 
-   this.doorManager = new DoorManager(this, [
+    this.doorManager = new DoorManager(this, [
       { x: 1199, y: 1577, toScene: 'MapScene', spawnX: 1200, spawnY: 74 },
       { x: 943, y: 524, toScene: 'MapCasino', spawnX: 637, spawnY: 1208 },
       // Agrega más puertas según sea necesario

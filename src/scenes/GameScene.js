@@ -26,6 +26,7 @@ export default class GameScene extends Phaser.Scene {
     // Contexto del jugador
     this.playerContext = {
       handType: '',
+      chips: 0,
       baseScore: 0,
       winningCards: [],
       multiplier: 1,
@@ -146,7 +147,7 @@ export default class GameScene extends Phaser.Scene {
     this.jokerManager = new JokerManager(this, this.inventory);
   
     // For testing: Add the first 5 jokers to inventory
-    this.inventory.addJoker();
+    //this.inventory.addFiveJokers();
     
     // Display jokers
     this.jokerManager.displayJokers();
@@ -243,7 +244,7 @@ export default class GameScene extends Phaser.Scene {
   
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
       this.highlightWinningCards(result);
-      this.showScorePopups(result.winningCards, result.score);
+      this.showScorePopups2(result.winningCards, result.score);
   
       this.time.delayedCall(600, () => {
         this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
@@ -377,6 +378,42 @@ export default class GameScene extends Phaser.Scene {
       });
     });
   }
+
+//diferente animacion a ver si os gusta mas
+  showScorePopups2(winningCards, score) {
+    winningCards.forEach(card => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      const valueText = this.add.text(sprite.x, sprite.y, `+${score}`, {
+        fontSize: '36px',
+        fontStyle: 'bold',
+        color: '#00ffcc',
+        stroke: '#003333',
+        strokeThickness: 4,
+      }).setOrigin(0.5);
+  
+      // Give it a random horizontal wiggle to feel more dynamic
+      const randomOffset = Phaser.Math.Between(-30, 30);
+      const finalY = sprite.y - 130;
+  
+      this.tweens.add({
+        targets: valueText,
+        y: finalY,
+        x: sprite.x + randomOffset,
+        scale: { from: 2, to: 1 },
+        alpha: { from: 1, to: 0 },
+        angle: { from: 0, to: Phaser.Math.Between(-20, 20) },
+        duration: 3000,
+        ease: 'Cubic.easeOut',
+        onComplete: () => valueText.destroy()
+      });
+    });
+  }
+
+
+
+
 
 highlightWinningCards(result) {
     const winners = result.winningCards || [];

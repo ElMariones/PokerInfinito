@@ -73,7 +73,15 @@ export default class MapPuerto extends Phaser.Scene {
     this.npcArray = this.npcManager.getAllNPCs();
 
     //Music
-    this.songs = null;
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.rainAudio = this.sound.add('ocean', { volume: 0.2, loop: true });
+      this.songs.push(this.rainAudio);
+      this.rainAudio.play();
+      this.music = this.sound.add('puertoMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
+    }
 
     // Inicializar el DoorManager después de todas las capas
     this.doorManager = new DoorManager(this, [
