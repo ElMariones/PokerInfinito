@@ -147,7 +147,7 @@ export default class GameScene extends Phaser.Scene {
     this.jokerManager = new JokerManager(this, this.inventory);
   
     // For testing: Add the first 5 jokers to inventory
-    this.inventory.addFiveJokers();
+    //this.inventory.addFiveJokers();
     
     // Display jokers
     this.jokerManager.displayJokers();
