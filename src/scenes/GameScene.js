@@ -247,7 +247,7 @@ export default class GameScene extends Phaser.Scene {
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
   
     // Castigo de Samuel: Si hay una copa, el resultado entero es 0
-    if (this.playerContext.opponent === 'helena') {
+    if (this.playerContext.opponent === 'samuel') {
       const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
       if (hasCopas) {
         result.score = 0;
@@ -300,7 +300,7 @@ export default class GameScene extends Phaser.Scene {
   // Castigo pescador
   // Timer para el castigo del Pescador
   startFishermanTimer() {
-    if (this.playerContext.opponent !== 'samuel') return;
+    if (this.playerContext.opponent !== 'pescador') return;
   
     // Limpiar timer anterior si existe
     if (this.fishermanTimer) {
@@ -458,7 +458,7 @@ export default class GameScene extends Phaser.Scene {
 
   // Resetear el timer cuando el jugador selecciona cartas
   resetFishermanTimer() {
-    if (this.playerContext.opponent === 'samuel') {
+    if (this.playerContext.opponent === 'pescador') {
       this.startFishermanTimer(); // Reiniciar el timer
     }
   }
@@ -474,7 +474,7 @@ export default class GameScene extends Phaser.Scene {
   
     this.animateCardsToCenter(result);
   
-    if (this.playerContext.opponent === 'helena') {
+    if (this.playerContext.opponent === 'samuel') {
       this.tintarCopas();
     }
   
