@@ -344,10 +344,10 @@ export default class GameScene extends Phaser.Scene {
 
   // Aplicar el castigo del Pescador
   applyFishermanPenalty() {
-    const numCardsToReplace = Math.min(3, this.playerHand.length);
+    const numCardsToReplace = Math.min(3, this.playerHand.length); // Máximo 3 cartas
     const cardsToReplace = [];
   
-    // Seleccionar cartas aleatorias
+    // Seleccionar 3 cartas aleatorias
     while (cardsToReplace.length < numCardsToReplace) {
       const randomIndex = Phaser.Math.Between(0, this.playerHand.length - 1);
       if (!cardsToReplace.includes(randomIndex)) {
@@ -355,70 +355,50 @@ export default class GameScene extends Phaser.Scene {
       }
     }
   
-    // Animación de cambio
-    cardsToReplace.forEach(index => {
-      const card = this.playerHand[index];
-      const sprite = this.cardSprites.find(s => s && s.texture.key === card.key); // Verificar que el sprite existe
+    // Marcar las cartas seleccionadas para el shuffle
+    this.selectedCards = cardsToReplace.map(index => this.playerHand[index]);
   
-      if (sprite) {
-        this.tweens.add({
-          targets: sprite,
-          scale: { from: 1, to: 1.2 },
-          alpha: { from: 1, to: 0 },
-          duration: 300,
-          yoyo: true,
-          onComplete: () => {
-            // Destruir el sprite antiguo
-            sprite.destroy();
+    // Ejecutar la animación de shuffle para estas cartas
+    this.shuffleAnimationForPenalty(() => {
+      // Después de la animación, reemplazar las cartas seleccionadas
+      this.replaceSelectedCards();
   
-            // Reemplazar carta si hay en el mazo
-            if (this.deck.length > 0) {
-              this.playerHand[index] = this.deck.pop();
-            } else {
-              // Si no hay cartas en el mazo, eliminarla
-              this.playerHand.splice(index, 1);
-            }
+      // Mostrar mensaje de penalización
+      this.showAlertMessage('¡Se han cambiado 3 cartas por tardar demasiado!');
   
-            // Crear un nuevo sprite para la carta reemplazada
-            if (this.playerHand[index]) {
-              const newSprite = this.add.image(sprite.x, sprite.y, this.playerHand[index].key)
-                .setScale(0.9)
-                .setInteractive();
-              this.cardSprites.push(newSprite);
-  
-              // Agregar eventos al nuevo sprite
-              newSprite.on('pointerover', () => {
-                if (!this.selectedCards.includes(this.playerHand[index])) {
-                  newSprite.setScale(0.95);
-                }
-              });
-              newSprite.on('pointerout', () => {
-                if (!this.selectedCards.includes(this.playerHand[index])) {
-                  newSprite.setScale(0.9);
-                  newSprite.clearTint();
-                }
-              });
-              newSprite.on('pointerdown', () => {
-                this.toggleCardSelection(this.playerHand[index], newSprite);
-              });
-            }
-          }
-        });
-      }
+      // Reiniciar el timer
+      this.resetFishermanTimer();
     });
+  }
+
+  shuffleAnimationForPenalty(callback) {
+    if (this.selectedCards.length === 0) return;
   
-    // Asegurarse de que siempre haya máximo 10 cartas
-    if (this.playerHand.length < 10 && this.deck.length > 0) {
-      const cardsToAdd = 10 - this.playerHand.length;
-      const newCards = drawCards(this.deck, cardsToAdd);
-      this.playerHand.push(...newCards);
-    }
+    const duration = 500;
+    const selectedSprites = this.cardSprites.filter(sprite =>
+      this.selectedCards.some(card => card.key === sprite.texture.key)
+    );
   
-    // Mostrar mensaje de penalización
-    this.showAlertMessage('¡Se han cambiado 3 cartas por tardar demasiado!');
+    selectedSprites.forEach(sprite => {
+      const randX = this.cameras.main.width / 2 + (Math.random() * 200 - 100);
+      const randY = this.cameras.main.height / 2 + (Math.random() * 200 - 100);
   
-    // Reiniciar timer
-    this.resetFishermanTimer();
+      // Aplicar múltiples efectos para hacerlo más dinámico
+      this.tweens.add({
+        targets: sprite,
+        x: randX,
+        y: randY,
+        scale: { from: 1.1, to: 1.0 }, // Escalado ligero para enfatizar
+        angle: { from: 0, to: 360 },   // Añadir rotación
+        duration: duration,
+        ease: 'Sine.easeInOut',
+        yoyo: true,
+        onComplete: () => {
+          // Al finalizar la animación, ejecutar el callback
+          if (callback) callback();
+        }
+      });
+    });
   }
 
   // Resetear el timer cuando el jugador selecciona cartas
