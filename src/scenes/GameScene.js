@@ -274,7 +274,7 @@ export default class GameScene extends Phaser.Scene {
     const popup = this.add.text(
       this.cameras.main.width / 2,
       this.cameras.main.height / 2 - 180,
-      '💔 ¡Las copas no puntúan contra Samuel!',
+      '💔 ¡Las copas no puntúan\ncontra Samuel!',
       {
         fontSize: '20px',
         fontStyle: 'bold',
@@ -292,7 +292,7 @@ export default class GameScene extends Phaser.Scene {
       alpha: { from: 1, to: 0 },
       scale: { from: 1.2, to: 1 },
       ease: 'Back.easeOut',
-      duration: 8000,
+      duration: 10000,
       onComplete: () => popup.destroy()
     });
   }
@@ -419,7 +419,7 @@ export default class GameScene extends Phaser.Scene {
       this.replaceSelectedCards();
   
       // Mostrar mensaje de penalización
-      this.showAlertMessage('¡Se han cambiado 3 cartas por tardar demasiado!');
+      this.showAlertMessage('¡Se han cambiado 3 cartas\npor tardar demasiado!');
   
       // Reiniciar el timer
       this.resetFishermanTimer();
