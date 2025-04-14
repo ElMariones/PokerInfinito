@@ -233,19 +233,41 @@ export default class GameScene extends Phaser.Scene {
       this.showAlertMessage('Selecciona 5 cartas para jugar');
       return;
     }
+  
+    // Ocultar la caja del timer antes de evaluar las cartas
+    if (this.timerBox) {
+      this.timerBox.destroy(); // Destruir la caja del timer
+    }
+  
+    // Pausar el timer del Fisherman antes de iniciar la animación
+    if (this.fishermanTimer) {
+      this.fishermanTimer.paused = true; // Pausar el timer
+    }
+  
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
-
+  
     // Castigo de Samuel: Si hay una copa, el resultado entero es 0
     if (this.playerContext.opponent === 'helena') {
       const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
-      if (hasCopas ) {
+      if (hasCopas) {
         result.score = 0;
         this.popUpCopas();
       }
     }
+  
     this.score += result.score;
-    this.animateSelectedCards(result);
-    this.resetFishermanTimer(); // Reiniciar el timer del Pescador al enviar la mano
+  
+    // Animar las cartas seleccionadas con un callback
+    this.animateSelectedCards(result, () => {
+      // Reiniciar el timer después de que terminen las animaciones
+      if (this.fishermanTimer) {
+        this.fishermanTimer.paused = false; // Reanudar el timer
+      }
+      this.resetFishermanTimer(); // Reiniciar el timer
+  
+      // Mostrar nuevamente la caja del timer
+      this.startFishermanTimer(); // Reconstruir la caja del timer
+    });
   }
 
   popUpCopas() {
@@ -279,45 +301,78 @@ export default class GameScene extends Phaser.Scene {
   // Timer para el castigo del Pescador
   startFishermanTimer() {
     if (this.playerContext.opponent !== 'samuel') return;
-    
+  
     // Limpiar timer anterior si existe
     if (this.fishermanTimer) {
-      this.fishermanTimer.destroy(); // Cambio aquí
+      this.fishermanTimer.destroy();
     }
-    
-    // Eliminar timer box anterior si existe
     if (this.timerBox) {
       this.timerBox.destroy();
     }
-
-    // Crear fondo del timer
+  
+    // Crear contenedor para la caja del timer
     const margin = 20;
-    const boxWidth = 60;
-    const boxHeight = 40;
+    const boxWidth = 140; // Ancho aumentado para acomodar el diseño
+    const boxHeight = 80; // Altura aumentada para dos secciones
     const padding = 10;
-    
+  
     this.timerBox = this.add.container(
       this.cameras.main.width - boxWidth - margin,
       (this.cameras.main.height / 2) - (boxHeight / 2)
     );
-    
-    // Fondo de la caja
-    const background = this.add.rectangle(
-      0, 0, boxWidth, boxHeight, 0x000000
-    ).setOrigin(0).setStrokeStyle(2, 0xffffff);
-    
-    // Texto del timer
-    this.timerText = this.add.text(
-      boxWidth / 2, boxHeight / 2, '10', {
-        fontSize: '24px',
-        color: '#ffff00'
+  
+    // Fondo de la caja (rojo para el título)
+    const titleBackground = this.add.rectangle(
+      0, 0, boxWidth, boxHeight / 2, 0xff0000 // Rojo sólido
+    ).setOrigin(0);
+  
+    // Fondo del contador (naranja difuminado)
+    const counterBackground = this.add.rectangle(
+      0, boxHeight / 2, boxWidth, boxHeight / 2, 0xff4500 // Naranja llamativo
+    ).setOrigin(0);
+  
+    // Línea divisoria entre el título y el contador
+    const dividerLine = this.add.rectangle(
+      0, boxHeight / 2, boxWidth, 2, 0xffffff // Línea blanca
+    ).setOrigin(0);
+  
+    // Título "Penalidad en..."
+    const titleText = this.add.text(
+      boxWidth / 2, boxHeight / 4 - 6, 'Penalidad\nen...', { // Ajuste: 6 píxeles más arriba
+        fontFamily: 'RetroFont',
+        fontSize: '20px', // Tamaño más grande para sobresalir
+        color: '#000000', // Negro para el texto
+        stroke: '#f0f8ff', // Blanco brillante para el delineado
+        strokeThickness: 5, // Grosor del delineado aumentado
+        align: 'center',
+        wordWrap: { width: boxWidth - padding * 2 } // Ajustar al ancho de la caja
       }
     ).setOrigin(0.5);
-    
+  
+    // Texto del timer (en la mitad inferior)
+    this.timerText = this.add.text(
+      boxWidth / 2, boxHeight * 0.75, '10', { // Centrado en la mitad inferior
+        fontFamily: 'RetroFont',
+        fontSize: '24px',
+        color: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 5,
+      }
+    ).setOrigin(0.5);
+  
+    // Delineado blanco para la caja completa
+    const outline = this.add.rectangle(
+      0, 0, boxWidth, boxHeight, 0xffffff // Blanco brillante
+    ).setOrigin(0).setStrokeStyle(2, 0xffffff); // Borde blanco
+  
     // Añadir elementos al contenedor
-    this.timerBox.add(background);
+    this.timerBox.add(outline); // Agregar el delineado primero
+    this.timerBox.add(titleBackground);
+    this.timerBox.add(counterBackground);
+    this.timerBox.add(dividerLine);
+    this.timerBox.add(titleText);
     this.timerBox.add(this.timerText);
-    
+  
     // Configurar el timer de 10 segundos
     this.fishermanTimer = this.time.addEvent({
       delay: 1000,
@@ -408,28 +463,30 @@ export default class GameScene extends Phaser.Scene {
     }
   }
   
-  animateSelectedCards(result) {
+  animateSelectedCards(result, onCompleteCallback) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
-  
     this.events.emit('toggle-sort-button', false);
-  
     this.cardSprites.forEach(sprite => {
       const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
       if (!isSelected) sprite.setVisible(false);
     });
   
     this.animateCardsToCenter(result);
+  
     if (this.playerContext.opponent === 'helena') {
       this.tintarCopas();
     }
+  
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
       if (this.SamuelCastigo) {
         this.time.delayedCall(1000, () => {
           this.handleRoundEnd();
+          if (onCompleteCallback) onCompleteCallback(); // Ejecutar callback
         });
         return;
       }
+  
       this.highlightWinningCards(result);
       this.showScorePopups2(result.winningCards, result.score);
   
@@ -441,6 +498,7 @@ export default class GameScene extends Phaser.Scene {
   
           this.time.delayedCall(1300, () => {
             this.handleRoundEnd();
+            if (onCompleteCallback) onCompleteCallback(); // Ejecutar callback
           });
         });
       });
