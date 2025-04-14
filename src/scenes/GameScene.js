@@ -482,7 +482,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   initializeGemelosCastigo() {
-    const possibleHands = ['Carta Alta', 'Pareja', 'Doble Pareja', 'Trio', 'Escalera', 'Color', 'Full house', 'Póker', 'Escalera de Color'];
+    const possibleHands = ['Carta Alta', 'Pareja', 'Doble Pareja', 'Trío', 'Escalera', 'Color', 'Full house', 'Póker', 'Escalera de Color'];
     this.lastPlayedHand = Phaser.Utils.Array.GetRandom(possibleHands); // Seleccionar una mano aleatoria
     console.log(`[GEMELOS] Mano inicial prohibida: ${this.lastPlayedHand}`);
     this.createGemelosPenaltyText(this.lastPlayedHand);
@@ -507,29 +507,119 @@ export default class GameScene extends Phaser.Scene {
       this.gemelosPenaltyText.destroy();
     }
   
-    // Crear el texto del castigo
-    this.gemelosPenaltyText = this.add.text(
-      this.cameras.main.width - 20, // Pegado a la derecha
-      this.cameras.main.height / 2, // Centrado verticalmente
-      `Mano Prohibida:\n${handType}`, // Texto del castigo
-      {
-        fontFamily: 'RetroFont',
-        fontSize: '16px',
-        color: '#ffffff', // Blanco brillante
-        stroke: '#000000', // Borde negro
-        strokeThickness: 4,
-        align: 'right', // Alineación a la derecha
-        padding: { x: 10, y: 5 },
-        wordWrap: { width: 150 } // Ancho máximo del texto
-      }
-    )
-      .setOrigin(1, 0.5) // Origen en la esquina superior derecha
-      .setBackgroundColor('#ff0000') // Fondo rojo para destacar
-      .setAlpha(0.8); // Transparencia ligera
+    // Crear el contenedor para el texto y los elementos visuales
+    const penaltyContainer = this.add.container(
+      this.cameras.main.width - 20,
+      this.cameras.main.height / 2
+    ).setDepth(10);
   
-    console.log(`[GEMELOS] Castigo aplicado: Repetición de ${handType}`);
+    // Fondo con gradiente
+    const background = this.add.rectangle(0, 0, 180, 80, 0x000000)
+      .setOrigin(1, 0.5)
+      .setStrokeStyle(2, 0xffffff);
+    this.tweens.add({
+      targets: background,
+      alpha: { from: 0, to: 1 },
+      duration: 300,
+      ease: 'Sine.easeInOut'
+    });
+  
+    // Ícono de advertencia
+    const warningIcon = this.add.text(-160, -20, '⚠', {
+      fontFamily: 'Arial',
+      fontSize: '24px',
+      color: '#ffcc00'
+    }).setOrigin(0, 0.5);
+  
+    // Texto principal
+    const penaltyText = this.add.text(-140, 0, `Mano Prohibida:\n${handType}`, {
+      fontFamily: 'RetroFont',
+      fontSize: '16px',
+      color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 4,
+      align: 'left',
+      wordWrap: { width: 140 }
+    }).setOrigin(0, 0.5);
+  
+    // Efecto de brillo en el borde
+    const shineEffect = this.add.rectangle(0, 0, 180, 80, 0xffffff)
+      .setOrigin(1, 0.5)
+      .setAlpha(0);
+    this.tweens.add({
+      targets: shineEffect,
+      alpha: { from: 1, to: 0 },
+      scaleX: { from: 1, to: 0 },
+      duration: 1000,
+      ease: 'Sine.easeOut',
+      repeat: -1
+    });
+  
+    // Añadir elementos al contenedor
+    penaltyContainer.add(background);
+    penaltyContainer.add(shineEffect);
+    penaltyContainer.add(warningIcon);
+    penaltyContainer.add(penaltyText);
+  
+    // Guardar referencia al contenedor
+    this.gemelosPenaltyText = penaltyContainer;
   }
+
+  vacioCartasGemelos(onComplete) {
+    this.selectedCards.forEach((card, index) => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
   
+      // Crear líneas diagonales para simular ruptura
+      const slash1 = this.add.line(
+        sprite.x, sprite.y,
+        -sprite.displayWidth / 2, -sprite.displayHeight / 2,
+        sprite.displayWidth / 2, sprite.displayHeight / 2,
+        0xffffff
+      ).setLineWidth(4).setAlpha(0);
+  
+      const slash2 = this.add.line(
+        sprite.x, sprite.y,
+        sprite.displayWidth / 2, -sprite.displayHeight / 2,
+        -sprite.displayWidth / 2, sprite.displayHeight / 2,
+        0xffffff
+      ).setLineWidth(4).setAlpha(0);
+  
+      // Animación de las líneas diagonales
+      this.tweens.add({
+        targets: [slash1, slash2],
+        alpha: { from: 0, to: 1 },
+        duration: 200,
+        ease: 'Sine.easeInOut',
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => {
+          slash1.destroy();
+          slash2.destroy();
+        }
+      });
+  
+      // Animación de desvanecimiento y contracción de la carta
+      this.tweens.add({
+        targets: sprite,
+        scale: { from: 1, to: 0 }, // La carta se contrae
+        alpha: { from: 1, to: 0 }, // La carta se desvanece
+        angle: { from: 0, to: Math.random() * 360 - 180 }, // Ligera rotación aleatoria
+        duration: 800, // Duración de la animación
+        ease: 'Cubic.easeOut',
+        delay: index * 50, // Retraso progresivo para cada carta
+        onComplete: () => {
+          sprite.destroy(); // Eliminar la carta después de la animación
+  
+          // Si es la última carta, ejecutar el callback
+          if (index === this.selectedCards.length - 1 && onComplete) {
+            onComplete();
+          }
+        }
+      });
+    });
+  }
+
   animateSelectedCards(result, onCompleteCallback) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
@@ -543,6 +633,20 @@ export default class GameScene extends Phaser.Scene {
   
     if (this.playerContext.opponent === 'helena') {
       this.tintarCopas();
+    }
+    // Verificar si el oponente es los gemelos y si hay un castigo (mano repetida)
+    else if (this.playerContext.opponent === 'samuel' && result.score === 0) {
+      this.vacioCartasGemelos(() => {
+        // Continuar con las animaciones después de la desintegración
+        this.time.delayedCall(600, () => {
+          this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+          this.time.delayedCall(1300, () => {
+            this.handleRoundEnd();
+            if (onCompleteCallback) onCompleteCallback();
+          });
+        });
+      });
+      return; // Salir temprano para evitar ejecutar el resto del código
     }
   
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
@@ -688,7 +792,7 @@ export default class GameScene extends Phaser.Scene {
               onComplete: () => darken.destroy(),
             });
   
-            this.cameras.main.shake(500, 0.03);
+            //this.cameras.main.shake(500, 0.03);
           }
         });
       });
