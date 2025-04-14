@@ -50,7 +50,6 @@ export default class GameScene extends Phaser.Scene {
     this.roundNumber = 1;
     this.gameScene = data.scene;
     this.npc = data.npc || null; // ← Añadimos esto
-
   }
 
   create() {
@@ -139,13 +138,17 @@ export default class GameScene extends Phaser.Scene {
     this.playerContext.opponent = this.npc;
     console.log('🎯 NPC actual:', this.npc);
 
+    // --- LAUNCH UI SCENE ---
+    if (this.scene.isActive('UIScene')) {
+      this.scene.stop('UIScene');
+    }
+    this.scene.start('UIScene');
+    this.scene.bringToTop('UIScene');
 
-        // --- LAUNCH UI SCENE ---
-        if (this.scene.isActive('UIScene')) {
-          this.scene.stop('UIScene');
-        }
-        this.scene.start('UIScene');
-        this.scene.bringToTop('UIScene');
+    this.fishermanTimer = null; // Asegurarse de tener esta propiedad
+    this.timerBox = null; // Para manejar la caja del timer
+    // Iniciar timer del Pescador
+    this.startFishermanTimer();
 
     // Inventario del jugador
     this.inventory = new Inventory(this);
@@ -171,7 +174,7 @@ export default class GameScene extends Phaser.Scene {
   // Called by the UI scene’s "Shuffle" button
   shuffleAnimation() {
     if (this.selectedCards.length === 0) return;
-
+    this.resetFishermanTimer(); // Reiniciar el timer del Pescador al hacer shuffle
     const duration = 500;
     const selectedSprites = this.cardSprites.filter(sprite => 
       this.selectedCards.some(card => card.key === sprite.texture.key)
@@ -197,7 +200,7 @@ export default class GameScene extends Phaser.Scene {
     this.time.delayedCall(duration * 2, () => {
       this.replaceSelectedCards();
     });
-}
+  }
 
   /**
    * Removes the selected cards from the player's hand and draws the same number
@@ -232,16 +235,17 @@ export default class GameScene extends Phaser.Scene {
     }
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
 
-  // Castigo de Samuel: Si hay una copa, el resultado entero es 0
-  if (this.playerContext.opponent === 'samuel') {
-    const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
-    if (hasCopas ) {
-      result.score = 0;
-      this.popUpCopas();
-  }
-}
-this.score += result.score;
-this.animateSelectedCards(result);
+    // Castigo de Samuel: Si hay una copa, el resultado entero es 0
+    if (this.playerContext.opponent === 'helena') {
+      const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
+      if (hasCopas ) {
+        result.score = 0;
+        this.popUpCopas();
+      }
+    }
+    this.score += result.score;
+    this.animateSelectedCards(result);
+    this.resetFishermanTimer(); // Reiniciar el timer del Pescador al enviar la mano
   }
 
   popUpCopas() {
@@ -271,8 +275,159 @@ this.animateSelectedCards(result);
     });
   }
 
-  
+  // Castigo pescador
+  // Timer para el castigo del Pescador
+  startFishermanTimer() {
+    if (this.playerContext.opponent !== 'samuel') return;
+    
+    // Limpiar timer anterior si existe
+    if (this.fishermanTimer) {
+      this.fishermanTimer.destroy(); // Cambio aquí
+    }
+    
+    // Eliminar timer box anterior si existe
+    if (this.timerBox) {
+      this.timerBox.destroy();
+    }
 
+    // Crear fondo del timer
+    const margin = 20;
+    const boxWidth = 60;
+    const boxHeight = 40;
+    const padding = 10;
+    
+    this.timerBox = this.add.container(
+      this.cameras.main.width - boxWidth - margin,
+      (this.cameras.main.height / 2) - (boxHeight / 2)
+    );
+    
+    // Fondo de la caja
+    const background = this.add.rectangle(
+      0, 0, boxWidth, boxHeight, 0x000000
+    ).setOrigin(0).setStrokeStyle(2, 0xffffff);
+    
+    // Texto del timer
+    this.timerText = this.add.text(
+      boxWidth / 2, boxHeight / 2, '10', {
+        fontSize: '24px',
+        color: '#ffff00'
+      }
+    ).setOrigin(0.5);
+    
+    // Añadir elementos al contenedor
+    this.timerBox.add(background);
+    this.timerBox.add(this.timerText);
+    
+    // Configurar el timer de 10 segundos
+    this.fishermanTimer = this.time.addEvent({
+      delay: 1000,
+      callback: this.updateFishermanTimer,
+      callbackScope: this,
+      repeat: 9 // 10 iteraciones (de 10 a 1)
+    });
+  }
+
+  //Mostrar el contador en pantalla
+  updateFishermanTimer() {
+    const remainingTime = this.fishermanTimer.getRepeatCount(); // +1 para ajustar el desfase
+    this.timerText.setText(remainingTime);
+  
+    if (remainingTime <= 3) {
+      this.timerText.setColor('#ff0000'); // Advertencia en rojo
+    }
+  
+    if (remainingTime === 0) {
+      this.applyFishermanPenalty();
+      this.timerBox.destroy(); // Destruir toda la caja
+    }
+  }
+
+  // Aplicar el castigo del Pescador
+  applyFishermanPenalty() {
+    const numCardsToReplace = Math.min(3, this.playerHand.length);
+    const cardsToReplace = [];
+  
+    // Seleccionar cartas aleatorias
+    while (cardsToReplace.length < numCardsToReplace) {
+      const randomIndex = Phaser.Math.Between(0, this.playerHand.length - 1);
+      if (!cardsToReplace.includes(randomIndex)) {
+        cardsToReplace.push(randomIndex);
+      }
+    }
+  
+    // Animación de cambio
+    cardsToReplace.forEach(index => {
+      const card = this.playerHand[index];
+      const sprite = this.cardSprites.find(s => s && s.texture.key === card.key); // Verificar que el sprite existe
+  
+      if (sprite) {
+        this.tweens.add({
+          targets: sprite,
+          scale: { from: 1, to: 1.2 },
+          alpha: { from: 1, to: 0 },
+          duration: 300,
+          yoyo: true,
+          onComplete: () => {
+            // Destruir el sprite antiguo
+            sprite.destroy();
+  
+            // Reemplazar carta si hay en el mazo
+            if (this.deck.length > 0) {
+              this.playerHand[index] = this.deck.pop();
+            } else {
+              // Si no hay cartas en el mazo, eliminarla
+              this.playerHand.splice(index, 1);
+            }
+  
+            // Crear un nuevo sprite para la carta reemplazada
+            if (this.playerHand[index]) {
+              const newSprite = this.add.image(sprite.x, sprite.y, this.playerHand[index].key)
+                .setScale(0.9)
+                .setInteractive();
+              this.cardSprites.push(newSprite);
+  
+              // Agregar eventos al nuevo sprite
+              newSprite.on('pointerover', () => {
+                if (!this.selectedCards.includes(this.playerHand[index])) {
+                  newSprite.setScale(0.95);
+                }
+              });
+              newSprite.on('pointerout', () => {
+                if (!this.selectedCards.includes(this.playerHand[index])) {
+                  newSprite.setScale(0.9);
+                  newSprite.clearTint();
+                }
+              });
+              newSprite.on('pointerdown', () => {
+                this.toggleCardSelection(this.playerHand[index], newSprite);
+              });
+            }
+          }
+        });
+      }
+    });
+  
+    // Asegurarse de que siempre haya máximo 10 cartas
+    if (this.playerHand.length < 10 && this.deck.length > 0) {
+      const cardsToAdd = 10 - this.playerHand.length;
+      const newCards = drawCards(this.deck, cardsToAdd);
+      this.playerHand.push(...newCards);
+    }
+  
+    // Mostrar mensaje de penalización
+    this.showAlertMessage('¡Se han cambiado 3 cartas por tardar demasiado!');
+  
+    // Reiniciar timer
+    this.resetFishermanTimer();
+  }
+
+  // Resetear el timer cuando el jugador selecciona cartas
+  resetFishermanTimer() {
+    if (this.playerContext.opponent === 'samuel') {
+      this.startFishermanTimer(); // Reiniciar el timer
+    }
+  }
+  
   animateSelectedCards(result) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
@@ -285,7 +440,7 @@ this.animateSelectedCards(result);
     });
   
     this.animateCardsToCenter(result);
-    if (this.playerContext.opponent === 'samuel') {
+    if (this.playerContext.opponent === 'helena') {
       this.tintarCopas();
     }
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
