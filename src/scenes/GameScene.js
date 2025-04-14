@@ -55,7 +55,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
-    this.SamuelCastigo = false; // Variable para el castigo de Samuel
+    this.HelenaCastigo = false; // Variable para el castigo de Helena
 
     // Background
     // Definir el shader directamente en el archivo
@@ -149,6 +149,12 @@ export default class GameScene extends Phaser.Scene {
     this.timerBox = null; // Para manejar la caja del timer
     // Iniciar timer del Pescador
     this.startFishermanTimer();
+    if (this.playerContext.opponent === 'samuel') {
+      this.lastPlayedHand = null; // Última mano jugada por el jugador
+      this.gemelosCastigo = false; // Variable para activar/desactivar el castigo de los gemelos
+      this.gemelosPenaltyText = null; // Texto que muestra el castigo de los gemelos
+      this.initializeGemelosCastigo();
+    }
 
     // Inventario del jugador
     this.inventory = new Inventory(this);
@@ -233,7 +239,7 @@ export default class GameScene extends Phaser.Scene {
       this.showAlertMessage('Selecciona 5 cartas para jugar');
       return;
     }
-  
+
     // Ocultar la caja del timer antes de evaluar las cartas
     if (this.timerBox) {
       this.timerBox.destroy(); // Destruir la caja del timer
@@ -245,14 +251,26 @@ export default class GameScene extends Phaser.Scene {
     }
   
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
-  
-    // Castigo de Samuel: Si hay una copa, el resultado entero es 0
-    if (this.playerContext.opponent === 'samuel') {
+
+    // Castigo de Helena: Si hay una copa, el resultado entero es 0
+    if (this.playerContext.opponent === 'helena') {
       const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
       if (hasCopas) {
         result.score = 0;
         this.popUpCopas();
       }
+    }
+
+    // Verificar el castigo de los gemelos
+    if (this.playerContext.opponent === 'samuel') {
+      if (result.handType === this.lastPlayedHand) {
+        this.applyGemelosPenalty(result);
+        return; // No continuar con el procesamiento normal de la mano
+      }
+      // Actualizar la última mano jugada
+      this.lastPlayedHand = result.handType;
+      // Actualizar el texto del castigo
+      this.createGemelosPenaltyText(this.lastPlayedHand);
     }
   
     this.score += result.score;
@@ -274,7 +292,7 @@ export default class GameScene extends Phaser.Scene {
     const popup = this.add.text(
       this.cameras.main.width / 2,
       this.cameras.main.height / 2 - 180,
-      '💔 ¡Las copas no puntúan\ncontra Samuel!',
+      '💔 ¡Las copas no puntúan\ncontra Helena!',
       {
         fontSize: '20px',
         fontStyle: 'bold',
@@ -462,6 +480,55 @@ export default class GameScene extends Phaser.Scene {
       this.startFishermanTimer(); // Reiniciar el timer
     }
   }
+
+  initializeGemelosCastigo() {
+    const possibleHands = ['Carta Alta', 'Pareja', 'Doble Pareja', 'Trio', 'Escalera', 'Color', 'Full house', 'Póker', 'Escalera de Color'];
+    this.lastPlayedHand = Phaser.Utils.Array.GetRandom(possibleHands); // Seleccionar una mano aleatoria
+    console.log(`[GEMELOS] Mano inicial prohibida: ${this.lastPlayedHand}`);
+    this.createGemelosPenaltyText(this.lastPlayedHand);
+  }
+
+  applyGemelosPenalty(result) {
+    result.score = 0; // Anular el puntaje
+    this.gemelosCastigo = true;
+  
+    // Mostrar mensaje de advertencia
+    this.showAlertMessage(`💔 ¡No puedes repetir la misma mano\n(${result.handType}) contra los Gemelos!`);
+  
+    // Animar las cartas sin otorgar puntos
+    this.animateSelectedCards(result);
+  
+    console.log(`[GEMELOS] Castigo aplicado: Repetición de ${result.handType}`);
+  }
+
+  createGemelosPenaltyText(handType) {
+    // Limpiar el texto anterior si existe
+    if (this.gemelosPenaltyText) {
+      this.gemelosPenaltyText.destroy();
+    }
+  
+    // Crear el texto del castigo
+    this.gemelosPenaltyText = this.add.text(
+      this.cameras.main.width - 20, // Pegado a la derecha
+      this.cameras.main.height / 2, // Centrado verticalmente
+      `Mano Prohibida:\n${handType}`, // Texto del castigo
+      {
+        fontFamily: 'RetroFont',
+        fontSize: '16px',
+        color: '#ffffff', // Blanco brillante
+        stroke: '#000000', // Borde negro
+        strokeThickness: 4,
+        align: 'right', // Alineación a la derecha
+        padding: { x: 10, y: 5 },
+        wordWrap: { width: 150 } // Ancho máximo del texto
+      }
+    )
+      .setOrigin(1, 0.5) // Origen en la esquina superior derecha
+      .setBackgroundColor('#ff0000') // Fondo rojo para destacar
+      .setAlpha(0.8); // Transparencia ligera
+  
+    console.log(`[GEMELOS] Castigo aplicado: Repetición de ${handType}`);
+  }
   
   animateSelectedCards(result, onCompleteCallback) {
     const centerX = this.cameras.main.width / 2;
@@ -474,12 +541,12 @@ export default class GameScene extends Phaser.Scene {
   
     this.animateCardsToCenter(result);
   
-    if (this.playerContext.opponent === 'samuel') {
+    if (this.playerContext.opponent === 'helena') {
       this.tintarCopas();
     }
   
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
-      if (this.SamuelCastigo) {
+      if (this.HelenaCastigo) {
         this.time.delayedCall(1000, () => {
           this.handleRoundEnd();
           if (onCompleteCallback) onCompleteCallback(); // Ejecutar callback
@@ -529,10 +596,10 @@ export default class GameScene extends Phaser.Scene {
       }
     });
     if (found) {
-      console.log("[SAMUEL] Castigo aplicado: cartas de copas detectadas");
-      this.SamuelCastigo = true;
+      console.log("[HELENA] Castigo aplicado: cartas de copas detectadas");
+      this.HelenaCastigo = true;
     } else {
-      this.SamuelCastigo = false;
+      this.HelenaCastigo = false;
     }
   }
   
