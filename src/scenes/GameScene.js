@@ -149,7 +149,7 @@ export default class GameScene extends Phaser.Scene {
     this.timerBox = null; // Para manejar la caja del timer
     // Iniciar timer del Pescador
     this.startFishermanTimer();
-    if (this.playerContext.opponent === 'samuel') {
+    if (this.playerContext.opponent === 'gemelos') {
       this.lastPlayedHand = null; // Última mano jugada por el jugador
       this.gemelosCastigo = false; // Variable para activar/desactivar el castigo de los gemelos
       this.gemelosPenaltyText = null; // Texto que muestra el castigo de los gemelos
@@ -262,7 +262,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     // Verificar el castigo de los gemelos
-    if (this.playerContext.opponent === 'samuel') {
+    if (this.playerContext.opponent === 'gemelos') {
       if (result.handType === this.lastPlayedHand) {
         this.applyGemelosPenalty(result);
         return; // No continuar con el procesamiento normal de la mano
@@ -514,7 +514,7 @@ export default class GameScene extends Phaser.Scene {
     ).setDepth(10);
   
     // Fondo con gradiente
-    const background = this.add.rectangle(0, 0, 180, 80, 0x000000)
+    const background = this.add.rectangle(0, 0, 200, 100, 0x000000)
       .setOrigin(1, 0.5)
       .setStrokeStyle(2, 0xffffff);
     this.tweens.add({
@@ -525,14 +525,14 @@ export default class GameScene extends Phaser.Scene {
     });
   
     // Ícono de advertencia
-    const warningIcon = this.add.text(-160, -20, '⚠', {
+    const warningIcon = this.add.text(-190, -20, '⚠', {
       fontFamily: 'Arial',
       fontSize: '24px',
       color: '#ffcc00'
     }).setOrigin(0, 0.5);
   
     // Texto principal
-    const penaltyText = this.add.text(-140, 0, `Mano Prohibida:\n${handType}`, {
+    const penaltyText = this.add.text(-160, 0, `Mano Prohibida:\n${handType}`, {
       fontFamily: 'RetroFont',
       fontSize: '16px',
       color: '#ffffff',
@@ -543,7 +543,7 @@ export default class GameScene extends Phaser.Scene {
     }).setOrigin(0, 0.5);
   
     // Efecto de brillo en el borde
-    const shineEffect = this.add.rectangle(0, 0, 180, 80, 0xffffff)
+    const shineEffect = this.add.rectangle(0, 0, 200, 100, 0xffffff)
       .setOrigin(1, 0.5)
       .setAlpha(0);
     this.tweens.add({
@@ -635,18 +635,8 @@ export default class GameScene extends Phaser.Scene {
       this.tintarCopas();
     }
     // Verificar si el oponente es los gemelos y si hay un castigo (mano repetida)
-    else if (this.playerContext.opponent === 'samuel' && result.score === 0) {
-      this.vacioCartasGemelos(() => {
-        // Continuar con las animaciones después de la desintegración
-        this.time.delayedCall(600, () => {
-          this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
-          this.time.delayedCall(1300, () => {
-            this.handleRoundEnd();
-            if (onCompleteCallback) onCompleteCallback();
-          });
-        });
-      });
-      return; // Salir temprano para evitar ejecutar el resto del código
+    else if (this.playerContext.opponent === 'gemelos' && result.score === 0) {
+      this.aplicarGemelosCastigo();
     }
   
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
@@ -705,6 +695,20 @@ export default class GameScene extends Phaser.Scene {
     } else {
       this.HelenaCastigo = false;
     }
+  }
+
+  aplicarGemelosCastigo() {
+    this.vacioCartasGemelos(() => {
+      // Continuar con las animaciones después de la desintegración
+      this.time.delayedCall(600, () => {
+        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+        this.time.delayedCall(1300, () => {
+          this.handleRoundEnd();
+          if (onCompleteCallback) onCompleteCallback();
+        });
+      });
+    });
+    return; // Salir temprano para evitar ejecutar el resto del código
   }
   
   animateCardsToCenter(result) {
