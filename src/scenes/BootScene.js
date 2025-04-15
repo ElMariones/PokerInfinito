@@ -158,6 +158,7 @@ import trapecistaJoker from '../../assets/images/jokers/trapecistaJoker.png';
 import billeteJoker from '../../assets/images/jokers/billeteJoker.png';
 import cromosJoker from '../../assets/images/jokers/cromosJoker.png';
 import doradoJoker from '../../assets/images/jokers/doradoJoker.png';
+import backOfCard from '../../assets/cards/back.png';
 
 //import music
 import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
@@ -464,6 +465,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('billeteJoker', billeteJoker);
     this.load.image('cromosJoker', cromosJoker);
     this.load.image('doradoJoker', doradoJoker);
+    this.load.image('backOfCard', backOfCard);
   }
 
   create() {
