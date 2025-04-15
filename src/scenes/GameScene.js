@@ -159,11 +159,39 @@ export default class GameScene extends Phaser.Scene {
     // Inventario del jugador
     this.inventory = new Inventory(this);
 
+    // For testing: Add jokers to inventory
+    this.inventory.addFiveJokers();
+
+    // Dificultad adaptativa basada en los jokers
+    if (this.inventory) {
+        const ownedJokers = this.inventory.getOwnedJokers();
+        const jokerCount = ownedJokers.length;
+
+        if (jokerCount > 0) {
+            // Calcular el costo total de los jokers
+            const totalJokerCost = ownedJokers.reduce((sum, joker) => sum + joker.price, 0);
+
+            // Calcular el multiplicador adaptativo
+            const costMultiplier = Math.floor(totalJokerCost / 250); // Cada 250 añade 1 al multiplicador
+            const adaptiveMultiplier = jokerCount + costMultiplier;
+
+            // Ajustar los puntos necesarios para pasar de ronda
+            this.pointsNeeded *= adaptiveMultiplier;
+
+            console.log(`🎯 Dificultad adaptativa aplicada:`);
+            console.log(`- Jokers: ${jokerCount}`);
+            console.log(`- Costo total de jokers: ${totalJokerCost}`);
+            console.log(`- Multiplicador adaptativo: ${adaptiveMultiplier}`);
+            console.log(`- Puntos necesarios ajustados: ${this.pointsNeeded}`);
+        } else {
+            console.log(`🎯 Sin jokers: Puntos necesarios no ajustados (${this.pointsNeeded}).`);
+        }
+    } else {
+        console.warn('⚠️ Inventario no definido en el registro. Puntos necesarios no ajustados.');
+    }
+
     // Initialize joker manager
     this.jokerManager = new JokerManager(this, this.inventory);
-  
-    // For testing: Add the first 5 jokers to inventory
-    //this.inventory.addFiveJokers();
     
     // Display jokers
     this.jokerManager.displayJokers();
