@@ -699,13 +699,13 @@ if (this.playerContext.opponent === 'samuel') {
     });
 
     // Si estamos contra Samuel, ocultar temporalmente las máscaras de todas las cartas
-    if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
-      this.cardSprites.forEach(sprite => {
-        if (sprite.samuelCover) {
-          sprite.samuelCover.setVisible(false);
-        }
-      });
+if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
+  this.cardSprites.forEach(sprite => {
+    if (sprite.samuelMask) {
+      sprite.samuelMask.setVisible(false);
     }
+  });
+}
   
     this.animateCardsToCenter(result);
   
@@ -1243,6 +1243,32 @@ highlightWinningCards(result) {
     }
   }
 
+
+  applySamuelPunishment() {
+    // Aplica un filtro visual solo a las primeras 5 cartas
+    this.hiddenSamuelCards = [];
+  
+    for (let i = 0; i < 5 && i < this.cardSprites.length; i++) {
+      const sprite = this.cardSprites[i];
+  
+      // Guardar las cartas ocultas para evitar que se descarten
+      this.hiddenSamuelCards.push(this.playerHand[i]);
+  
+      // Crear un rectángulo negro totalmente opaco encima de la carta
+      const mask = this.add.rectangle(
+        sprite.x,
+        sprite.y,
+        sprite.displayWidth,
+        sprite.displayHeight,
+        0x000000,
+        1 // opacidad total
+      )
+      .setOrigin(0.5)
+      .setDepth(sprite.depth + 1); // por encima de la carta
+  
+      sprite.samuelMask = mask;
+    }
+  }
   applySamuelPunishment() {
     this.hiddenSamuelCards = [];
   
