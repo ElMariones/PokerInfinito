@@ -699,13 +699,13 @@ if (this.playerContext.opponent === 'samuel') {
     });
 
     // Si estamos contra Samuel, ocultar temporalmente las máscaras de todas las cartas
-if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
-  this.cardSprites.forEach(sprite => {
-    if (sprite.samuelMask) {
-      sprite.samuelMask.setVisible(false);
+    if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
+      this.cardSprites.forEach(sprite => {
+        if (sprite.samuelCover) {
+          sprite.samuelCover.setVisible(false);
+        }
+      });
     }
-  });
-}
   
     this.animateCardsToCenter(result);
   
@@ -1407,4 +1407,3 @@ highlightWinningCards(result) {
   
 
 }
-
