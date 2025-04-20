@@ -302,7 +302,14 @@ if (this.playerContext.opponent === 'helena') {
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
 
     // Si estamos contra Samuel, eliminar el filtro de las cartas seleccionadas
-
+if (this.playerContext.opponent === 'samuel') {
+  this.selectedCards.forEach(card => {
+    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+    if (sprite && sprite.samuelMask) {
+      sprite.samuelMask.destroy();
+      delete sprite.samuelMask;
+    }
+  });
 }
 
 
