@@ -1227,6 +1227,25 @@ highlightWinningCards(result) {
       this.applySamuelPunishment();
     }
   }
+  applySamuelPunishment() {
+    this.hiddenSamuelCards = [];
+  
+    for (let i = 0; i < 5 && i < this.cardSprites.length; i++) {
+      const sprite = this.cardSprites[i];
+      const card = this.playerHand[i];
+  
+      this.hiddenSamuelCards.push(card);
+  
+      // Añadir una imagen de carta oculta encima
+      const cover = this.add.image(sprite.x, sprite.y, 'backOfCard')
+      .setDisplaySize(200, 240) // ajusta según tus cartas
+      .setDepth(sprite.depth + 1)
+      .setOrigin(0.5);
+  
+      sprite.samuelCover = cover;
+      sprite.isSamuelHidden = true;
+    }
+  }
   
   
 
