@@ -267,7 +267,15 @@ if (this.playerContext.opponent === 'helena') {
    */
   replaceSelectedCards() {
     // Remove selected cards from hand
+    if (this.playerContext.opponent === 'samuel') {
+      this.selectedCards = this.selectedCards.filter(card => !this.hiddenSamuelCards.includes(card));
+    }
     
+    // Eliminar las cartas seleccionadas (excepto las ocultas de Samuel)
+    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
+    const newCards = drawCards(this.deck, toDraw);
+    this.playerHand.push(...newCards);
+
     // Clear selection and rebuild card sprites
     this.selectedCards = [];
     this.cardSprites.forEach(s => s.destroy());
