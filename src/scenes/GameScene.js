@@ -15,6 +15,7 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
+    this.hiddenSamuelCards = [];
 
     // Game settings (set in init())
     this.pointsNeeded = 0;
@@ -203,6 +204,30 @@ export default class GameScene extends Phaser.Scene {
 
     // Deal initial hand of 10 cards
     this.dealNewHand();
+
+
+// Mostrar advertencia permanente si el oponente es Helena
+if (this.playerContext.opponent === 'helena') {
+  this.helenaWarningText = this.add.text(
+    this.cameras.main.width / 2,
+    20,
+    '💢Las copas no puntúan💢',
+    {
+      fontFamily: 'RetroFont',
+      fontSize: '20px',
+      color: '#ffff66', // amarillo claro
+      stroke: '#800000',
+      strokeThickness: 3,
+      align: 'center',
+      backgroundColor: '#000000aa', // fondo semitransparente negro
+      padding: { x: 12, y: 6 }
+    }
+  )
+  .setOrigin(0.5, 0) // centrado horizontal, parte superior
+  .setScrollFactor(0)
+  .setDepth(100);
+}
+
   }
 
   // Called by the UI scene’s "Shuffle" button
@@ -242,11 +267,7 @@ export default class GameScene extends Phaser.Scene {
    */
   replaceSelectedCards() {
     // Remove selected cards from hand
-    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));
-    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
-    const newCards = drawCards(this.deck, toDraw);
-    this.playerHand.push(...newCards);
-
+    
     // Clear selection and rebuild card sprites
     this.selectedCards = [];
     this.cardSprites.forEach(s => s.destroy());
@@ -279,6 +300,11 @@ export default class GameScene extends Phaser.Scene {
     }
   
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
+
+    // Si estamos contra Samuel, eliminar el filtro de las cartas seleccionadas
+
+}
+
 
     // Castigo de Helena: Si hay una copa, el resultado entero es 0
     if (this.playerContext.opponent === 'helena') {
@@ -656,6 +682,15 @@ export default class GameScene extends Phaser.Scene {
       const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
       if (!isSelected) sprite.setVisible(false);
     });
+
+    // Si estamos contra Samuel, ocultar temporalmente las máscaras de todas las cartas
+    if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
+      this.cardSprites.forEach(sprite => {
+        if (sprite.samuelCover) {
+          sprite.samuelCover.setVisible(false);
+        }
+      });
+    }
   
     this.animateCardsToCenter(result);
   
@@ -1166,11 +1201,17 @@ highlightWinningCards(result) {
         if (!this.selectedCards.includes(card)) {
           sprite.setScale(cardScale * 1.05);
         }
+        if (sprite.samuelCover) {
+          //sprite.samuelCover.setScale(cardScale * 1.05);
+        }
       });
       sprite.on('pointerout', () => {
         if (!this.selectedCards.includes(card)) {
           sprite.setScale(cardScale);
           sprite.clearTint();
+        }
+        if (sprite.samuelCover) {
+          //sprite.samuelCover.setScale(cardScale);
         }
       });
       sprite.on('pointerdown', () => {
@@ -1181,7 +1222,13 @@ highlightWinningCards(result) {
     });
 
     this.events.emit('cards-changed', 0);
+
+    if (this.playerContext.opponent === 'samuel') {
+      this.applySamuelPunishment();
+    }
   }
+  
+  
 
   toggleCardSelection(card, sprite) {
     const maxSelectable = 5;
@@ -1189,12 +1236,18 @@ highlightWinningCards(result) {
       this.selectedCards = this.selectedCards.filter(c => c !== card);
       sprite.setScale(0.9);
       sprite.clearTint();
+      if (sprite.samuelCover) {
+        sprite.samuelCover.clearTint();
+      }
     } else {
       if (this.selectedCards.length < maxSelectable) {
         this.selectedCards.push(card);
         sprite.setScale(0.8);
-        sprite.setTint(0x808080);
-      }
+        if (sprite.samuelCover) {
+          sprite.samuelCover.setTint(0x808080); // gris visible en la carta oculta
+        } else {
+          sprite.setTint(0x808080); // para el resto de cartas
+        }      }
     }
     // Si no hay cartas seleccionadas, actualizar el marcador a 0
     if (this.selectedCards.length === 0) {
@@ -1213,7 +1266,7 @@ highlightWinningCards(result) {
 
     this.events.emit('cards-changed', this.selectedCards.length);
   }
-
+  
   showResultMessage(msg) {
     const text = this.add.text(
       this.cameras.main.width / 2,
