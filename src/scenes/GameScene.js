@@ -1242,6 +1242,7 @@ highlightWinningCards(result) {
       this.applySamuelPunishment();
     }
   }
+
   applySamuelPunishment() {
     this.hiddenSamuelCards = [];
   
