@@ -77,6 +77,7 @@ export default class MapCocinaDante extends Phaser.Scene {
 
     this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)
     this.npcManager.createAnimations()
+    const madre = this.npcManager.addNPC('madre', 400, 408, 'idle-down', true)
 
     this.npcArray = this.npcManager.getAllNPCs()
 
