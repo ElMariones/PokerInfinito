@@ -42,7 +42,7 @@
          "name":"windows",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":8,
          "x":0,
          "y":0
@@ -57,37 +57,35 @@
          "name":"walldecoration",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":8,
          "x":0,
          "y":0
         }, 
         {
          "compression":"",
-         "data":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAwAAIAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8DAAAwAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwMAAEADAAAAAAAAAAAAAAAAAADUAgAA1QIAAOsCAAAAAAAAAAAAAAAAAAC0AgAAtQIAAOQCAADlAgAA+wIAAAAAAAAAAAAAAAAAAMQCAADFAgAA9AIAAPUCAAAAAAAAAAAAAAAAAAAAAAAAwQAAAMIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADRAAAA0gAAAA==",
+         "data":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAwAAIAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8DAAAwAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwMAAEADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC0AgAAtQIAANQCAADVAgAA6wIAAAAAAAAAAAAAAAAAAMQCAADFAgAA5AIAAOUCAAD7AgAAAAAAAAAAAAAAAAAAwQAAAMIAAAD0AgAA9QIAAAAAAAAAAAAAAAAAAAAAAADRAAAA0gAAAA==",
          "encoding":"base64",
          "height":8,
          "id":2,
-         "locked":true,
          "name":"furniture",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":8,
          "x":0,
          "y":0
         }, 
         {
          "compression":"",
-         "data":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+         "data":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
          "encoding":"base64",
          "height":8,
          "id":6,
-         "locked":true,
          "name":"onTopOfFurniture",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":8,
          "x":0,
          "y":0
@@ -106,8 +104,8 @@
                  "type":"",
                  "visible":true,
                  "width":22.4134,
-                 "x":-1,
-                 "y":135.964
+                 "x":-0.666666666666668,
+                 "y":167.297333333333
                 }, 
                 {
                  "gid":1194,
@@ -118,8 +116,8 @@
                  "type":"",
                  "visible":true,
                  "width":22.4134,
-                 "x":20.713,
-                 "y":134.913
+                 "x":21.0463333333333,
+                 "y":166.246333333333
                 }, 
                 {
                  "gid":1196,
@@ -130,8 +128,8 @@
                  "type":"",
                  "visible":true,
                  "width":22.4134,
-                 "x":21.0632,
-                 "y":157.327
+                 "x":21.3965333333333,
+                 "y":188.660333333333
                 }, 
                 {
                  "gid":1195,
@@ -142,8 +140,8 @@
                  "type":"",
                  "visible":true,
                  "width":22.4134,
-                 "x":0.0506275,
-                 "y":157.327
+                 "x":0.383960833333332,
+                 "y":188.660333333333
                 }, 
                 {
                  "gid":1199,
@@ -173,7 +171,7 @@
         {
          "columns":16,
          "firstgid":1,
-         "image":"Inside_B.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/Inside_B.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,
@@ -186,7 +184,7 @@
         {
          "columns":16,
          "firstgid":257,
-         "image":"Inside_A2.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/Inside_A2.png",
          "imageheight":384,
          "imagewidth":512,
          "margin":0,
@@ -199,7 +197,7 @@
         {
          "columns":16,
          "firstgid":449,
-         "image":"Inside_A4.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/Inside_A4.png",
          "imageheight":480,
          "imagewidth":512,
          "margin":0,
@@ -212,7 +210,7 @@
         {
          "columns":16,
          "firstgid":689,
-         "image":"house_inside.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/house_inside.png",
          "imageheight":448,
          "imagewidth":512,
          "margin":0,
@@ -225,7 +223,7 @@
         {
          "columns":16,
          "firstgid":913,
-         "image":"windows.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/windows.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,
@@ -238,7 +236,7 @@
         {
          "columns":4,
          "firstgid":1169,
-         "image":"bookshelf-brown.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/bookshelf-brown.png",
          "imageheight":96,
          "imagewidth":128,
          "margin":0,
@@ -251,7 +249,7 @@
         {
          "columns":4,
          "firstgid":1181,
-         "image":"drawer_shelf-brown.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/drawer_shelf-brown.png",
          "imageheight":96,
          "imagewidth":128,
          "margin":0,
@@ -264,7 +262,7 @@
         {
          "columns":2,
          "firstgid":1193,
-         "image":"pixelart-tv-iso_0.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/pixelart-tv-iso_0.png",
          "imageheight":64,
          "imagewidth":64,
          "margin":0,
@@ -278,7 +276,7 @@
         {
          "columns":5,
          "firstgid":1197,
-         "image":"tv.png",
+         "image":"..\/..\/..\/..\/..\/Desktop\/juegosWeb\/tv.png",
          "imageheight":64,
          "imagewidth":160,
          "margin":0,

@@ -65,8 +65,14 @@ export default class MapCocinaDante extends Phaser.Scene {
     }
     this.doorManager = new DoorManager(this, [
       { x: 726, y: 470, toScene: 'MapScene', spawnX: 187, spawnY: 2448 },
-      { x: 726, y: 260, toScene: 'MapScene', spawnX: 187, spawnY: 2448 }, //Cuarto de Dante
-      // Agrega más puertas según sea necesario
+      { 
+        x: 726, 
+        y: 260, 
+        toScene: 'MapHabitacion', 
+        spawnX: 150,  // Cambiado para que aparezca justo cerca de la puerta
+        spawnY: 240 
+      }
+            // Agrega más puertas según sea necesario
     ], this.music);
 
     this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)

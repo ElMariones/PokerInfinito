@@ -15,6 +15,7 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
+    this.hiddenSamuelCards = [];
 
     // Game settings (set in init())
     this.pointsNeeded = 0;
@@ -49,11 +50,13 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.gameScene = data.scene;
+    this.npc = data.npc || null; // ← Añadimos esto
   }
 
   create() {
     const gameWidth = this.cameras.main.width;
     const gameHeight = this.cameras.main.height;
+    this.HelenaCastigo = false; // Variable para el castigo de Helena
 
     // Background
     // Definir el shader directamente en el archivo
@@ -133,21 +136,63 @@ export default class GameScene extends Phaser.Scene {
     this.roundNumber = 1;
     this.cardSprites = [];
 
-        // --- LAUNCH UI SCENE ---
-        if (this.scene.isActive('UIScene')) {
-          this.scene.stop('UIScene');
-        }
-        this.scene.start('UIScene');
-        this.scene.bringToTop('UIScene');
+    this.playerContext.opponent = this.npc;
+    console.log('🎯 NPC actual:', this.npc);
+
+    // --- LAUNCH UI SCENE ---
+    if (this.scene.isActive('UIScene')) {
+      this.scene.stop('UIScene');
+    }
+    this.scene.start('UIScene');
+    this.scene.bringToTop('UIScene');
+
+    this.fishermanTimer = null; // Asegurarse de tener esta propiedad
+    this.timerBox = null; // Para manejar la caja del timer
+    // Iniciar timer del Pescador
+    this.startFishermanTimer();
+    if (this.playerContext.opponent === 'gemelos') {
+      this.lastPlayedHand = null; // Última mano jugada por el jugador
+      this.gemelosCastigo = false; // Variable para activar/desactivar el castigo de los gemelos
+      this.gemelosPenaltyText = null; // Texto que muestra el castigo de los gemelos
+      this.initializeGemelosCastigo();
+    }
 
     // Inventario del jugador
     this.inventory = new Inventory(this);
 
+    // For testing: Add jokers to inventory
+    this.inventory.addFiveJokers();
+
+    // Dificultad adaptativa basada en los jokers
+    if (this.inventory) {
+        const ownedJokers = this.inventory.getOwnedJokers();
+        const jokerCount = ownedJokers.length;
+
+        if (jokerCount > 0) {
+            // Calcular el costo total de los jokers
+            const totalJokerCost = ownedJokers.reduce((sum, joker) => sum + joker.price, 0);
+
+            // Calcular el multiplicador adaptativo
+            const costMultiplier = Math.floor(totalJokerCost / 250); // Cada 250 añade 1 al multiplicador
+            const adaptiveMultiplier = jokerCount + costMultiplier;
+
+            // Ajustar los puntos necesarios para pasar de ronda
+            this.pointsNeeded *= adaptiveMultiplier;
+
+            console.log(`🎯 Dificultad adaptativa aplicada:`);
+            console.log(`- Jokers: ${jokerCount}`);
+            console.log(`- Costo total de jokers: ${totalJokerCost}`);
+            console.log(`- Multiplicador adaptativo: ${adaptiveMultiplier}`);
+            console.log(`- Puntos necesarios ajustados: ${this.pointsNeeded}`);
+        } else {
+            console.log(`🎯 Sin jokers: Puntos necesarios no ajustados (${this.pointsNeeded}).`);
+        }
+    } else {
+        console.warn('⚠️ Inventario no definido en el registro. Puntos necesarios no ajustados.');
+    }
+
     // Initialize joker manager
     this.jokerManager = new JokerManager(this, this.inventory);
-  
-    // For testing: Add the first 5 jokers to inventory
-    //this.inventory.addFiveJokers();
     
     // Display jokers
     this.jokerManager.displayJokers();
@@ -159,12 +204,36 @@ export default class GameScene extends Phaser.Scene {
 
     // Deal initial hand of 10 cards
     this.dealNewHand();
+
+
+// Mostrar advertencia permanente si el oponente es Helena
+if (this.playerContext.opponent === 'helena') {
+  this.helenaWarningText = this.add.text(
+    this.cameras.main.width / 2,
+    20,
+    '💢Las copas no puntúan💢',
+    {
+      fontFamily: 'RetroFont',
+      fontSize: '20px',
+      color: '#ffff66', // amarillo claro
+      stroke: '#800000',
+      strokeThickness: 3,
+      align: 'center',
+      backgroundColor: '#000000aa', // fondo semitransparente negro
+      padding: { x: 12, y: 6 }
+    }
+  )
+  .setOrigin(0.5, 0) // centrado horizontal, parte superior
+  .setScrollFactor(0)
+  .setDepth(100);
+}
+
   }
 
   // Called by the UI scene’s "Shuffle" button
   shuffleAnimation() {
     if (this.selectedCards.length === 0) return;
-
+    this.resetFishermanTimer(); // Reiniciar el timer del Pescador al hacer shuffle
     const duration = 500;
     const selectedSprites = this.cardSprites.filter(sprite => 
       this.selectedCards.some(card => card.key === sprite.texture.key)
@@ -190,7 +259,7 @@ export default class GameScene extends Phaser.Scene {
     this.time.delayedCall(duration * 2, () => {
       this.replaceSelectedCards();
     });
-}
+  }
 
   /**
    * Removes the selected cards from the player's hand and draws the same number
@@ -198,8 +267,12 @@ export default class GameScene extends Phaser.Scene {
    */
   replaceSelectedCards() {
     // Remove selected cards from hand
-    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));
-    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
+    if (this.playerContext.opponent === 'samuel') {
+      this.selectedCards = this.selectedCards.filter(card => !this.hiddenSamuelCards.includes(card));
+    }
+    
+    // Eliminar las cartas seleccionadas (excepto las ocultas de Samuel)
+    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
     const newCards = drawCards(this.deck, toDraw);
     this.playerHand.push(...newCards);
 
@@ -224,25 +297,435 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
+    // Ocultar la caja del timer antes de evaluar las cartas
+    if (this.timerBox) {
+      this.timerBox.destroy(); // Destruir la caja del timer
+    }
+  
+    // Pausar el timer del Fisherman antes de iniciar la animación
+    if (this.fishermanTimer) {
+      this.fishermanTimer.paused = true; // Pausar el timer
+    }
+  
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
+
+    // Si estamos contra Samuel, eliminar el filtro de las cartas seleccionadas
+if (this.playerContext.opponent === 'samuel') {
+  this.selectedCards.forEach(card => {
+    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+    if (sprite && sprite.samuelMask) {
+      sprite.samuelMask.destroy();
+      delete sprite.samuelMask;
+    }
+  });
+}
+
+
+    // Castigo de Helena: Si hay una copa, el resultado entero es 0
+    if (this.playerContext.opponent === 'helena') {
+      const hasCopas = this.selectedCards.some(card => card.suit === 'copas');
+      if (hasCopas) {
+        result.score = 0;
+        this.popUpCopas();
+      }
+    }
+
+    // Verificar el castigo de los gemelos
+    if (this.playerContext.opponent === 'gemelos') {
+      if (result.handType === this.lastPlayedHand) {
+        this.applyGemelosPenalty(result);
+        return; // No continuar con el procesamiento normal de la mano
+      }
+      // Actualizar la última mano jugada
+      this.lastPlayedHand = result.handType;
+      // Actualizar el texto del castigo
+      this.createGemelosPenaltyText(this.lastPlayedHand);
+    }
+  
     this.score += result.score;
-    this.animateSelectedCards(result);
+  
+    // Animar las cartas seleccionadas con un callback
+    this.animateSelectedCards(result, () => {
+      // Reiniciar el timer después de que terminen las animaciones
+      if (this.fishermanTimer) {
+        this.fishermanTimer.paused = false; // Reanudar el timer
+      }
+      this.resetFishermanTimer(); // Reiniciar el timer
+  
+      // Mostrar nuevamente la caja del timer
+      this.startFishermanTimer(); // Reconstruir la caja del timer
+    });
   }
 
-  animateSelectedCards(result) {
+  popUpCopas() {
+    const popup = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2 - 180,
+      '💔 ¡Las copas no puntúan\ncontra Helena!',
+      {
+        fontSize: '20px',
+        fontStyle: 'bold',
+        color: '#ff0033',
+        stroke: '#000000',
+        strokeThickness: 5,
+        fontFamily: 'RetroFont',
+        align: 'center'
+      }
+    ).setOrigin(0.5);
+
+    this.tweens.add({
+      targets: popup,
+      y: popup.y - 80,
+      alpha: { from: 1, to: 0 },
+      scale: { from: 1.2, to: 1 },
+      ease: 'Back.easeOut',
+      duration: 10000,
+      onComplete: () => popup.destroy()
+    });
+  }
+
+  // Castigo pescador
+  // Timer para el castigo del Pescador
+  startFishermanTimer() {
+    if (this.playerContext.opponent !== 'pescador') return;
+  
+    // Limpiar timer anterior si existe
+    if (this.fishermanTimer) {
+      this.fishermanTimer.destroy();
+    }
+    if (this.timerBox) {
+      this.timerBox.destroy();
+    }
+  
+    // Crear contenedor para la caja del timer
+    const margin = 20;
+    const boxWidth = 140; // Ancho aumentado para acomodar el diseño
+    const boxHeight = 80; // Altura aumentada para dos secciones
+    const padding = 10;
+  
+    this.timerBox = this.add.container(
+      this.cameras.main.width - boxWidth - margin,
+      (this.cameras.main.height / 2) - (boxHeight / 2)
+    );
+  
+    // Fondo de la caja (rojo para el título)
+    const titleBackground = this.add.rectangle(
+      0, 0, boxWidth, boxHeight / 2, 0xff0000 // Rojo sólido
+    ).setOrigin(0);
+  
+    // Fondo del contador (naranja difuminado)
+    const counterBackground = this.add.rectangle(
+      0, boxHeight / 2, boxWidth, boxHeight / 2, 0xff4500 // Naranja llamativo
+    ).setOrigin(0);
+  
+    // Línea divisoria entre el título y el contador
+    const dividerLine = this.add.rectangle(
+      0, boxHeight / 2, boxWidth, 2, 0xffffff // Línea blanca
+    ).setOrigin(0);
+  
+    // Título "Penalidad en..."
+    const titleText = this.add.text(
+      boxWidth / 2, boxHeight / 4 - 6, 'Penalidad\nen...', { // Ajuste: 6 píxeles más arriba
+        fontFamily: 'RetroFont',
+        fontSize: '20px', // Tamaño más grande para sobresalir
+        color: '#000000', // Negro para el texto
+        stroke: '#f0f8ff', // Blanco brillante para el delineado
+        strokeThickness: 5, // Grosor del delineado aumentado
+        align: 'center',
+        wordWrap: { width: boxWidth - padding * 2 } // Ajustar al ancho de la caja
+      }
+    ).setOrigin(0.5);
+  
+    // Texto del timer (en la mitad inferior)
+    this.timerText = this.add.text(
+      boxWidth / 2, boxHeight * 0.75, '10', { // Centrado en la mitad inferior
+        fontFamily: 'RetroFont',
+        fontSize: '24px',
+        color: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 5,
+      }
+    ).setOrigin(0.5);
+  
+    // Delineado blanco para la caja completa
+    const outline = this.add.rectangle(
+      0, 0, boxWidth, boxHeight, 0xffffff // Blanco brillante
+    ).setOrigin(0).setStrokeStyle(2, 0xffffff); // Borde blanco
+  
+    // Añadir elementos al contenedor
+    this.timerBox.add(outline); // Agregar el delineado primero
+    this.timerBox.add(titleBackground);
+    this.timerBox.add(counterBackground);
+    this.timerBox.add(dividerLine);
+    this.timerBox.add(titleText);
+    this.timerBox.add(this.timerText);
+  
+    // Configurar el timer de 10 segundos
+    this.fishermanTimer = this.time.addEvent({
+      delay: 1000,
+      callback: this.updateFishermanTimer,
+      callbackScope: this,
+      repeat: 9 // 10 iteraciones (de 10 a 1)
+    });
+  }
+
+  //Mostrar el contador en pantalla
+  updateFishermanTimer() {
+    const remainingTime = this.fishermanTimer.getRepeatCount(); // +1 para ajustar el desfase
+    this.timerText.setText(remainingTime);
+  
+    if (remainingTime <= 3) {
+      this.timerText.setColor('#ff0000'); // Advertencia en rojo
+    }
+  
+    if (remainingTime === 0) {
+      this.applyFishermanPenalty();
+      this.timerBox.destroy(); // Destruir toda la caja
+    }
+  }
+
+  // Aplicar el castigo del Pescador
+  applyFishermanPenalty() {
+    const numCardsToReplace = Math.min(3, this.playerHand.length); // Máximo 3 cartas
+    const cardsToReplace = [];
+  
+    // Seleccionar 3 cartas aleatorias
+    while (cardsToReplace.length < numCardsToReplace) {
+      const randomIndex = Phaser.Math.Between(0, this.playerHand.length - 1);
+      if (!cardsToReplace.includes(randomIndex)) {
+        cardsToReplace.push(randomIndex);
+      }
+    }
+  
+    // Marcar las cartas seleccionadas para el shuffle
+    this.selectedCards = cardsToReplace.map(index => this.playerHand[index]);
+  
+    // Ejecutar la animación de shuffle para estas cartas
+    this.shuffleAnimationForPenalty(() => {
+      // Después de la animación, reemplazar las cartas seleccionadas
+      this.replaceSelectedCards();
+  
+      // Mostrar mensaje de penalización
+      this.showAlertMessage('¡Se han cambiado 3 cartas\npor tardar demasiado!');
+  
+      // Reiniciar el timer
+      this.resetFishermanTimer();
+    });
+  }
+
+  shuffleAnimationForPenalty(callback) {
+    if (this.selectedCards.length === 0) return;
+  
+    const duration = 500;
+    const selectedSprites = this.cardSprites.filter(sprite =>
+      this.selectedCards.some(card => card.key === sprite.texture.key)
+    );
+  
+    selectedSprites.forEach(sprite => {
+      const randX = this.cameras.main.width / 2 + (Math.random() * 200 - 100);
+      const randY = this.cameras.main.height / 2 + (Math.random() * 200 - 100);
+  
+      // Aplicar múltiples efectos para hacerlo más dinámico
+      this.tweens.add({
+        targets: sprite,
+        x: randX,
+        y: randY,
+        scale: { from: 1.1, to: 1.0 }, // Escalado ligero para enfatizar
+        angle: { from: 0, to: 360 },   // Añadir rotación
+        duration: duration,
+        ease: 'Sine.easeInOut',
+        yoyo: true,
+        onComplete: () => {
+          // Al finalizar la animación, ejecutar el callback
+          if (callback) callback();
+        }
+      });
+    });
+  }
+
+  // Resetear el timer cuando el jugador selecciona cartas
+  resetFishermanTimer() {
+    if (this.playerContext.opponent === 'pescador') {
+      this.startFishermanTimer(); // Reiniciar el timer
+    }
+  }
+
+  initializeGemelosCastigo() {
+    const possibleHands = ['Carta Alta', 'Pareja', 'Doble Pareja', 'Trío', 'Escalera', 'Color', 'Full house', 'Póker', 'Escalera de Color'];
+    this.lastPlayedHand = Phaser.Utils.Array.GetRandom(possibleHands); // Seleccionar una mano aleatoria
+    console.log(`[GEMELOS] Mano inicial prohibida: ${this.lastPlayedHand}`);
+    this.createGemelosPenaltyText(this.lastPlayedHand);
+  }
+
+  applyGemelosPenalty(result) {
+    result.score = 0; // Anular el puntaje
+    this.gemelosCastigo = true;
+  
+    // Mostrar mensaje de advertencia
+    this.showAlertMessage(`💔 ¡No puedes repetir la misma mano\n(${result.handType}) contra los Gemelos!`);
+  
+    // Animar las cartas sin otorgar puntos
+    this.animateSelectedCards(result);
+  
+    console.log(`[GEMELOS] Castigo aplicado: Repetición de ${result.handType}`);
+  }
+
+  createGemelosPenaltyText(handType) {
+    // Limpiar el texto anterior si existe
+    if (this.gemelosPenaltyText) {
+      this.gemelosPenaltyText.destroy();
+    }
+  
+    // Crear el contenedor para el texto y los elementos visuales
+    const penaltyContainer = this.add.container(
+      this.cameras.main.width - 20,
+      this.cameras.main.height / 2
+    ).setDepth(10);
+  
+    // Fondo con gradiente
+    const background = this.add.rectangle(0, 0, 200, 100, 0x000000)
+      .setOrigin(1, 0.5)
+      .setStrokeStyle(2, 0xffffff);
+    this.tweens.add({
+      targets: background,
+      alpha: { from: 0, to: 1 },
+      duration: 300,
+      ease: 'Sine.easeInOut'
+    });
+  
+    // Ícono de advertencia
+    const warningIcon = this.add.text(-190, -20, '⚠', {
+      fontFamily: 'Arial',
+      fontSize: '24px',
+      color: '#ffcc00'
+    }).setOrigin(0, 0.5);
+  
+    // Texto principal
+    const penaltyText = this.add.text(-160, 0, `Mano Prohibida:\n${handType}`, {
+      fontFamily: 'RetroFont',
+      fontSize: '16px',
+      color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 4,
+      align: 'left',
+      wordWrap: { width: 140 }
+    }).setOrigin(0, 0.5);
+  
+    // Efecto de brillo en el borde
+    const shineEffect = this.add.rectangle(0, 0, 200, 100, 0xffffff)
+      .setOrigin(1, 0.5)
+      .setAlpha(0);
+    this.tweens.add({
+      targets: shineEffect,
+      alpha: { from: 1, to: 0 },
+      scaleX: { from: 1, to: 0 },
+      duration: 1000,
+      ease: 'Sine.easeOut',
+      repeat: -1
+    });
+  
+    // Añadir elementos al contenedor
+    penaltyContainer.add(background);
+    penaltyContainer.add(shineEffect);
+    penaltyContainer.add(warningIcon);
+    penaltyContainer.add(penaltyText);
+  
+    // Guardar referencia al contenedor
+    this.gemelosPenaltyText = penaltyContainer;
+  }
+
+  vacioCartasGemelos(onComplete) {
+    this.selectedCards.forEach((card, index) => {
+      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+      if (!sprite) return;
+  
+      // Crear líneas diagonales para simular ruptura
+      const slash1 = this.add.line(
+        sprite.x, sprite.y,
+        -sprite.displayWidth / 2, -sprite.displayHeight / 2,
+        sprite.displayWidth / 2, sprite.displayHeight / 2,
+        0xffffff
+      ).setLineWidth(4).setAlpha(0);
+  
+      const slash2 = this.add.line(
+        sprite.x, sprite.y,
+        sprite.displayWidth / 2, -sprite.displayHeight / 2,
+        -sprite.displayWidth / 2, sprite.displayHeight / 2,
+        0xffffff
+      ).setLineWidth(4).setAlpha(0);
+  
+      // Animación de las líneas diagonales
+      this.tweens.add({
+        targets: [slash1, slash2],
+        alpha: { from: 0, to: 1 },
+        duration: 200,
+        ease: 'Sine.easeInOut',
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => {
+          slash1.destroy();
+          slash2.destroy();
+        }
+      });
+  
+      // Animación de desvanecimiento y contracción de la carta
+      this.tweens.add({
+        targets: sprite,
+        scale: { from: 1, to: 0 }, // La carta se contrae
+        alpha: { from: 1, to: 0 }, // La carta se desvanece
+        angle: { from: 0, to: Math.random() * 360 - 180 }, // Ligera rotación aleatoria
+        duration: 800, // Duración de la animación
+        ease: 'Cubic.easeOut',
+        delay: index * 50, // Retraso progresivo para cada carta
+        onComplete: () => {
+          sprite.destroy(); // Eliminar la carta después de la animación
+  
+          // Si es la última carta, ejecutar el callback
+          if (index === this.selectedCards.length - 1 && onComplete) {
+            onComplete();
+          }
+        }
+      });
+    });
+  }
+
+  animateSelectedCards(result, onCompleteCallback) {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
-  
     this.events.emit('toggle-sort-button', false);
-  
     this.cardSprites.forEach(sprite => {
       const isSelected = this.selectedCards.some(card => card.key === sprite.texture.key);
       if (!isSelected) sprite.setVisible(false);
     });
+
+    // Si estamos contra Samuel, ocultar temporalmente las máscaras de todas las cartas
+    if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
+      this.cardSprites.forEach(sprite => {
+        if (sprite.samuelCover) {
+          sprite.samuelCover.setVisible(false);
+        }
+      });
+    }
   
     this.animateCardsToCenter(result);
   
+    if (this.playerContext.opponent === 'helena') {
+      this.tintarCopas();
+    }
+    // Verificar si el oponente es los gemelos y si hay un castigo (mano repetida)
+    else if (this.playerContext.opponent === 'gemelos' && result.score === 0) {
+      this.aplicarGemelosCastigo();
+    }
+  
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
+      if (this.HelenaCastigo) {
+        this.time.delayedCall(1000, () => {
+          this.handleRoundEnd();
+          if (onCompleteCallback) onCompleteCallback(); // Ejecutar callback
+        });
+        return;
+      }
+  
       this.highlightWinningCards(result);
       this.showScorePopups2(result.winningCards, result.score);
   
@@ -254,12 +737,57 @@ export default class GameScene extends Phaser.Scene {
   
           this.time.delayedCall(1300, () => {
             this.handleRoundEnd();
+            if (onCompleteCallback) onCompleteCallback(); // Ejecutar callback
           });
         });
       });
     });
   }
   
+  tintarCopas() {
+    let found = false;
+    this.selectedCards.forEach(card => {
+      if (card.suit === 'copas') {
+        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+        if (sprite) {
+          sprite.setTint(0x880000); // rojo oscuro
+          found = true;
+          // Efecto visual: parpadeo leve para remarcar
+          this.tweens.add({
+            targets: sprite,
+            alpha: { from: 1, to: 0.4 },
+            yoyo: true,
+            repeat: 2,
+            duration: 200,
+            ease: 'Sine.easeInOut',
+            onComplete: () => {
+              sprite.setAlpha(1);
+            }
+          });
+        }
+      }
+    });
+    if (found) {
+      console.log("[HELENA] Castigo aplicado: cartas de copas detectadas");
+      this.HelenaCastigo = true;
+    } else {
+      this.HelenaCastigo = false;
+    }
+  }
+
+  aplicarGemelosCastigo() {
+    this.vacioCartasGemelos(() => {
+      // Continuar con las animaciones después de la desintegración
+      this.time.delayedCall(600, () => {
+        this.showResultMessage(`${result.handType} (+${result.score} puntos)`);
+        this.time.delayedCall(1300, () => {
+          this.handleRoundEnd();
+          if (onCompleteCallback) onCompleteCallback();
+        });
+      });
+    });
+    return; // Salir temprano para evitar ejecutar el resto del código
+  }
   
   animateCardsToCenter(result) {
     const centerX = this.cameras.main.width / 2;
@@ -346,7 +874,7 @@ export default class GameScene extends Phaser.Scene {
               onComplete: () => darken.destroy(),
             });
   
-            this.cameras.main.shake(500, 0.03);
+            //this.cameras.main.shake(500, 0.03);
           }
         });
       });
@@ -688,11 +1216,17 @@ highlightWinningCards(result) {
         if (!this.selectedCards.includes(card)) {
           sprite.setScale(cardScale * 1.05);
         }
+        if (sprite.samuelCover) {
+          //sprite.samuelCover.setScale(cardScale * 1.05);
+        }
       });
       sprite.on('pointerout', () => {
         if (!this.selectedCards.includes(card)) {
           sprite.setScale(cardScale);
           sprite.clearTint();
+        }
+        if (sprite.samuelCover) {
+          //sprite.samuelCover.setScale(cardScale);
         }
       });
       sprite.on('pointerdown', () => {
@@ -703,7 +1237,59 @@ highlightWinningCards(result) {
     });
 
     this.events.emit('cards-changed', 0);
+
+    if (this.playerContext.opponent === 'samuel') {
+      this.applySamuelPunishment();
+    }
   }
+
+
+  applySamuelPunishment() {
+    // Aplica un filtro visual solo a las primeras 5 cartas
+    this.hiddenSamuelCards = [];
+  
+    for (let i = 0; i < 5 && i < this.cardSprites.length; i++) {
+      const sprite = this.cardSprites[i];
+  
+      // Guardar las cartas ocultas para evitar que se descarten
+      this.hiddenSamuelCards.push(this.playerHand[i]);
+  
+      // Crear un rectángulo negro totalmente opaco encima de la carta
+      const mask = this.add.rectangle(
+        sprite.x,
+        sprite.y,
+        sprite.displayWidth,
+        sprite.displayHeight,
+        0x000000,
+        1 // opacidad total
+      )
+      .setOrigin(0.5)
+      .setDepth(sprite.depth + 1); // por encima de la carta
+  
+      sprite.samuelMask = mask;
+    }
+  }
+  applySamuelPunishment() {
+    this.hiddenSamuelCards = [];
+  
+    for (let i = 0; i < 5 && i < this.cardSprites.length; i++) {
+      const sprite = this.cardSprites[i];
+      const card = this.playerHand[i];
+  
+      this.hiddenSamuelCards.push(card);
+  
+      // Añadir una imagen de carta oculta encima
+      const cover = this.add.image(sprite.x, sprite.y, 'backOfCard')
+      .setDisplaySize(200, 240) // ajusta según tus cartas
+      .setDepth(sprite.depth + 1)
+      .setOrigin(0.5);
+  
+      sprite.samuelCover = cover;
+      sprite.isSamuelHidden = true;
+    }
+  }
+  
+  
 
   toggleCardSelection(card, sprite) {
     const maxSelectable = 5;
@@ -711,12 +1297,18 @@ highlightWinningCards(result) {
       this.selectedCards = this.selectedCards.filter(c => c !== card);
       sprite.setScale(0.9);
       sprite.clearTint();
+      if (sprite.samuelCover) {
+        sprite.samuelCover.clearTint();
+      }
     } else {
       if (this.selectedCards.length < maxSelectable) {
         this.selectedCards.push(card);
         sprite.setScale(0.8);
-        sprite.setTint(0x808080);
-      }
+        if (sprite.samuelCover) {
+          sprite.samuelCover.setTint(0x808080); // gris visible en la carta oculta
+        } else {
+          sprite.setTint(0x808080); // para el resto de cartas
+        }      }
     }
     // Si no hay cartas seleccionadas, actualizar el marcador a 0
     if (this.selectedCards.length === 0) {
@@ -735,7 +1327,7 @@ highlightWinningCards(result) {
 
     this.events.emit('cards-changed', this.selectedCards.length);
   }
-
+  
   showResultMessage(msg) {
     const text = this.add.text(
       this.cameras.main.width / 2,
@@ -815,4 +1407,3 @@ highlightWinningCards(result) {
   
 
 }
-
