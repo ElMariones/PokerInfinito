@@ -1280,8 +1280,8 @@ highlightWinningCards(result) {
   
       // Añadir una imagen de carta oculta encima
       const cover = this.add.image(sprite.x, sprite.y, 'backOfCard')
-      .setDisplaySize(200, 240) // ajusta según tus cartas
       .setDepth(sprite.depth + 1)
+      .setScale(0.9)
       .setOrigin(0.5);
   
       sprite.samuelCover = cover;
