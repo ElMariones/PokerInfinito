@@ -3,9 +3,9 @@ import Player from '../utils/Player.js';
 import DoorManager from '../utils/DoorManager.js';
 import NPCManager from '../utils/NPCManager.js';
 
-export default class MapAsador extends Phaser.Scene {
+export default class MapCocinaDante extends Phaser.Scene {
   constructor() {
-    super('MapAsador');
+    super('MapCocinaDante');
   }
 
   create(data) {
@@ -16,35 +16,39 @@ export default class MapAsador extends Phaser.Scene {
     const startY = data?.spawnY ?? 500;
 
     // 2) Load your Tilemap and Tilesets
-    const map = this.make.tilemap({ key: 'asadorReyMap' });
-    const texturasSuelosParedes = map.addTilesetImage('floors', 'floors');
-    const texturasMobiliario = map.addTilesetImage('dark-wood', 'darkWood');
-    const texturasDecoracion = map.addTilesetImage('tavern-deco', 'tavernDeco');
-    const texturasCocina = map.addTilesetImage('tavern-cooking', 'tavernCooking');
+    const map = this.make.tilemap({ key: 'cocinaDanteMap' });
+    const texturasSuelos = map.addTilesetImage('suelos', 'suelos');
+    const texturasParedes = map.addTilesetImage('paredes', 'paredes');
+    const texturasParedes2 = map.addTilesetImage('walls', 'paredes2');
+    const texturasMobiliario = map.addTilesetImage('Muebles', 'muebles');
+    const texturasInterior = map.addTilesetImage('Interior', 'interior2'); //siempre encima de los muebles, no me importa
 
     // 3) Create layers
-    const layerSuelos = map.createLayer('suelo', texturasSuelosParedes, 0, 0);
-    const layerPisable = map.createLayer('pisable', [texturasSuelosParedes, texturasDecoracion, texturasMobiliario], 0, 0);
-    const layerPared = map.createLayer('pared', texturasSuelosParedes, 0, 0);
-    const layerMobiliario = map.createLayer('mobiliario', [texturasMobiliario, texturasDecoracion, texturasCocina, texturasSuelosParedes], 0, 0);
-    const layerencima_mobiliario = map.createLayer('encima_mobiliario', texturasCocina, 0, 0);
+    const layerSuelos = map.createLayer('Suelo', [texturasSuelos, texturasInterior], 0, 0);
+    const layerPared = map.createLayer('Paredes', [texturasParedes, texturasParedes2], 0, 0);
+    const layerMobiliario = map.createLayer('muebles', [texturasMobiliario, texturasInterior], 0, 0);
+    const layerAdornos = map.createLayer('Adornos', [texturasInterior, texturasMobiliario], 0, 0);
 
     // 4) Set collisions
+    layerSuelos.setCollisionByProperty({}); // Vacío: ningún tile cumple con ninguna propiedad, así que nada colisiona
+    layerAdornos.setCollisionByProperty({});
     layerPared.setCollisionByExclusion([-1]);
     layerMobiliario.setCollisionByExclusion([-1]);
-    layerencima_mobiliario.setCollisionByExclusion([-1]);
 
     // 5) Player logic
     Player.createPlayerAnimations(this);
     // Create player at the specified (or default) position
     this.player = new Player(this, startX, startY, 'playerIdle');
 
-    const layerDecoracion = map.createLayer('auxiliar', [texturasMobiliario, texturasDecoracion, texturasCocina], 0, 0);
-
     // Collisions with the solid layers
     this.physics.add.collider(this.player, layerPared);
     this.physics.add.collider(this.player, layerMobiliario);
 
+    layerMobiliario.setDepth(1); // o cualquier valor más bajo
+    layerAdornos.setDepth(999); // para que esté por encima de Dante
+    this.player.setDepth(this.player.y); // para que el jugador quede "entre" los layers correctamente
+
+   
     // Camera settings
     this.cameras.main.startFollow(this.player);
     this.cameras.main.setZoom(2);
@@ -52,27 +56,27 @@ export default class MapAsador extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.player.setCollideWorldBounds(true);
 
+    // Music
     this.songs = [];
     if (this.registry.get('musicEnabled') === true) {
-      this.music = this.sound.add('asadorMusic', { volume: 0.6, loop: true });
+      this.music = this.sound.add('cocinaMusic', { volume: 0.6, loop: true });
       this.songs.push(this.music);
       this.music.play();
-    };
-
+    }
     this.doorManager = new DoorManager(this, [
-      { x: 320, y: 614, toScene: 'MapScene', spawnX: 862, spawnY: 2431 },
-      // Agrega más puertas según sea necesario
+      { x: 726, y: 470, toScene: 'MapScene', spawnX: 187, spawnY: 2448 },
+      { 
+        x: 726, 
+        y: 260, 
+        toScene: 'MapHabitacion', 
+        spawnX: 150,  // Cambiado para que aparezca justo cerca de la puerta
+        spawnY: 240 
+      }
+            // Agrega más puertas según sea necesario
     ], this.music);
 
     this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player)
     this.npcManager.createAnimations()
-
-    const samuel = this.npcManager.addNPC('samuel', 321, 125, 'idle-down', false)
-    const calvo = this.npcManager.addNPC('calvo', 242, 384, 'idle-down', true)
-    const roberto = this.npcManager.addNPC('roberto', 470, 272, 'idle-down', true)
-    const esqueleto = this.npcManager.addNPC('esqueleto', 426, 431, 'idle-down', true)
-    //470, 272
-    //426, 431
 
     this.npcArray = this.npcManager.getAllNPCs()
 

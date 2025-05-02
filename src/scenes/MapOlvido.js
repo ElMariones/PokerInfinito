@@ -71,15 +71,14 @@ export default class MapOlvido extends Phaser.Scene {
     this.npcManager.createAnimations();
     const helena = this.npcManager.addNPC('helena', 177, 120, 'idle-down', false);
     const pelirrojo = this.npcManager.addNPC('pelirrojo', 401, 380, 'idle-down', true);
-    //401, 380
     this.npcArray = this.npcManager.getAllNPCs();
 
-    // Music
-    if (this.scene.sound) {
-      this.scene.sound.stopAll();
+    this.songs = [];
+    if (this.registry.get('musicEnabled') === true) {
+      this.music = this.sound.add('olvidoMusic', { volume: 0.6, loop: true });
+      this.songs.push(this.music);
+      this.music.play();
     }
-     this.music = this.sound.add('olvidoMusic', { volume: 0.5, loop: true });
-     this.music.play();
 
     this.doorManager = new DoorManager(this, [
       { x: 320, y: 614, toScene: 'MapScene', spawnX: 720, spawnY: 1756 },

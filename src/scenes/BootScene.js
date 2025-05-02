@@ -25,6 +25,20 @@ import interior from '../../assets/maps/images/Interior.png';
 import rpg from '../../assets/maps/images/rpg.png';
 import tavernCooking from '../../assets/maps/images/tavern-cooking.png';
 import taverDeco from '../../assets/maps/images/tavern-deco.png';
+import paredes from '../../assets/maps/images/Inside_A4.png';
+import suelos from '../../assets/maps/images/Inside_A2.png';
+import muebles from '../../assets/maps/images/Inside_B.png';
+import paredes2 from '../../assets/maps/images/walls.png';
+import interior2 from '../../assets/maps/images/castle.png';
+
+import bookShelf from '../../assets/maps/images/bookshelf-brown.png';
+import drawerShelf from '../../assets/maps/images/drawer_shelf-brown.png';
+import habitacionInside1 from '../../assets/maps/images/house_inside.png';
+import habitacionInside2 from '../../assets/maps/images/Inside_B.png';
+import TV from '../../assets/maps/images/pixelart-tv-iso_0.png';
+import windows from '../../assets/maps/images/windows.png';
+import TVBig from '../../assets/maps/images/tv.png';
+
 
 // NEW: Sort button skins
 import sortNum from '../../assets/images/sortnum.png';
@@ -61,6 +75,14 @@ import pacoIdle from '../../assets/images/sprites/paco/Idle.png';
 import robertoIdle from '../../assets/images/sprites/roberto/Idle.png';
 import pelirrojoIdle from '../../assets/images/sprites/pelirrojo/Idle.png';
 
+import ratonIdle from '../../assets/images/sprites/raton/Idle.png';
+import orcoIdle from '../../assets/images/sprites/orco/Idle.png';
+import mujerIdle from '../../assets/images/sprites/mujer/Idle.png';
+import pardilloIdle from '../../assets/images/sprites/pardillo/Idle.png';
+import pepeIdle from '../../assets/images/sprites/pepe/Idle.png';
+import joseIdle from '../../assets/images/sprites/jose/Idle.png';
+import esqueletoIdle from '../../assets/images/sprites/esqueleto/Idle.png';
+
 //import pictures dialogos
 
 import samuel from '../../assets/images/samuel.png';
@@ -89,6 +111,14 @@ import paco from '../../assets/images/paco.png';
 import roberto from '../../assets/images/roberto.png';
 import pelirrojo from '../../assets/images/pelirrojo.png';
 
+import raton from '../../assets/images/raton.png';
+import orco from '../../assets/images/orco.png';
+import mujer from '../../assets/images/mujer.png';
+import pardillo from '../../assets/images/pardillo.png';
+import pepe from '../../assets/images/pepe.png';
+import jose from '../../assets/images/jose.png';
+import esqueleto from '../../assets/images/esqueleto.png';
+
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
 import retroFontUrl from '../../assets/fonts/PressStart2P-Regular.ttf';
@@ -101,6 +131,8 @@ import mapacavernaOlvido from '../../assets/maps/interior_cavernaOlvido.json';
 import mapapuertoAzul from '../../assets/maps/interior_puertoAzul.json';
 import maparinconBandido from '../../assets/maps/interior_rinconBandido.json';
 import mapaextCasino from '../../assets/maps/exterior_casino.json';
+import mapCocinaDante from '../../assets/maps/interior_cocinaDante.json';
+import mapaHabitacion from '../../assets/maps/habitacion.json';
 
 //importar jokers
 import joker1 from '../../assets/images/jokers/joker1.png';
@@ -142,12 +174,13 @@ import trapecistaJoker from '../../assets/images/jokers/trapecistaJoker.png';
 import billeteJoker from '../../assets/images/jokers/billeteJoker.png';
 import cromosJoker from '../../assets/images/jokers/cromosJoker.png';
 import doradoJoker from '../../assets/images/jokers/doradoJoker.png';
+import backOfCard from '../../assets/cards/back.png';
 
 //import music
 import rain from '../../assets/audio/Dark_Rainy_Night(ambience).ogg';
 import mapSceneMusic from '../../assets/audio/Space_Atmosphere.mp3';
 import olvidoMusic from '../../assets/audio/Night_of_the_Streets.mp3';
-import creditsMusic from '../../assets/audio/main_menu_music.ogg';
+import cocinaMusic from '../../assets/audio/main_menu_music.ogg';
 import mainMenuMusic from '../../assets/audio/ambient_menu.mp3';
 import asadorMusic from '../../assets/audio/life_in_corrupted_binary.flac';
 import puertoMusic from '../../assets/audio/merchants_and_sea_salt.wav';
@@ -322,6 +355,16 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('robertoIdle', robertoIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('pelirrojoIdle', pelirrojoIdle, { frameWidth: 64, frameHeight: 64 });
 
+    this.load.spritesheet('ratonIdle', ratonIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('orcoIdle', orcoIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('mujerIdle', mujerIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('pardilloIdle', pardilloIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('pepeIdle', pepeIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('joseIdle', joseIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('esqueletoIdle', esqueletoIdle, { frameWidth: 64, frameHeight: 64 });
+
+    
+
     // Load the dialog pictures
     this.load.image('samuel', samuel);
     this.load.image('dante', dante);
@@ -342,6 +385,13 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('paco', paco);
     this.load.image('roberto', roberto);
     this.load.image('pelirrojo', pelirrojo);
+    this.load.image('raton', raton);
+    this.load.image('orco', orco);
+    this.load.image('mujer', mujer);
+    this.load.image('pardillo', pardillo);
+    this.load.image('pepe', pepe);
+    this.load.image('jose', jose);
+    this.load.image('esqueleto', esqueleto);
     
     this.load.image('broken_car', broken_car);
     this.load.image('cow', cow);
@@ -365,6 +415,23 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('rpg', rpg);
     this.load.image('tavernCooking', tavernCooking);
     this.load.image('tavernDeco', taverDeco);
+    this.load.image('paredes', paredes);
+    this.load.image('suelos', suelos);
+    this.load.image('muebles', muebles);
+    this.load.image('paredes2', paredes2);
+    this.load.image('interior2', interior2);
+
+    this.load.image('bookShelf', bookShelf);
+    this.load.image('drawerShelf', drawerShelf);
+    this.load.image('habitacionInside1', habitacionInside1);
+    this.load.image('habitacionInside2', habitacionInside2);
+    this.load.image('TV', TV);
+    this.load.image('windows', windows);
+    this.load.image('TVBig', TVBig);
+
+
+
+
 
     //Json Mapas
     this.load.tilemapTiledJSON('ciudadMap', mapaCiudad);
@@ -374,13 +441,16 @@ export default class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('puertoAzulMap', mapapuertoAzul);
     this.load.tilemapTiledJSON('rinconBandidoMap', maparinconBandido);
     this.load.tilemapTiledJSON('extCasinoMap', mapaextCasino);
+    this.load.tilemapTiledJSON('cocinaDanteMap', mapCocinaDante);
+    this.load.tilemapTiledJSON('habitacionMap', mapaHabitacion);
+
 
     // Load music
     this.load.audio('rain', rain);
     this.load.audio('mapSceneMusic', mapSceneMusic);
     this.load.audio('olvidoMusic', olvidoMusic);
     this.load.audio('mainMenuMusic', mainMenuMusic);
-    this.load.audio('creditsMusic', creditsMusic);
+    this.load.audio('cocinaMusic', cocinaMusic);
     this.load.audio('asadorMusic', asadorMusic);
     this.load.audio('puertoMusic', puertoMusic);
     this.load.audio('ocean', ocean);
@@ -428,6 +498,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('billeteJoker', billeteJoker);
     this.load.image('cromosJoker', cromosJoker);
     this.load.image('doradoJoker', doradoJoker);
+    this.load.image('backOfCard', backOfCard);
   }
 
   create() {
@@ -435,7 +506,7 @@ export default class BootScene extends Phaser.Scene {
     // In a BootScene or before starting game scenes
     this.registry.set('coins', 150);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
-    this.registry.set('stage', 4);
+    this.registry.set('stage', 0);
     this.registry.set('musicEnabled', true);
     this.scene.start('IntroScene');
   }

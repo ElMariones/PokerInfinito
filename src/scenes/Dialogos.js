@@ -96,7 +96,7 @@ export default class Dialogos extends Phaser.Scene {
                 case 'samuel':
                     if (stage === 0) {
                         // Initial dialog with Samuel at stage 0
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 400, rounds: 3, scene: this.gameScene };
+                        this.transitionData = { npc: 'samuel', pointsNeeded: 500, rounds: 5, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
                             { character: "dante", text: "¿Cómo sabes mi nombre?" },
@@ -119,7 +119,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'helena':
                     if (stage === 1) {
-                        this.transitionData = { npc: 'helena', pointsNeeded: 550, rounds: 4, scene: this.gameScene };
+                        this.transitionData = { npc: 'helena', pointsNeeded: 1000, rounds: 4, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
                             { character: "dante", text: "¿Tú también? ¿Cómo es que todos saben quién soy?" },
@@ -143,7 +143,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'pescador':
                     if (stage === 2) {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 800, rounds: 4, scene: this.gameScene };
+                        this.transitionData = { npc: 'pescador', pointsNeeded: 1500, rounds: 4, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "pescador", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
                             { character: "dante", text: "Parece que mi reputación me precede." },
@@ -165,7 +165,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'gemelos':
                     if (stage === 3) {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 1250, rounds: 3, scene: this.gameScene };
+                        this.transitionData = { npc: 'gemelos', pointsNeeded: 3500, rounds: 3, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "gemelos", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
                             { character: "gemelos", text: "Oh sí… creía que tardaría más en aparecer." },
@@ -189,7 +189,7 @@ export default class Dialogos extends Phaser.Scene {
                     break;
                 case 'padre':
                     if (stage === 4) {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 2500, rounds: 3, scene: this.gameScene };
+                        this.transitionData = { npc: 'padre', pointsNeeded: 5000, rounds: 3, scene: this.gameScene };
                         this.dialogLines = [
                             { character: "dante", text: "Papá." },
                             { character: "padre", text: "Has llegado, Dante. Tal como imaginé." },
@@ -333,6 +333,71 @@ case 'pelirrojo':
         { character: "pelirrojo", text: "Estoy aquí practicando las escaleras de color para poder ganarle a Helena. El problema es que siempre me confundo… ¿Después del 6 va el 8 o el 9?" },
         { character: "dante", text: "Creo que el 7 está entre esos dos." },
         { character: "pelirrojo", text: "¿El 7? ¿Es que no sabes contar?" }
+    ];
+    break;
+
+case 'orco':
+    this.transitionData = { npc: 'orco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "orco",  text: "¡Maldita máquina dispensadora! La golpeo y nada… ¿Dónde está el alcalde?" },
+        { character: "dante", text: "Quizá acepta solo monedas, no puños." },
+        { character: "orco",  text: "¿Eres muy listillo, no?" }
+    ];
+    break;
+
+case 'raton':
+    this.transitionData = { npc: 'raton', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "raton", text: "Ufff… diecisiete trozos de queso son demasiados para un cuerpo tan pequeño. No puedo ni mover el bigote." },
+        { character: "dante", text: "Eso es mucho queso, desde luego." },
+        { character: "raton", text: "Se lo gané a un tipo con gafas de sol en una partida de cartas. Ahora tendrá que irse a su casa con las manos vacías." }
+    ];
+    break;
+
+case 'esqueleto':
+    this.transitionData = { npc: 'esqueleto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "esqueleto", text: "Intento comerme este pan, pero atraviesa mis costillas y vuelve a salir. ¡Dietas milagro, lo llaman!" },
+        { character: "dante",     text: "Al menos no engordas." },
+        { character: "esqueleto", text: "Ni engordo ni disfruto… ¡Un drama existencial!" }
+    ];
+    break;
+
+case 'pardillo':
+    this.transitionData = { npc: 'pardillo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "pardillo", text: "¿Sabías que si sigues por esta carretera cuesta arriba llegas al Casino Ébano?" },
+        { character: "dante",    text: "Eso dicen. ¿Tú ya fuiste?" },
+        { character: "pardillo", text: "No… no tengo ni un euro para gastar. Pero cuentan que brilla más que la luna." }
+    ];
+    break;
+
+case 'mujer':
+    this.transitionData = { npc: 'mujer', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "mujer", text: "Estoy perdida, no encuentro a los gemelos, he perdido dos de mis jokers. Se acabó mi suerte." },
+        { character: "dante", text: "¿Vas a dejarlo?" },
+        { character: "mujer", text: "Sí. Probaré con otra vocación… quizá ingeniera informática." }
+    ];
+    break;
+
+case 'jose':
+    this.transitionData = { npc: 'jose', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "jose",  text: "Barajar es muy útil en plena batalla de cartas." },
+        { character: "dante", text: "Renueva la mano, desde luego." },
+        { character: "jose",  text: "Pero ojo: cada barajado sube la penalización. Una vez no pasa nada, dos veces inquieta, tres… la has liado." },
+        { character: "dante", text: "¿Hablas por experiencia?" },
+        { character: "jose",  text: "Sí, he perdido todo el queso que había comprado. Mi mujer me va a matar." }
+    ];
+    break;
+
+case 'pepe':
+    this.transitionData = { npc: 'pepe', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "pepe",  text: "Me encanta pasar las tardes aquí oliendo a pescado…" },
+        { character: "dante", text: "Bueno, cada quien sus aficiones." },
+        { character: "pepe",  text: "¿Qué pasa, tienes algún problema?" },
     ];
     break;
 

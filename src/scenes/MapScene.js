@@ -91,6 +91,10 @@ export default class MapScene extends Phaser.Scene {
       });
     }
 
+    // Luz que sigue al jugador
+    this.playerLight = this.lights.addLight(this.player.x, this.player.y, 120, 0xffffff, 0.65);
+
+
     // Music
     this.songs = [];
     if (this.registry.get('musicEnabled') === true) {
@@ -138,7 +142,15 @@ export default class MapScene extends Phaser.Scene {
         toScene: 'MapRincon',
         spawnX: 956,
         spawnY: 928
+      },
+      {
+        x: 187, 
+        y: 2410, 
+        toScene: 'MapCocinaDante', 
+        spawnX: 705, 
+        spawnY: 489 
       }
+
     ];
     this.doorManager = new DoorManager(this, this.doors, this.songs);
 
@@ -171,31 +183,21 @@ export default class MapScene extends Phaser.Scene {
     // Set pipeline for NPCs
 
     // Add NPCs
-    const oveja = this.npcManager.addNPC('oveja', 154, 872, 'idle-down', false);
+    const oveja = this.npcManager.addNPC('oveja', 154, 872, 'idle-down', true);
     const rubio = this.npcManager.addNPC('rubio', 1295, 543, 'idle-down', true);
     const alien = this.npcManager.addNPC('alien', 945, 1900, 'idle-down', true);
     const hermenegildo = this.npcManager.addNPC('hermenegildo', 950, 845, 'idle-down', true);
     const chica = this.npcManager.addNPC('chica', 1002, 1148, 'idle-down', true);
     const paco = this.npcManager.addNPC('paco', 481, 476, 'idle-down', true);
-    //tienda 950, 845
-    //bajo mesa parque 817, 1020
+    const orco = this.npcManager.addNPC('orco', 583, 2428, 'idle-down', true);
+    const pardillo = this.npcManager.addNPC('pardillo', 1072, 508, 'idle-down', true);
+    const jose = this.npcManager.addNPC('jose', 466, 796, 'idle-down', true);
+    const raton = this.npcManager.addNPC('raton', 817, 1020, 'idle-down', true);
     //arriba parque 466, 796
-    //casa arriba 481, 476
-    //farola al lado bandido 1072, 508
-    //parque abajo fuera 1002, 1148
-    //abajo olvido 145, 1948
-    //calle abajo dispenser 583, 2428
 
     this.npcManager.getAllNPCs().forEach(npc => {
       npc.setPipeline('Light2D');
     });
-    // Example path for an NPC
-    this.npcManager.setNPCPath(oveja, [
-      { x: 154, y: 872 },
-      { x: 224, y: 872 },
-      { x: 224, y: 967 },
-      { x: 154, y: 967 },
-    ], 60, true);
 
             // --- NEW: Add Barriers based on Stage ---
             this.barriers = []; // Clear previous barriers if scene restarts
@@ -283,6 +285,8 @@ export default class MapScene extends Phaser.Scene {
     this.flickerLights.forEach(light => {
       light.intensity = 0.5 + (Math.random() - 0.5) * 0.05; // Intensity fluctuates roughly between 0.4 and 0.6
     });
+    // Actualizar la posición de la luz del jugador
+    this.playerLight.setPosition(this.player.x, this.player.y);
   }
 
   tryInteract() {
