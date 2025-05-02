@@ -471,7 +471,7 @@ export default class BootScene extends Phaser.Scene {
     // In a BootScene or before starting game scenes
     this.registry.set('coins', 150);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
-    this.registry.set('stage', 0);
+    this.registry.set('stage', 4);
     this.registry.set('musicEnabled', true);
     this.scene.start('IntroScene');
   }
