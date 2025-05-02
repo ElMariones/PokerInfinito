@@ -68,7 +68,7 @@ export default class MapPuerto extends Phaser.Scene {
     this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
     this.npcManager.createAnimations();
     const pescador = this.npcManager.addNPC('pescador', 370, 291, 'idle-down', true);
-    //553, 424
+    const pepe = this.npcManager.addNPC('pepe', 553, 424, 'idle-down', true);
     //pianista 479, 92
     this.npcArray = this.npcManager.getAllNPCs();
 

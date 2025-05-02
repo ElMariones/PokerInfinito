@@ -336,6 +336,71 @@ case 'pelirrojo':
     ];
     break;
 
+case 'orco':
+    this.transitionData = { npc: 'orco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "orco",  text: "¡Maldita máquina dispensadora! La golpeo y nada… ¿Dónde está el alcalde?" },
+        { character: "dante", text: "Quizá acepta solo monedas, no puños." },
+        { character: "orco",  text: "¿Eres muy listillo, no?" }
+    ];
+    break;
+
+case 'raton':
+    this.transitionData = { npc: 'raton', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "raton", text: "Ufff… diecisiete trozos de queso son demasiados para un cuerpo tan pequeño. No puedo ni mover el bigote." },
+        { character: "dante", text: "Eso es mucho queso, desde luego." },
+        { character: "raton", text: "Se lo gané a un tipo con gafas de sol en una partida de cartas. Ahora tendrá que irse a su casa con las manos vacías." }
+    ];
+    break;
+
+case 'esqueleto':
+    this.transitionData = { npc: 'esqueleto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "esqueleto", text: "Intento comerme este pan, pero atraviesa mis costillas y vuelve a salir. ¡Dietas milagro, lo llaman!" },
+        { character: "dante",     text: "Al menos no engordas." },
+        { character: "esqueleto", text: "Ni engordo ni disfruto… ¡Un drama existencial!" }
+    ];
+    break;
+
+case 'pardillo':
+    this.transitionData = { npc: 'pardillo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "pardillo", text: "¿Sabías que si sigues por esta carretera cuesta arriba llegas al Casino Ébano?" },
+        { character: "dante",    text: "Eso dicen. ¿Tú ya fuiste?" },
+        { character: "pardillo", text: "No… no tengo ni un euro para gastar. Pero cuentan que brilla más que la luna." }
+    ];
+    break;
+
+case 'mujer':
+    this.transitionData = { npc: 'mujer', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "mujer", text: "Estoy perdida, no encuentro a los gemelos, he perdido dos de mis jokers. Se acabó mi suerte." },
+        { character: "dante", text: "¿Vas a dejarlo?" },
+        { character: "mujer", text: "Sí. Probaré con otra vocación… quizá ingeniera informática." }
+    ];
+    break;
+
+case 'jose':
+    this.transitionData = { npc: 'jose', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "jose",  text: "Barajar es muy útil en plena batalla de cartas." },
+        { character: "dante", text: "Renueva la mano, desde luego." },
+        { character: "jose",  text: "Pero ojo: cada barajado sube la penalización. Una vez no pasa nada, dos veces inquieta, tres… la has liado." },
+        { character: "dante", text: "¿Hablas por experiencia?" },
+        { character: "jose",  text: "Sí, he perdido todo el queso que había comprado. Mi mujer me va a matar." }
+    ];
+    break;
+
+case 'pepe':
+    this.transitionData = { npc: 'pepe', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "pepe",  text: "Me encanta pasar las tardes aquí oliendo a pescado…" },
+        { character: "dante", text: "Bueno, cada quien sus aficiones." },
+        { character: "pepe",  text: "¿Qué pasa, tienes algún problema?" },
+    ];
+    break;
+
             default:
                 this.dialogLines = [];
                 this.startBattle();

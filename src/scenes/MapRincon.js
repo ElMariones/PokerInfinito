@@ -68,6 +68,7 @@ export default class MapRincon extends Phaser.Scene {
     this.npcManager = new NPCManager(this, [layerPared, layerMobiliario], this.player);
     this.npcManager.createAnimations();
     const gemelos = this.npcManager.addNPC('gemelos', 1056, 156, 'idle-down', true);
+    const mujer = this.npcManager.addNPC('mujer', 998, 697, 'idle-down', true);
     this.npcArray = this.npcManager.getAllNPCs();
 
     this.songs = [];

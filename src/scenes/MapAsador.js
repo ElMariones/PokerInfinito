@@ -70,6 +70,7 @@ export default class MapAsador extends Phaser.Scene {
     const samuel = this.npcManager.addNPC('samuel', 321, 125, 'idle-down', false)
     const calvo = this.npcManager.addNPC('calvo', 242, 384, 'idle-down', true)
     const roberto = this.npcManager.addNPC('roberto', 470, 272, 'idle-down', true)
+    const esqueleto = this.npcManager.addNPC('esqueleto', 426, 431, 'idle-down', true)
     //470, 272
     //426, 431
 
