@@ -2,8 +2,7 @@
 
 ![macaco_macaco_generate_a_pixel_art_title_for_a_card_game_with_0810ca01-5e59-4d3d-8e44-e5ff481cf843_3 (1)](https://github.com/user-attachments/assets/390034cc-580a-4b57-9b9e-5aa8255eb484)
 
-[Ver trailer (720p)](./assets/Trailer720p.mp4)
-[Ver trailer (1080p)](./assets/Trailer1080p.mp4)
+[![Ver el trailer](https://img.youtube.com/vi/WXuYIYHAj-8/0.jpg)](https://youtu.be/WXuYIYHAj-8)
 
 
 
