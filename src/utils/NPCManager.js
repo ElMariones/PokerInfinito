@@ -25,10 +25,10 @@ export default class NPCManager {
    */
 
   createAnimations() {
-    const npcNames = ['samuel', 'helena', 'pescador', 'padre', 'gemelos', 'oveja', 'calvo', 'alien', 'rubio', 'hermenegildo', 'chica', 'paco', 'roberto', 'pelirrojo', 'raton', 'orco', 'mujer', 'pardillo', 'pepe', 'jose', 'esqueleto'];
+    const npcNames = ['samuel', 'helena', 'pescador', 'padre', 'gemelos', 'oveja', 'calvo', 'alien', 'rubio', 'hermenegildo', 'chica', 'paco', 'roberto', 'pelirrojo', 'raton', 'orco', 'mujer', 'pardillo', 'pepe', 'jose', 'esqueleto', 'madre'];
 
     // Define which NPCs only have idle animations
-    const idleOnlyNPCs = ['calvo', 'alien', 'rubio', 'hermenegildo', 'chica', 'paco', 'roberto', 'pelirrojo', 'raton', 'orco', 'mujer', 'pardillo', 'pepe', 'jose', 'esqueleto'];
+    const idleOnlyNPCs = ['calvo', 'alien', 'rubio', 'hermenegildo', 'chica', 'paco', 'roberto', 'pelirrojo', 'raton', 'orco', 'mujer', 'pardillo', 'pepe', 'jose', 'esqueleto', 'madre'];
 
     npcNames.forEach(npc => {
       // Idle animations

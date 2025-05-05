@@ -401,6 +401,14 @@ case 'pepe':
     ];
     break;
 
+case 'madre':
+    this.transitionData = { npc: 'madre', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+    this.dialogLines = [
+        { character: "madre", text: "Hola Dante, ¿qué tal?" },
+        { character: "dante", text: "Todo bien, gracias. ¿Qué tal tú?" },
+        { character: "madre", text: "Bien, gracias a Dios." },
+    ];
+    break;
             default:
                 this.dialogLines = [];
                 this.startBattle();

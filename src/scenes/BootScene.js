@@ -82,6 +82,7 @@ import pardilloIdle from '../../assets/images/sprites/pardillo/Idle.png';
 import pepeIdle from '../../assets/images/sprites/pepe/Idle.png';
 import joseIdle from '../../assets/images/sprites/jose/Idle.png';
 import esqueletoIdle from '../../assets/images/sprites/esqueleto/Idle.png';
+import madreIdle from '../../assets/images/sprites/madre/Idle.png';
 
 //import pictures dialogos
 
@@ -118,6 +119,7 @@ import pardillo from '../../assets/images/pardillo.png';
 import pepe from '../../assets/images/pepe.png';
 import jose from '../../assets/images/jose.png';
 import esqueleto from '../../assets/images/esqueleto.png';
+import madre from '../../assets/images/madre.png';
 
 // Load the font
 import fontUrl from '../../assets/fonts/MarioKart.ttf';
@@ -362,6 +364,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('pepeIdle', pepeIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('joseIdle', joseIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('esqueletoIdle', esqueletoIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('madreIdle', madreIdle, { frameWidth: 64, frameHeight: 64 });
 
     
 
@@ -392,6 +395,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('pepe', pepe);
     this.load.image('jose', jose);
     this.load.image('esqueleto', esqueleto);
+    this.load.image('madre', madre);
     
     this.load.image('broken_car', broken_car);
     this.load.image('cow', cow);
