@@ -79,14 +79,146 @@ export default class MapCocinaDante extends Phaser.Scene {
     this.npcManager.createAnimations()
     const madre = this.npcManager.addNPC('madre', 400, 408, 'idle-down', true)
 
-    this.npcArray = this.npcManager.getAllNPCs()
+    this.npcArray = this.npcManager.getAllNPCs();
+    this.eIcon = this.add.image(566, 90, 'interactKey').setInteractive();
+    this.eIcon.setScale(0.07);
+    this.eIcon.setDepth(9999); // Ensure it's on top
+    // Índice para rastrear la imagen actual
+    this.currentTutorialImageIndex = -1;
+    this.tutorial = false;
 
     this.input.keyboard.on('keydown-E', () => {
+      if (!this.tutorial && this.isPlayerNearEIcon()) {
+        this.tutorial = true;
+        this.startTutorial();
+      }
+      else if (this.tutorial) {
+        this.exitTutorial();
+      }
       this.tryInteract()
     });
+
+    // Lógica para navegar por las imágenes del tutorial
+    this.input.keyboard.on('keydown-T', () => {
+      if (this.tutorial) {
+        this.currentTutorialImageIndex++;
+        this.showTutorialImage();
+      }
+    });
+
+    this.input.keyboard.on('keydown-R', () => {
+      if (this.tutorial) {
+        this.currentTutorialImageIndex = Math.max(0, this.currentTutorialImageIndex - 1);
+        this.showTutorialImage();
+      }
+    });
+    
+
+    // Obtener el tamaño de la escena
+    const sceneWidth = this.cameras.main.width;
+    const sceneHeight = this.cameras.main.height;
+    const imageWidth = sceneWidth * 0.35;
+    const imageHeight = sceneHeight * 0.35;
+    
+    this.tutorialImages = [
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial1').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial2').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial3').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial4').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial5').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial6').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial7').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial8').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial9').setScrollFactor(0).setVisible(false),
+      this.add.image(sceneWidth / 2, sceneHeight / 2, 'tutorial10').setScrollFactor(0).setVisible(false)
+    ];
+    
+    this.tutorialImages.forEach(image => {
+      image.setDisplaySize(imageWidth, imageHeight);
+      image.setDepth(9999);
+    });
+
+    const buttonY = sceneHeight / 2 + imageHeight / 2 + 20;
+    this.tutorialButtons = {
+      prev: this.add.text(sceneWidth / 2 - 150, buttonY, '← R: Anterior', {
+        fontSize: '20px',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 5, y: 5 }
+      }).setScrollFactor(0).setOrigin(0.5).setDepth(10000).setVisible(false),
+
+      exit: this.add.text(sceneWidth / 2, buttonY, 'E: Salir', {
+        fontSize: '20px',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 5, y: 5 }
+      }).setScrollFactor(0).setOrigin(0.5).setDepth(10000).setVisible(false),
+
+      next: this.add.text(sceneWidth / 2 + 150, buttonY, 'T: Siguiente →', {
+        fontSize: '20px',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 5, y: 5 }
+      }).setScrollFactor(0).setOrigin(0.5).setDepth(10000).setVisible(false)
+    };
+
+  }
+
+  isPlayerNearEIcon() {
+    const distance = Phaser.Math.Distance.Between(
+      this.player.x,
+      this.player.y,
+      this.eIcon.x,
+      this.eIcon.y
+    );
+    return distance < 50; // Umbral de proximidad (ajusta según sea necesario)
+  }
+
+  startTutorial() {
+    this.currentTutorialImageIndex = 0;
+    this.showTutorialImage();
+    Object.values(this.tutorialButtons).forEach(btn => btn.setVisible(true));
+  }
+
+  showTutorialImage() {
+    // Pausar el jugador mientras se muestra el tutorial
+    this.player.body.moves = false;
+  
+    if (this.currentTutorialImageIndex >= 0 && this.currentTutorialImageIndex < this.tutorialImages.length) {
+      // Ocultar todas las imágenes
+      this.tutorialImages.forEach(image => image.setVisible(false));
+  
+      // Mostrar solo la imagen actual
+      this.tutorialImages[this.currentTutorialImageIndex].setVisible(true);
+    } else {
+      // Si se llega al final del tutorial, salir
+      this.exitTutorial();
+    }
+  }
+  
+  exitTutorial() {
+    // Ocultar la última imagen
+    this.tutorialImages.forEach(image => image.setVisible(false));
+  
+    // Reiniciar el índice del tutorial
+    this.currentTutorialImageIndex = -1;
+  
+    // Reactivar el movimiento del jugador
+    this.player.body.moves = true;
+  
+    // Desactivar el modo tutorial
+    this.tutorial = false;
+    Object.values(this.tutorialButtons).forEach(btn => btn.setVisible(false));
+    if (this.registry.get('tutorialStep') === 0) {
+      this.registry.set('tutorialStep', 1); // Actualiza el paso del tutorial
+    }
   }
 
   update() {
+    if (this.isPlayerNearEIcon())
+      this.eIcon.setVisible(true);
+    else
+      this.eIcon.setVisible(false);
     this.player.update();
     this.npcManager.updateNPCs();
     this.doorManager.update(this.player);

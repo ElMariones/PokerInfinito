@@ -12,6 +12,16 @@ import portada from '../../assets/images/AllLUM.png';
 import botones from '../../assets/images/botones.png';
 import star from '../../assets/images/star.png';
 import moneda from '../../assets/images/moneda.png';
+import tutorial1 from '../../assets/images/tutorial1.png';
+import tutorial2 from '../../assets/images/tutorial2.png';
+import tutorial3 from '../../assets/images/tutorial3.png';
+import tutorial4 from '../../assets/images/tutorial4.png';
+import tutorial5 from '../../assets/images/tutorial5.png';
+import tutorial6 from '../../assets/images/tutorial6.png';
+import tutorial7 from '../../assets/images/tutorial7.png';
+import tutorial8 from '../../assets/images/tutorial8.png';
+import tutorial9 from '../../assets/images/tutorial9.png';
+import tutorial10 from '../../assets/images/tutorial10.png';
 
 //import tilesets
 import texturas_ciudad from '../../assets/maps/images/texturas_ciudad.png';
@@ -366,7 +376,17 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('esqueletoIdle', esqueletoIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('madreIdle', madreIdle, { frameWidth: 64, frameHeight: 64 });
 
-    
+    // load tutorial imágenes
+    this.load.image('tutorial1', tutorial1);
+    this.load.image('tutorial2', tutorial2);
+    this.load.image('tutorial3', tutorial3);
+    this.load.image('tutorial4', tutorial4);
+    this.load.image('tutorial5', tutorial5);
+    this.load.image('tutorial6', tutorial6);
+    this.load.image('tutorial7', tutorial7);
+    this.load.image('tutorial8', tutorial8);
+    this.load.image('tutorial9', tutorial9);
+    this.load.image('tutorial10', tutorial10);
 
     // Load the dialog pictures
     this.load.image('samuel', samuel);
@@ -511,6 +531,7 @@ export default class BootScene extends Phaser.Scene {
     this.registry.set('coins', 150);  // start with 0 or loaded value
     this.registry.set('jokers', []);  // start with empty array or loaded value
     this.registry.set('stage', 0);
+    this.registry.set('tutorialStep', 0);
     this.registry.set('musicEnabled', true);
     this.scene.start('IntroScene');
   }

@@ -93,134 +93,134 @@ export default class Dialogos extends Phaser.Scene {
         console.log("Dialogando");
         let stage = this.registry.get('stage');
         switch(npc) {
-                case 'samuel':
-                    if (stage === 0) {
-                        // Initial dialog with Samuel at stage 0
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 500, rounds: 5, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
-                            { character: "dante", text: "¿Cómo sabes mi nombre?" },
-                            { character: "samuel", text: "Eso no es lo importante. Si de verdad quieres saber lo que te come por dentro, tendrás que ganarme a mí y al resto. La paciencia es buena, pero si esperas demasiado, te quedas con las brasas. La vida es un juego, Dante, y el fuego siempre exige su turno." },
-                            { character: "dante", text: "Espero no quemarme entonces." },
-                            { character: "samuel", text: "Las cartas no mienten, Dante. Y esta mesa es mi trono. Si quieres un lugar en la historia de este pueblo, tendrás que arrebatármelo." }
-                        ];
-                    } else if (stage === 1) {
-                        // After Samuel has been defeated, his afterBattle dialog is shown.
-                        this.transitionData = { npc: 'samuel', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "samuel", text: "Bien jugado… La paciencia cocina la mejor jugada, y tú la serviste en su punto. Ahora, ve a enfrentar a Helena." }
-                        ];
-                    } else {
-                        // If already past Samuel, he just gives a brief message.
-                        this.dialogLines = [
-                            { character: "samuel", text: "Ya pasamos ese duelo, Dante. Tu camino continúa." }
-                        ];
-                    }
-                    break;
-                case 'helena':
-                    if (stage === 1) {
-                        this.transitionData = { npc: 'helena', pointsNeeded: 1000, rounds: 4, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
-                            { character: "dante", text: "¿Tú también? ¿Cómo es que todos saben quién soy?" },
-                            { character: "helena", text: "Dante, dulce Dante… si tienes esa carta dorada, entonces ya eres parte del juego. Ya debes saber por Samuel que lo único importante es ganar, avanzar y solo avanzar de local a local. Pero primero, tendrás que cruzar el Olvido." },
-                            { character: "helena", text: "Las reglas son como el humo, querido… difíciles de atrapar. Lo mismo que mi juego." },
-                            { character: "dante", text: "Entonces tendré que ver a través de la niebla." },
-                            { character: "helena", text: "Mmm... eso me gusta. Juguemos, antes de que olvides por qué viniste." }
-                        ];
-                    } else if (stage > 1) {
-                        // After Helena has been defeated
-                        this.transitionData = { npc: 'helena', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "helena", text: "Excelente, Dante. Has probado tu temple. Ahora, prepárate para enfrentar al Pescador." }
-                        ];
-                    } else {
-                        this.transitionData = { npc: 'helena', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "helena", text: "Ahora no es el momento para mí, Dante." }
-                        ];
-                    }
-                    break;
-                case 'pescador':
-                    if (stage === 2) {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 1500, rounds: 4, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "pescador", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
-                            { character: "dante", text: "Parece que mi reputación me precede." },
-                            { character: "pescador", text: "No es la reputación, muchacho. Es la carta dorada que arde en tu bolsillo. Pero antes de alzar las velas, tendrás que demostrar que sabes navegar estas aguas." },
-                            { character: "dante", text: "Si si, estoy un poco harto de hablar con cada uno, empieza a barajar las cartas." },
-                            { character: "pescador", text: "La suerte es como el mar: caprichosa, despiadada... pero si sabes leer las corrientes, te lleva a la victoria." }
-                        ];
-                    } else if (stage > 2) {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "pescador", text: "Ya hemos pasado por este desafío, sigue adelante." }
-                        ];
-                    } else {
-                        this.transitionData = { npc: 'pescador', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "pescador", text: "No es tu turno aún, Dante." }
-                        ];
-                    }
-                    break;
-                case 'gemelos':
-                    if (stage === 3) {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 3500, rounds: 3, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "gemelos", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
-                            { character: "gemelos", text: "Oh sí… creía que tardaría más en aparecer." },
-                            { character: "dante", text: "Son todos igual de insoportables." },
-                            { character: "gemelos", text: "Este ha salido peor que su padre. De igual manera, querido Dante, si realmente quieres entrar al Casino, tendrás que demostrar que no solo eres un jugador… sino un estratega." },
-                            { character: "gemelos", text: "Aquí no basta con jugar bien, Dante." },
-                            { character: "gemelos", text: "Aquí necesitas pensar dos veces antes de cada jugada." },
-                            { character: "gemelos", text: "O mejor dicho… pensar como dos." }
-                        ];
-                    } else if (stage > 3) {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 10, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "gemelos", text: "El juego avanza, Dante." }
-                        ];
-                    } else {
-                        this.transitionData = { npc: 'gemelos', pointsNeeded: 10, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "gemelos", text: "Aún no te corresponde enfrentarte a nosotros." }
-                        ];
-                    }
-                    break;
-                case 'padre':
-                    if (stage === 4) {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 5000, rounds: 3, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "dante", text: "Papá." },
-                            { character: "padre", text: "Has llegado, Dante. Tal como imaginé." },
-                            { character: "dante", text: "Todos en el pueblo lo sabían… Me estaban preparando para esto, ¿verdad?" },
-                            { character: "padre", text: "Teníamos que asegurarnos de que estuvieras listo." },
-                            { character: "padre", text: "Los llamaste rivales, pero eran tus maestros. ¿Crees que fue coincidencia que cada uno te enseñara una faceta del juego?" },
-                            { character: "dante", text: "El Monarca me enseñó paciencia. La Bruja, la duda. El Náufrago, el riesgo. Los Hermanos Blackwood, la estrategia..." },
-                            { character: "dante", text: "¡¿Por qué nunca volviste?! ¿Por qué dejaste todo atrás?" },
-                            { character: "padre", text: "Porque no tenía elección. Mi deuda con este lugar era más grande que cualquier apuesta que hubiera hecho antes. No se trata solo de dinero… sino del juego en sí." },
-                            { character: "dante", text: "Te convertiste en su prisionero." },
-                            { character: "padre", text: "Y en su guardián. Perdí mi última mano hace años… y desde entonces, el Casino me retuvo como su crupier eterno. Pero no fue solo una condena, Dante. Me enamoré del juego. De su arte. De la forma en que cada carta cuenta una historia, cada mano es un destino." },
-                            { character: "dante", text: "Pero esto no es vida." },
-                            { character: "padre", text: "Lo sé." },
-                            { character: "padre", text: "Pero ahora tienes la oportunidad de cambiar eso." },
-                            { character: "dante", text: "¿Cómo?" },
-                            { character: "padre", text: "Una última partida. Si ganas, mi deuda se salda. Seré libre. Si pierdes… digamos que hay espacio para un nuevo crupier." },
-                            { character: "dante", text: "Eso no va a pasar." },
-                            { character: "padre", text: "Entonces, baraja, hijo mío… y demuestra lo que has aprendido." }
-                        ];
-                    } else if (stage > 4) {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 20, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "padre", text: "Tu duelo conmigo ya ha quedado atrás." }
-                        ];
-                    } else {
-                        this.transitionData = { npc: 'padre', pointsNeeded: 20, rounds: 0, scene: this.gameScene };
-                        this.dialogLines = [
-                            { character: "padre", text: "No es tu momento, Dante." }
-                        ];
-                    }
-                    break;
+            case 'samuel':
+                if (stage === 0) {
+                    // Initial dialog with Samuel at stage 0
+                    this.transitionData = { npc: 'samuel', pointsNeeded: 650, rounds: 5, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "samuel", text: "Dante… no sabía si alguna vez vendrías. Apuesto a que tienes una carta dorada escondida en el bolsillo, ¿no es así?" },
+                        { character: "dante", text: "¿Cómo sabes mi nombre?" },
+                        { character: "samuel", text: "Eso no es lo importante. Si de verdad quieres saber lo que te come por dentro, tendrás que ganarme a mí y al resto. La paciencia es buena, pero si esperas demasiado, te quedas con las brasas. La vida es un juego, Dante, y el fuego siempre exige su turno." },
+                        { character: "dante", text: "Espero no quemarme entonces." },
+                        { character: "samuel", text: "Las cartas no mienten, Dante. Y esta mesa es mi trono. Si quieres un lugar en la historia de este pueblo, tendrás que arrebatármelo." }
+                    ];
+                } else if (stage === 1) {
+                    // After Samuel has been defeated, his afterBattle dialog is shown.
+                    this.transitionData = { npc: 'samuel', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "samuel", text: "Bien jugado… La paciencia cocina la mejor jugada, y tú la serviste en su punto. Ahora, ve a enfrentar a Helena." }
+                    ];
+                } else {
+                    // If already past Samuel, he just gives a brief message.
+                    this.dialogLines = [
+                        { character: "samuel", text: "Ya pasamos ese duelo, Dante. Tu camino continúa." }
+                    ];
+                }
+                break;
+            case 'helena':
+                if (stage === 1) {
+                    this.transitionData = { npc: 'helena', pointsNeeded: 1000, rounds: 4, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "helena", text: "Mira nada más… Dante Holloway, caminando entre las sombras. ¿Ya sabes lo que buscas o solo sigues las huellas de tu padre?" },
+                        { character: "dante", text: "¿Tú también? ¿Cómo es que todos saben quién soy?" },
+                        { character: "helena", text: "Dante, dulce Dante… si tienes esa carta dorada, entonces ya eres parte del juego. Ya debes saber por Samuel que lo único importante es ganar, avanzar y solo avanzar de local a local. Pero primero, tendrás que cruzar el Olvido." },
+                        { character: "helena", text: "Las reglas son como el humo, querido… difíciles de atrapar. Lo mismo que mi juego." },
+                        { character: "dante", text: "Entonces tendré que ver a través de la niebla." },
+                        { character: "helena", text: "Mmm... eso me gusta. Juguemos, antes de que olvides por qué viniste." }
+                    ];
+                } else if (stage > 1) {
+                    // After Helena has been defeated
+                    this.transitionData = { npc: 'helena', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "helena", text: "Excelente, Dante. Has probado tu temple. Ahora, prepárate para enfrentar al Pescador." }
+                    ];
+                } else {
+                    this.transitionData = { npc: 'helena', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "helena", text: "Ahora no es el momento para mí, Dante." }
+                    ];
+                }
+                break;
+            case 'pescador':
+                if (stage === 2) {
+                    this.transitionData = { npc: 'pescador', pointsNeeded: 1500, rounds: 4, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "pescador", text: "¡Ja! ¡Sabía que vendrías! Todos lo sabíamos. Ningún Holloway puede resistirse al brillo del Casino Ébano." },
+                        { character: "dante", text: "Parece que mi reputación me precede." },
+                        { character: "pescador", text: "No es la reputación, muchacho. Es la carta dorada que arde en tu bolsillo. Pero antes de alzar las velas, tendrás que demostrar que sabes navegar estas aguas." },
+                        { character: "dante", text: "Si si, estoy un poco harto de hablar con cada uno, empieza a barajar las cartas." },
+                        { character: "pescador", text: "La suerte es como el mar: caprichosa, despiadada... pero si sabes leer las corrientes, te lleva a la victoria." }
+                    ];
+                } else if (stage > 2) {
+                    this.transitionData = { npc: 'pescador', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "pescador", text: "Ya hemos pasado por este desafío, sigue adelante." }
+                    ];
+                } else {
+                    this.transitionData = { npc: 'pescador', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "pescador", text: "No es tu turno aún, Dante." }
+                    ];
+                }
+                break;
+            case 'gemelos':
+                if (stage === 3) {
+                    this.transitionData = { npc: 'gemelos', pointsNeeded: 3500, rounds: 3, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "gemelos", text: "Míralo, hermano. Ahí está el chico con la carta dorada." },
+                        { character: "gemelos", text: "Oh sí… creía que tardaría más en aparecer." },
+                        { character: "dante", text: "Son todos igual de insoportables." },
+                        { character: "gemelos", text: "Este ha salido peor que su padre. De igual manera, querido Dante, si realmente quieres entrar al Casino, tendrás que demostrar que no solo eres un jugador… sino un estratega." },
+                        { character: "gemelos", text: "Aquí no basta con jugar bien, Dante." },
+                        { character: "gemelos", text: "Aquí necesitas pensar dos veces antes de cada jugada." },
+                        { character: "gemelos", text: "O mejor dicho… pensar como dos." }
+                    ];
+                } else if (stage > 3) {
+                    this.transitionData = { npc: 'gemelos', pointsNeeded: 10, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "gemelos", text: "El juego avanza, Dante." }
+                    ];
+                } else {
+                    this.transitionData = { npc: 'gemelos', pointsNeeded: 10, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "gemelos", text: "Aún no te corresponde enfrentarte a nosotros." }
+                    ];
+                }
+                break;
+            case 'padre':
+                if (stage === 4) {
+                    this.transitionData = { npc: 'padre', pointsNeeded: 5000, rounds: 3, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "dante", text: "Papá." },
+                        { character: "padre", text: "Has llegado, Dante. Tal como imaginé." },
+                        { character: "dante", text: "Todos en el pueblo lo sabían… Me estaban preparando para esto, ¿verdad?" },
+                        { character: "padre", text: "Teníamos que asegurarnos de que estuvieras listo." },
+                        { character: "padre", text: "Los llamaste rivales, pero eran tus maestros. ¿Crees que fue coincidencia que cada uno te enseñara una faceta del juego?" },
+                        { character: "dante", text: "El Monarca me enseñó paciencia. La Bruja, la duda. El Náufrago, el riesgo. Los Hermanos Blackwood, la estrategia..." },
+                        { character: "dante", text: "¡¿Por qué nunca volviste?! ¿Por qué dejaste todo atrás?" },
+                        { character: "padre", text: "Porque no tenía elección. Mi deuda con este lugar era más grande que cualquier apuesta que hubiera hecho antes. No se trata solo de dinero… sino del juego en sí." },
+                        { character: "dante", text: "Te convertiste en su prisionero." },
+                        { character: "padre", text: "Y en su guardián. Perdí mi última mano hace años… y desde entonces, el Casino me retuvo como su crupier eterno. Pero no fue solo una condena, Dante. Me enamoré del juego. De su arte. De la forma en que cada carta cuenta una historia, cada mano es un destino." },
+                        { character: "dante", text: "Pero esto no es vida." },
+                        { character: "padre", text: "Lo sé." },
+                        { character: "padre", text: "Pero ahora tienes la oportunidad de cambiar eso." },
+                        { character: "dante", text: "¿Cómo?" },
+                        { character: "padre", text: "Una última partida. Si ganas, mi deuda se salda. Seré libre. Si pierdes… digamos que hay espacio para un nuevo crupier." },
+                        { character: "dante", text: "Eso no va a pasar." },
+                        { character: "padre", text: "Entonces, baraja, hijo mío… y demuestra lo que has aprendido." }
+                    ];
+                } else if (stage > 4) {
+                    this.transitionData = { npc: 'padre', pointsNeeded: 20, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "padre", text: "Tu duelo conmigo ya ha quedado atrás." }
+                    ];
+                } else {
+                    this.transitionData = { npc: 'padre', pointsNeeded: 20, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "padre", text: "No es tu momento, Dante." }
+                    ];
+                }
+                break;
             case 'oveja':
                 this.transitionData = { npc: 'oveja', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; //Si ponemos rounds a 0 no hay batalla, solo diálogo
                 this.dialogLines = [
@@ -232,183 +232,197 @@ export default class Dialogos extends Phaser.Scene {
                 ];
                 break;
 
-                case 'barrier_car':
-    this.transitionData = { npc: 'barrier_car', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Sin batalla, solo diálogo
-    this.dialogLines = [
-        { character: "hombre", text: "¡Mi coche se averió y no puedo moverlo!" },
-        { character: "dante", text: "Estás bloqueando la carretera." },
-        { character: "hombre", text: "Estoy trabajando en ello, pero necesito un rato. ¿Por qué no esperas en el asador?" },
-        { character: "dante", text: "Vale, espero que lo soluciones pronto." }
-    ];
-    break;
+            case 'barrier_car':
+                this.transitionData = { npc: 'barrier_car', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Sin batalla, solo diálogo
+                this.dialogLines = [
+                    { character: "hombre", text: "¡Mi coche se averió y no puedo moverlo!" },
+                    { character: "dante", text: "Estás bloqueando la carretera." },
+                    { character: "hombre", text: "Estoy trabajando en ello, pero necesito un rato. ¿Por qué no esperas en el asador?" },
+                    { character: "dante", text: "Vale, espero que lo soluciones pronto." }
+                ];
+                break;
 
-case 'barrier_cow':
-    this.transitionData = { npc: 'barrier_cow', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Diálogo sin batalla
-    this.dialogLines = [
-        { character: "vaca", text: "Muuu!" },
-        { character: "dante", text: "Parece que te has perdido en medio de la carretera. Mejor regresaré más tarde." }
-    ];
-    break;
+            case 'barrier_cow':
+                this.transitionData = { npc: 'barrier_cow', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Diálogo sin batalla
+                this.dialogLines = [
+                    { character: "vaca", text: "Muuu!" },
+                    { character: "dante", text: "Parece que te has perdido en medio de la carretera. Mejor regresaré más tarde." }
+                ];
+                break;
 
-case 'barrier_guard':
-    this.transitionData = { npc: 'barrier_guard', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Solo diálogo
-    this.dialogLines = [
-        { character: "guardia", text: "Lo siento, pero el edificio está cerrado en este momento." },
-        { character: "dante", text: "Entiendo, volveré más tarde entonces." }
-    ];
-    break;
+            case 'barrier_guard':
+                this.transitionData = { npc: 'barrier_guard', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Solo diálogo
+                this.dialogLines = [
+                    { character: "guardia", text: "Lo siento, pero el edificio está cerrado en este momento." },
+                    { character: "dante", text: "Entiendo, volveré más tarde entonces." }
+                ];
+                break;
 
-case 'barrier_big_man':
-    this.transitionData = { npc: 'barrier_big_man', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Diálogo sin batalla
-    this.dialogLines = [
-        { character: "gordo", text: "Zzz... Zzz..." },
-        { character: "dante", text: "Este grandullón está dormido aquí en medio. Mejor regreso más tarde." }
-    ];
-    break;
+            case 'barrier_big_man':
+                this.transitionData = { npc: 'barrier_big_man', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; // Diálogo sin batalla
+                this.dialogLines = [
+                    { character: "gordo", text: "Zzz... Zzz..." },
+                    { character: "dante", text: "Este grandullón está dormido aquí en medio. Mejor regreso más tarde." }
+                ];
+                break;
 
-case 'calvo':
-    this.transitionData = { npc: 'calvo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "calvo", text: "¿Vas a hacer la ruta hasta el Casino Ébano? Mucha suerte, jovenzuelo... y recuerda: no todo lo que brilla son fichas." },
-        { character: "dante", text: "¿Usted ha estado allí? Hay algo en su mirada que me dice que ha visto cosas que no caben en una partida." },
-        { character: "calvo", text: "Vi más de lo que quise... y perdí más de lo que tenía. Si llegas, no te olvides de quién fuiste antes de la última mano." }
-    ];
-    break;
+            case 'calvo':
+                this.transitionData = { npc: 'calvo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "calvo", text: "¿Vas a hacer la ruta hasta el Casino Ébano? Mucha suerte, jovenzuelo... y recuerda: no todo lo que brilla son fichas." },
+                    { character: "dante", text: "¿Usted ha estado allí? Hay algo en su mirada que me dice que ha visto cosas que no caben en una partida." },
+                    { character: "calvo", text: "Vi más de lo que quise... y perdí más de lo que tenía. Si llegas, no te olvides de quién fuiste antes de la última mano." }
+                ];
+                break;
 
-case 'rubio':
-    this.transitionData = { npc: 'rubio', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "rubio", text: "¿Has ido ya al Puerto Azul? Está aquí al lado, hacia la derecha. Buen sitio para perder… o encontrar secretos." }
-    ];
-    break;
+            case 'rubio':
+                this.transitionData = { npc: 'rubio', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "rubio", text: "¿Has ido ya al Puerto Azul? Está aquí al lado, hacia la derecha. Buen sitio para perder… o encontrar secretos." }
+                ];
+                break;
 
-case 'alien':
-    this.transitionData = { npc: 'alien', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "alien", text: "¡He venido desde Urano para enfrentarme a Helena… y me ha puesto en mi sitio! Lleva cuidado, y compra un Joker antes." },
-        { character: "dante", text: "¿Un alienígena que juega a las cartas? Esto ya está yendo más allá de lo que esperaba." },
-        { character: "alien", text: "Lo mismo pensé yo cuando llegué aquí." }
-    ];
-    break;
+            case 'alien':
+                this.transitionData = { npc: 'alien', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "alien", text: "¡He venido desde Urano para enfrentarme a Helena… y me ha puesto en mi sitio! Lleva cuidado, y compra un Joker antes." },
+                    { character: "dante", text: "¿Un alienígena que juega a las cartas? Esto ya está yendo más allá de lo que esperaba." },
+                    { character: "alien", text: "Lo mismo pensé yo cuando llegué aquí." }
+                ];
+                break;
 
-case 'hermenegildo':
-    this.transitionData = { npc: 'hermenegildo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "hermenegildo", text: "Esto antes era una tienda de Jokers, ¡pero ahora ya todo el mundo compra online! Incluso han puesto un botón para comprar arriba a la izquierda… ¡Qué vergüenza!" },
-        { character: "dante", text: "Supongo que es más cómodo que venir aquí cada vez que quieres un Joker." },
-        { character: "hermenegildo", text: "Maldita modernidad." }
-    ];
-    break;
+            case 'hermenegildo':
+                this.transitionData = { npc: 'hermenegildo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "hermenegildo", text: "Esto antes era una tienda de Jokers, ¡pero ahora ya todo el mundo compra online! Incluso han puesto un botón para comprar arriba a la izquierda… ¡Qué vergüenza!" },
+                    { character: "dante", text: "Supongo que es más cómodo que venir aquí cada vez que quieres un Joker." },
+                    { character: "hermenegildo", text: "Maldita modernidad." }
+                ];
+                break;
 
-case 'paco':
-    this.transitionData = { npc: 'paco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "paco", text: "Acabo de perder contra los gemelos en el Rincón del Bandido… esto de las cartas no es lo mío. Mejor vuelvo a estudiar." },
-        { character: "dante", text: "No es tan malo perder si aprendes algo… ¿Qué vas a estudiar?" },
-        { character: "paco", text: "Geografía. Los mapas no te gritan 'all-in' cuando te equivocas." }
-    ];
-    break;
+            case 'paco':
+                this.transitionData = { npc: 'paco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "paco", text: "Acabo de perder contra los gemelos en el Rincón del Bandido… esto de las cartas no es lo mío. Mejor vuelvo a estudiar." },
+                    { character: "dante", text: "No es tan malo perder si aprendes algo… ¿Qué vas a estudiar?" },
+                    { character: "paco", text: "Geografía. Los mapas no te gritan 'all-in' cuando te equivocas." }
+                ];
+                break;
 
-case 'roberto':
-    this.transitionData = { npc: 'roberto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "roberto", text: "¿Sabías que si no tienes cartas para una buena mano durante una batalla de cartas, siempre puedes barajar y conseguir nuevas cartas?" },
-        { character: "dante", text: "Interesante… ¿y qué pasa si lo haces demasiado?" },
-        { character: "roberto", text: "Pues vas perdiendo puntos... y cartas también. Es arriesgado pero puede valer la pena." }
-    ];
-    break;
+            case 'roberto':
+                this.transitionData = { npc: 'roberto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "roberto", text: "¿Sabías que si no tienes cartas para una buena mano durante una batalla de cartas, siempre puedes barajar y conseguir nuevas cartas?" },
+                    { character: "dante", text: "Interesante… ¿y qué pasa si lo haces demasiado?" },
+                    { character: "roberto", text: "Pues vas perdiendo puntos... y cartas también. Es arriesgado pero puede valer la pena." }
+                ];
+                break;
 
-case 'chica':
-    this.transitionData = { npc: 'chica', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "chica", text: "¿Cuánto dinero tienes? ¿Sabes que tras una batalla, la diferencia de puntos entre los tuyos y el objetivo es el dinero que ganas? El otro día gané por más de 1000 puntos de diferencia y me saqué un sobresueldo." },
-        { character: "dante", text: "Entonces no solo se gana respeto… se gana también para la merienda." },
-        { character: "chica", text: "Exacto. Aquí todos jugamos por fama, fortuna o porque no hay otra forma de pagar el alquiler." }
-    ];
-    break;
+            case 'chica':
+                this.transitionData = { npc: 'chica', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "chica", text: "¿Cuánto dinero tienes? ¿Sabes que tras una batalla, la diferencia de puntos entre los tuyos y el objetivo es el dinero que ganas? El otro día gané por más de 1000 puntos de diferencia y me saqué un sobresueldo." },
+                    { character: "dante", text: "Entonces no solo se gana respeto… se gana también para la merienda." },
+                    { character: "chica", text: "Exacto. Aquí todos jugamos por fama, fortuna o porque no hay otra forma de pagar el alquiler." }
+                ];
+                break;
 
-case 'pelirrojo':
-    this.transitionData = { npc: 'pelirrojo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "pelirrojo", text: "Estoy aquí practicando las escaleras de color para poder ganarle a Helena. El problema es que siempre me confundo… ¿Después del 6 va el 8 o el 9?" },
-        { character: "dante", text: "Creo que el 7 está entre esos dos." },
-        { character: "pelirrojo", text: "¿El 7? ¿Es que no sabes contar?" }
-    ];
-    break;
+            case 'pelirrojo':
+                this.transitionData = { npc: 'pelirrojo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "pelirrojo", text: "Estoy aquí practicando las escaleras de color para poder ganarle a Helena. El problema es que siempre me confundo… ¿Después del 6 va el 8 o el 9?" },
+                    { character: "dante", text: "Creo que el 7 está entre esos dos." },
+                    { character: "pelirrojo", text: "¿El 7? ¿Es que no sabes contar?" }
+                ];
+                break;
 
-case 'orco':
-    this.transitionData = { npc: 'orco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "orco",  text: "¡Maldita máquina dispensadora! La golpeo y nada… ¿Dónde está el alcalde?" },
-        { character: "dante", text: "Quizá acepta solo monedas, no puños." },
-        { character: "orco",  text: "¿Eres muy listillo, no?" }
-    ];
-    break;
+            case 'orco':
+                this.transitionData = { npc: 'orco', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "orco",  text: "¡Maldita máquina dispensadora! La golpeo y nada… ¿Dónde está el alcalde?" },
+                    { character: "dante", text: "Quizá acepta solo monedas, no puños." },
+                    { character: "orco",  text: "¿Eres muy listillo, no?" }
+                ];
+                break;
 
-case 'raton':
-    this.transitionData = { npc: 'raton', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "raton", text: "Ufff… diecisiete trozos de queso son demasiados para un cuerpo tan pequeño. No puedo ni mover el bigote." },
-        { character: "dante", text: "Eso es mucho queso, desde luego." },
-        { character: "raton", text: "Se lo gané a un tipo con gafas de sol en una partida de cartas. Ahora tendrá que irse a su casa con las manos vacías." }
-    ];
-    break;
+            case 'raton':
+                this.transitionData = { npc: 'raton', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "raton", text: "Ufff… diecisiete trozos de queso son demasiados para un cuerpo tan pequeño. No puedo ni mover el bigote." },
+                    { character: "dante", text: "Eso es mucho queso, desde luego." },
+                    { character: "raton", text: "Se lo gané a un tipo con gafas de sol en una partida de cartas. Ahora tendrá que irse a su casa con las manos vacías." }
+                ];
+                break;
 
-case 'esqueleto':
-    this.transitionData = { npc: 'esqueleto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "esqueleto", text: "Intento comerme este pan, pero atraviesa mis costillas y vuelve a salir. ¡Dietas milagro, lo llaman!" },
-        { character: "dante",     text: "Al menos no engordas." },
-        { character: "esqueleto", text: "Ni engordo ni disfruto… ¡Un drama existencial!" }
-    ];
-    break;
+            case 'esqueleto':
+                this.transitionData = { npc: 'esqueleto', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "esqueleto", text: "Intento comerme este pan, pero atraviesa mis costillas y vuelve a salir. ¡Dietas milagro, lo llaman!" },
+                    { character: "dante",     text: "Al menos no engordas." },
+                    { character: "esqueleto", text: "Ni engordo ni disfruto… ¡Un drama existencial!" }
+                ];
+                break;
 
-case 'pardillo':
-    this.transitionData = { npc: 'pardillo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "pardillo", text: "¿Sabías que si sigues por esta carretera cuesta arriba llegas al Casino Ébano?" },
-        { character: "dante",    text: "Eso dicen. ¿Tú ya fuiste?" },
-        { character: "pardillo", text: "No… no tengo ni un euro para gastar. Pero cuentan que brilla más que la luna." }
-    ];
-    break;
+            case 'pardillo':
+                this.transitionData = { npc: 'pardillo', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "pardillo", text: "¿Sabías que si sigues por esta carretera cuesta arriba llegas al Casino Ébano?" },
+                    { character: "dante",    text: "Eso dicen. ¿Tú ya fuiste?" },
+                    { character: "pardillo", text: "No… no tengo ni un euro para gastar. Pero cuentan que brilla más que la luna." }
+                ];
+                break;
 
-case 'mujer':
-    this.transitionData = { npc: 'mujer', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "mujer", text: "Estoy perdida, no encuentro a los gemelos, he perdido dos de mis jokers. Se acabó mi suerte." },
-        { character: "dante", text: "¿Vas a dejarlo?" },
-        { character: "mujer", text: "Sí. Probaré con otra vocación… quizá ingeniera informática." }
-    ];
-    break;
+            case 'mujer':
+                this.transitionData = { npc: 'mujer', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "mujer", text: "Estoy perdida, no encuentro a los gemelos, he perdido dos de mis jokers. Se acabó mi suerte." },
+                    { character: "dante", text: "¿Vas a dejarlo?" },
+                    { character: "mujer", text: "Sí. Probaré con otra vocación… quizá ingeniera informática." }
+                ];
+                break;
 
-case 'jose':
-    this.transitionData = { npc: 'jose', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "jose",  text: "Barajar es muy útil en plena batalla de cartas." },
-        { character: "dante", text: "Renueva la mano, desde luego." },
-        { character: "jose",  text: "Pero ojo: cada barajado sube la penalización. Una vez no pasa nada, dos veces inquieta, tres… la has liado." },
-        { character: "dante", text: "¿Hablas por experiencia?" },
-        { character: "jose",  text: "Sí, he perdido todo el queso que había comprado. Mi mujer me va a matar." }
-    ];
-    break;
+            case 'jose':
+                this.transitionData = { npc: 'jose', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "jose",  text: "Barajar es muy útil en plena batalla de cartas." },
+                    { character: "dante", text: "Renueva la mano, desde luego." },
+                    { character: "jose",  text: "Pero ojo: cada barajado sube la penalización. Una vez no pasa nada, dos veces inquieta, tres… la has liado." },
+                    { character: "dante", text: "¿Hablas por experiencia?" },
+                    { character: "jose",  text: "Sí, he perdido todo el queso que había comprado. Mi mujer me va a matar." }
+                ];
+                break;
 
-case 'pepe':
-    this.transitionData = { npc: 'pepe', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "pepe",  text: "Me encanta pasar las tardes aquí oliendo a pescado…" },
-        { character: "dante", text: "Bueno, cada quien sus aficiones." },
-        { character: "pepe",  text: "¿Qué pasa, tienes algún problema?" },
-    ];
-    break;
+            case 'pepe':
+                this.transitionData = { npc: 'pepe', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                this.dialogLines = [
+                    { character: "pepe",  text: "Me encanta pasar las tardes aquí oliendo a pescado…" },
+                    { character: "dante", text: "Bueno, cada quien sus aficiones." },
+                    { character: "pepe",  text: "¿Qué pasa, tienes algún problema?" },
+                ];
+                break;
 
-case 'madre':
-    this.transitionData = { npc: 'madre', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
-    this.dialogLines = [
-        { character: "madre", text: "Hola Dante, ¿qué tal?" },
-        { character: "dante", text: "Todo bien, gracias. ¿Qué tal tú?" },
-        { character: "madre", text: "Bien, gracias a Dios." },
-    ];
-    break;
+            case 'madre':
+                if (this.registry.get('tutorialStep') === 0) {
+                    this.transitionData = { npc: 'madre', pointsNeeded: 0, rounds: 0, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "madre", text: "Hola Dante, hoy es el día. He recibido en el correo tu carta dorada." },
+                        { character: "dante", text: "Pero de qué hablas, ¿Qué carta?" },
+                        { character: "madre", text: "La invitación al Casino Ébano. Primero tienes que... Bueno, es mejor que lo vayas descubriendo tú mismo. Lo importante ahora es que sepas jugar."},
+                        { character: "dante", text: "¿A las cartas? Por fin, algo que papá me enseñó antes de desaparecer..." },
+                        { character: "madre", text: "No digas eso, no tienes idea lo que tu padre sacrificó por nosotros, nunca supimos lo que pasó. Eso da igual ahora, hazme caso, quiero que vayas al primer estante del pasillo. Ahí encontrarás un libro que te enseña a jugar. Por más listo que creas ser, échale un ojo antes." },
+                        { character: "dante", text: "De acuerdo, ¿y luego?" },
+                        { character: "madre", text: "Luego jugarás contra mí. No seré rival a comparación de lo que hay fuera, pero te ayudará a aprender."},
+                        { character: "dante", text: "¿Y después?" },
+                        { character: "madre", text: "Luego, irás al explorar el pueblo, digamos que esta vez tu visita a los locales no será para comer. Además, si la suerte está contigo descubrirás más cosas en tu viaje." },
+                    ];
+                }
+                else {
+                    this.transitionData = { npc: 'madre', pointsNeeded: 450, rounds: 6, scene: this.gameScene };
+                    this.dialogLines = [
+                        { character: "madre", text: "¿Listo? Comencemos..." },
+                    ];
+                }
+                break;
             default:
                 this.dialogLines = [];
                 this.startBattle();
@@ -433,7 +447,14 @@ case 'madre':
         this.createWindow();
         let postBattleDialog;
         this.transitionData = { npc: '', pointsNeeded: 0, rounds: 0, scene: this.gameScene }; //Si ponemos rounds a 0 no hay batalla, solo diálogo
-        if (this.npc === 'samuel') {
+        if (this.npc === 'madre') {
+            if (playerWon) {
+                postBattleDialog = [{ character: "madre", text: "Bien hecho, Dante. Has aprendido bien las reglas del juego. Ahora, puedes explorar el pueblo. O vuelve a jugar contra mí si quieres practicar más" }];
+            } else {
+                postBattleDialog = [{ character: "madre", text: "No te preocupes, hijo. Es cuestión de práctica. Vuelve a hablarme si quieres jugar de nuevo." }];
+            }
+        }
+        else if (this.npc === 'samuel') {
             if (playerWon) {
             postBattleDialog = [{ character: "samuel", text: "Bien jugado… La paciencia cocina la mejor jugada, y tú la serviste en su punto. Ahora, ve a enfrentar a Helena." }];
             this.registry.set('stage', 1);
