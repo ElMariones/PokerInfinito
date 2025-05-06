@@ -58,13 +58,31 @@ export default class UIScene extends Phaser.Scene {
 
     // Shuffle Button
     this.shuffleButton = new UIButton(this, this.cameras.main.width / 2 + buttonSpacing, buttonY, 'Cambiar', 'red', () => {
+      const hasHiddenpadre = this.gameScene.selectedCards.some(card =>
+        this.gameScene.hiddenpadreCards.includes(card)
+      );
+    
+      if (hasHiddenpadre) {
+        this.showTemporaryWarning('❌ No puedes cambiar cartas ocultas.');
+      
+        // 🔧 SOLUCIÓN: Restaurar la visibilidad de los covers (por si se ocultaron antes)
+        this.gameScene.cardSprites.forEach(sprite => {
+          if (sprite.padreCover) {
+            sprite.padreCover.setVisible(true);
+          }
+        });
+      
+        return;
+      }
+    
       if (!this.shuffleButton.disabled) {
         this.gameScene.score -= this.barajarPuntos;
-        this.barajarPuntos = this.barajarPuntos * 2;
+        this.barajarPuntos *= 2;
         this.shuffleButton.disable();
         this.gameScene.shuffleAnimation();
       }
     });
+    
     this.shuffleButton.disable();
     this.shuffleButton.setScale(2);
 
@@ -90,20 +108,34 @@ export default class UIScene extends Phaser.Scene {
 
     // Listen for card selection changes to enable/disable buttons.
     this.gameScene.events.on('cards-changed', (selectedCount) => {
-      // For the shuffle button - enabled only when cards are selected
       if (selectedCount === 0) {
         this.shuffleButton.disable();
-      } else if (this.shuffleButton.disabled) {
-        this.shuffleButton.enable();
+        this.submitButton.disable();
+        return;
       }
-      
-      // For the submit button - enabled only if exactly 5 cards are selected
+    
+      if (selectedCount === 'no-shuffle') {
+        this.shuffleButton.disable();
+        this.submitButton.setVisible(true); // Asegurar que el botón está visible
+        // Permitimos enviar si hay 5 cartas seleccionadas aunque no se pueda barajar
+        if (this.gameScene.selectedCards.length === 5) {
+          this.submitButton.enable();
+        } else {
+          this.submitButton.disable();
+        }
+        return;
+      }
+    
+      // Caso normal
       if (selectedCount !== 5) {
         this.submitButton.disable();
       } else {
         this.submitButton.enable();
       }
+    
+      this.shuffleButton.enable();
     });
+    
 
     // Listen for shuffle animation completion to re-enable shuffle button
     this.gameScene.events.on('shuffle-complete', () => {
@@ -129,6 +161,32 @@ export default class UIScene extends Phaser.Scene {
       }
     });
   }
+
+  showTemporaryWarning(message) {
+    const warning = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2 - 120,
+      message,
+      {
+        fontFamily: 'RetroFont',
+        fontSize: '20px',
+        color: '#ffff00',
+        stroke: '#000000',
+        strokeThickness: 4,
+        align: 'center'
+      }
+    ).setOrigin(0.5);
+  
+    this.tweens.add({
+      targets: warning,
+      y: warning.y - 40,
+      alpha: { from: 1, to: 0 },
+      duration: 2000,
+      ease: 'Power2',
+      onComplete: () => warning.destroy()
+    });
+  }
+  
 
   update() {
     const gameScene = this.scene.get('GameScene');

@@ -15,7 +15,7 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.roundNumber = 1;
     this.cardSprites = [];
-    this.hiddenSamuelCards = [];
+    this.hiddenpadreCards = [];
 
     // Game settings (set in init())
     this.pointsNeeded = 0;
@@ -232,17 +232,28 @@ if (this.playerContext.opponent === 'helena') {
 
   // Called by the UI scene’s "Shuffle" button
   shuffleAnimation() {
+    // 🔒 No permitir barajar si hay cartas ocultas de padre seleccionadas
+    const hasHiddenpadre = this.selectedCards.some(card =>
+      this.hiddenpadreCards.includes(card)
+    );
+    if (hasHiddenpadre) {
+      console.warn('[padre] Intento de barajar con cartas ocultas. Cancelado.');
+      return;
+    }
+  
     if (this.selectedCards.length === 0) return;
+  
     this.resetFishermanTimer(); // Reiniciar el timer del Pescador al hacer shuffle
     const duration = 500;
+  
     const selectedSprites = this.cardSprites.filter(sprite => 
       this.selectedCards.some(card => card.key === sprite.texture.key)
     );
-
+  
     selectedSprites.forEach(sprite => {
       const randX = this.cameras.main.width / 2 + (Math.random() * 200 - 100);
       const randY = this.cameras.main.height / 2 + (Math.random() * 200 - 100);
-
+  
       // Apply multiple effects to make it more dynamic
       this.tweens.add({
         targets: sprite,
@@ -255,33 +266,48 @@ if (this.playerContext.opponent === 'helena') {
         yoyo: true,
       });
     });
-
+  
     this.time.delayedCall(duration * 2, () => {
       this.replaceSelectedCards();
     });
   }
+  
 
   /**
    * Removes the selected cards from the player's hand and draws the same number
    * (or fewer if deck doesn't have enough) from the deck to replace them.
    */
   replaceSelectedCards() {
-    // Remove selected cards from hand
-    if (this.playerContext.opponent === 'samuel') {
-      this.selectedCards = this.selectedCards.filter(card => !this.hiddenSamuelCards.includes(card));
+    // 🔍 Si estamos contra padre, filtrar para que no se puedan descartar las cartas ocultas
+    if (this.playerContext.opponent === 'padre') {
+      this.selectedCards = this.selectedCards.filter(card => !this.hiddenpadreCards.includes(card));
     }
-    
-    // Eliminar las cartas seleccionadas (excepto las ocultas de Samuel)
-    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
+  
+    // 💣 Eliminar las cartas seleccionadas (ya filtradas)
+    this.playerHand = this.playerHand.filter(card => !this.selectedCards.includes(card));
+  
+    const toDraw = Math.min(this.selectedCards.length, this.deck.length);
     const newCards = drawCards(this.deck, toDraw);
     this.playerHand.push(...newCards);
-
-    // Clear selection and rebuild card sprites
+  
+    // 🧹 Limpiar selección y sprites
     this.selectedCards = [];
+  
+    // 🔥 Destruir los covers de padre que aún existan
+    this.cardSprites.forEach(sprite => {
+      if (sprite.padreCover) {
+        sprite.padreCover.destroy();
+        delete sprite.padreCover;
+      }
+    });
+  
     this.cardSprites.forEach(s => s.destroy());
     this.cardSprites = [];
+  
+    // 🃏 Volver a mostrar la mano
     this.displayHand();
-
+  
+    // 👎 Perdiste si te quedas sin cartas
     if (this.deck.length === 0 && this.score < this.pointsNeeded) {
       this.showResultMessage("No hay más cartas en el mazo. ¡Has perdido!");
       this.scene.stop('UIScene');
@@ -289,6 +315,7 @@ if (this.playerContext.opponent === 'helena') {
       this.scene.start('IntroScene');
     }
   }
+  
 
   // Called by the UI scene’s "Submit" button
   onSubmitHand() {
@@ -309,16 +336,25 @@ if (this.playerContext.opponent === 'helena') {
   
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
 
-    // Si estamos contra Samuel, eliminar el filtro de las cartas seleccionadas
-    if (this.playerContext.opponent === 'samuel') {
+    // Si estamos contra padre, eliminar el filtro de las cartas seleccionadas
+    if (this.playerContext.opponent === 'padre') {
       this.selectedCards.forEach(card => {
         const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-        if (sprite && sprite.samuelMask) {
-          sprite.samuelMask.destroy();
-          delete sprite.samuelMask;
+        if (sprite && sprite.padreCover) {
+          sprite.padreCover.destroy();
+          delete sprite.padreCover;
         }
       });
-  }
+    
+      // También ocultar los covers de las que NO han sido seleccionadas mientras se hace la animación
+      this.cardSprites.forEach(sprite => {
+        if (sprite.padreCover) {
+          sprite.padreCover.setVisible(false);
+        }
+      });
+    }
+    
+    
 
 
     // Castigo de Helena: Si hay una copa, el resultado entero es 0
@@ -698,11 +734,11 @@ if (this.playerContext.opponent === 'helena') {
       if (!isSelected) sprite.setVisible(false);
     });
 
-    // Si estamos contra Samuel, ocultar temporalmente las máscaras de todas las cartas
-    if (this.playerContext.opponent === 'samuel' && this.cardSprites) {
+    // Si estamos contra padre, ocultar temporalmente las máscaras de todas las cartas
+    if (this.playerContext.opponent === 'padre' && this.cardSprites) {
       this.cardSprites.forEach(sprite => {
-        if (sprite.samuelCover) {
-          sprite.samuelCover.setVisible(false);
+        if (sprite.padreCover) {
+          sprite.padreCover.setVisible(false);
         }
       });
     }
@@ -1166,26 +1202,33 @@ highlightWinningCards(result) {
   }
 
   // Rearranges the positions of the card sprites to match the sorted order.
-  updateCardPositions() {
-    const cardSpacing = 95;
-    const totalWidth = (this.playerHand.length - 1) * cardSpacing;
-    const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
-    const posY = this.cameras.main.height - 200;
+updateCardPositions() {
+  const cardSpacing = 95;
+  const totalWidth = (this.playerHand.length - 1) * cardSpacing;
+  const startX = (this.cameras.main.width / 2) - (totalWidth / 2);
+  const posY = this.cameras.main.height - 200;
 
-    // For each card in the sorted array, find its sprite and tween it to the new position.
-    this.playerHand.forEach((card, index) => {
-      const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-      if (sprite) {
-        this.tweens.add({
-          targets: sprite,
-          x: startX + index * cardSpacing,
-          y: posY,
-          duration: 300,
-          ease: 'Power2'
-        });
-      }
-    });
-  }
+  this.playerHand.forEach((card, index) => {
+    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+    if (sprite) {
+      this.tweens.add({
+        targets: sprite,
+        x: startX + index * cardSpacing,
+        y: posY,
+        duration: 300,
+        ease: 'Power2',
+        onUpdate: () => {
+          if (sprite.padreCover) {
+            sprite.padreCover.x = sprite.x;
+            sprite.padreCover.y = sprite.y;
+          }
+        }
+      });
+    }
+  });
+}
+
+  
 
   // Called when the sort button is pressed. Toggles the sort method,
   // sorts the hand, and updates the card positions.
@@ -1213,23 +1256,24 @@ highlightWinningCards(result) {
         .setInteractive()
         .setScale(cardScale);
 
-      sprite.on('pointerover', () => {
-        if (!this.selectedCards.includes(card)) {
-          sprite.setScale(cardScale * 1.05);
-        }
-        if (sprite.samuelCover) {
-          //sprite.samuelCover.setScale(cardScale * 1.05);
-        }
-      });
-      sprite.on('pointerout', () => {
-        if (!this.selectedCards.includes(card)) {
-          sprite.setScale(cardScale);
-          sprite.clearTint();
-        }
-        if (sprite.samuelCover) {
-          //sprite.samuelCover.setScale(cardScale);
-        }
-      });
+        sprite.on('pointerover', () => {
+          if (!this.selectedCards.includes(card)) {
+            sprite.setScale(cardScale * 1.05);
+            if (sprite.padreCover) {
+              sprite.padreCover.setScale(cardScale * 1.05);
+            }
+          }
+        });
+        
+        sprite.on('pointerout', () => {
+          if (!this.selectedCards.includes(card)) {
+            sprite.setScale(cardScale);
+            if (sprite.padreCover) {
+              sprite.padreCover.setScale(cardScale);
+            }
+          }
+        });
+        
       sprite.on('pointerdown', () => {
         this.toggleCardSelection(card, sprite);
       });
@@ -1239,56 +1283,54 @@ highlightWinningCards(result) {
 
     this.events.emit('cards-changed', 0);
 
-    if (this.playerContext.opponent === 'samuel') {
-      this.applySamuelPunishment();
-    }
-  }
+    if (this.playerContext.opponent === 'padre') {
+      // Solo aplicar castigo si aún no existen los covers
+      const alreadyApplied = this.cardSprites.some(s => s.padreCover);
+      if (!alreadyApplied) {
+        this.applypadrePunishment();
 
-
-  applySamuelPunishment() {
-    // Aplica un filtro visual solo a las primeras 5 cartas
-    this.hiddenSamuelCards = [];
-  
-    for (let i = 0; i < 5 && i < this.cardSprites.length; i++) {
-      const sprite = this.cardSprites[i];
-  
-      // Guardar las cartas ocultas para evitar que se descarten
-      this.hiddenSamuelCards.push(this.playerHand[i]);
-  
-      // Crear un rectángulo negro totalmente opaco encima de la carta
-      const mask = this.add.rectangle(
-        sprite.x,
-        sprite.y,
-        sprite.displayWidth,
-        sprite.displayHeight,
-        0x000000,
-        1 // opacidad total
-      )
-      .setOrigin(0.5)
-      .setDepth(sprite.depth + 1); // por encima de la carta
-  
-      sprite.samuelMask = mask;
+      }
     }
+    
   }
-  applySamuelPunishment() {
-    this.hiddenSamuelCards = [];
   
-    for (let i = 0; i < 5 && i < this.cardSprites.length; i++) {
+  
+
+  applypadrePunishment() {
+    this.hiddenpadreCards = [];
+  
+    // Elegir 5 cartas aleatorias del array playerHand
+    const availableIndexes = Phaser.Utils.Array.NumberArray(0, this.cardSprites.length - 1);
+    Phaser.Utils.Array.Shuffle(availableIndexes); // Baraja los índices
+    const selectedIndexes = availableIndexes.slice(0, 5); // Escoge 5 aleatorios
+  
+    selectedIndexes.forEach(i => {
       const sprite = this.cardSprites[i];
       const card = this.playerHand[i];
   
-      this.hiddenSamuelCards.push(card);
+      // Marcar como carta oculta
+      this.hiddenpadreCards.push(card);
+      sprite.ispadreHidden = true;
   
-      // Añadir una imagen de carta oculta encima
+      // Si ya tenía un cover, actualizar su posición
+      if (sprite.padreCover) {
+        sprite.padreCover.setPosition(sprite.x, sprite.y);
+        sprite.padreCover.setDepth(sprite.depth + 1);
+        return;
+      }
+  
+      // Si no tenía cover, crearlo
       const cover = this.add.image(sprite.x, sprite.y, 'backOfCard')
-      .setDepth(sprite.depth + 1)
-      .setScale(0.9)
-      .setOrigin(0.5);
+        .setDepth(sprite.depth + 1)
+        .setScale(0.9)
+        .setOrigin(0.5);
   
-      sprite.samuelCover = cover;
-      sprite.isSamuelHidden = true;
-    }
+      sprite.padreCover = cover;
+    });
   }
+  
+  
+
   
   
 
@@ -1298,25 +1340,37 @@ highlightWinningCards(result) {
       this.selectedCards = this.selectedCards.filter(c => c !== card);
       sprite.setScale(0.9);
       sprite.clearTint();
-      if (sprite.samuelCover) {
-        sprite.samuelCover.clearTint();
+      if (sprite.padreCover) {
+        sprite.padreCover.clearTint();
       }
     } else {
       if (this.selectedCards.length < maxSelectable) {
         this.selectedCards.push(card);
         sprite.setScale(0.8);
-        if (sprite.samuelCover) {
-          sprite.samuelCover.setTint(0x808080); // gris visible en la carta oculta
+        if (sprite.padreCover) {
+          sprite.padreCover.setTint(0x808080);
+          sprite.setTint(0x808080);
         } else {
-          sprite.setTint(0x808080); // para el resto de cartas
-        }      }
+          sprite.setTint(0x808080);
+        }
+       }
     }
     // Si no hay cartas seleccionadas, actualizar el marcador a 0
+    this.scene.get('UIScene').updateScoreMarker(0, 0);
+
+    // Si hay 0 cartas seleccionadas, desactiva todo
     if (this.selectedCards.length === 0) {
-      this.scene.get('UIScene').updateScoreMarker(0, 0);
-      this.scene.get('UIScene').shuffleButton.disable();
+      this.events.emit('cards-changed', 0);
       return;
-    } 
+    }
+    
+    // Si hay alguna oculta de padre, bloquea sólo el shuffle
+    if (this.selectedCards.some(card => this.hiddenpadreCards.includes(card))) {
+      this.events.emit('cards-changed', 'no-shuffle');
+    } else {
+      this.events.emit('cards-changed', this.selectedCards.length);
+    }
+    
 
     // Estimar la mano seleccionada
     const result = estimateHand(this.selectedCards);
