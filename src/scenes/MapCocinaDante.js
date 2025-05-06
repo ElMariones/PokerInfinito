@@ -10,6 +10,10 @@ export default class MapCocinaDante extends Phaser.Scene {
 
   create(data) {
     this.registry.set('currentMap', this.scene.key);
+    // Launch the UI overlay on top of this scene if it's not already launched
+    if (!this.scene.isActive('UIOverlay')) {
+      this.scene.launch('UIOverlay');
+    }
 
     // 1) Read optional spawn data (in case we're coming from another scene)
     const startX = data?.spawnX ?? 200;

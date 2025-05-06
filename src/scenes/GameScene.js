@@ -161,7 +161,7 @@ export default class GameScene extends Phaser.Scene {
     this.inventory = new Inventory(this);
 
     // For testing: Add jokers to inventory
-    this.inventory.addFiveJokers();
+    //this.inventory.addFiveJokers();
 
     // Dificultad adaptativa basada en los jokers
     if (this.inventory) {

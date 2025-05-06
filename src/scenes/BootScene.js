@@ -93,6 +93,7 @@ import pepeIdle from '../../assets/images/sprites/pepe/Idle.png';
 import joseIdle from '../../assets/images/sprites/jose/Idle.png';
 import esqueletoIdle from '../../assets/images/sprites/esqueleto/Idle.png';
 import madreIdle from '../../assets/images/sprites/madre/Idle.png';
+import madreWalk from '../../assets/images/sprites/madre/Walk.png';
 
 //import pictures dialogos
 
@@ -375,6 +376,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.spritesheet('joseIdle', joseIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('esqueletoIdle', esqueletoIdle, { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('madreIdle', madreIdle, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('madreWalk', madreWalk, { frameWidth: 64, frameHeight: 64 });
 
     // load tutorial imágenes
     this.load.image('tutorial1', tutorial1);
