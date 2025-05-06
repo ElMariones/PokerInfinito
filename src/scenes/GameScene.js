@@ -161,7 +161,7 @@ export default class GameScene extends Phaser.Scene {
     this.inventory = new Inventory(this);
 
     // For testing: Add jokers to inventory
-    this.inventory.addFiveJokers();
+    //this.inventory.addFiveJokers();
 
     // Dificultad adaptativa basada en los jokers
     if (this.inventory) {
@@ -310,15 +310,15 @@ if (this.playerContext.opponent === 'helena') {
     const result = evaluateHand(this.selectedCards, this.playerContext, this.inventory);
 
     // Si estamos contra Samuel, eliminar el filtro de las cartas seleccionadas
-if (this.playerContext.opponent === 'samuel') {
-  this.selectedCards.forEach(card => {
-    const sprite = this.cardSprites.find(s => s.texture.key === card.key);
-    if (sprite && sprite.samuelMask) {
-      sprite.samuelMask.destroy();
-      delete sprite.samuelMask;
-    }
-  });
-}
+    if (this.playerContext.opponent === 'samuel') {
+      this.selectedCards.forEach(card => {
+        const sprite = this.cardSprites.find(s => s.texture.key === card.key);
+        if (sprite && sprite.samuelMask) {
+          sprite.samuelMask.destroy();
+          delete sprite.samuelMask;
+        }
+      });
+  }
 
 
     // Castigo de Helena: Si hay una copa, el resultado entero es 0
@@ -714,7 +714,8 @@ if (this.playerContext.opponent === 'samuel') {
     }
     // Verificar si el oponente es los gemelos y si hay un castigo (mano repetida)
     else if (this.playerContext.opponent === 'gemelos' && result.score === 0) {
-      this.aplicarGemelosCastigo();
+      this.aplicarGemelosCastigo(result, onCompleteCallback);
+      return;
     }
   
     this.time.delayedCall(1200 + this.selectedCards.length * 100, () => {
@@ -775,7 +776,7 @@ if (this.playerContext.opponent === 'samuel') {
     }
   }
 
-  aplicarGemelosCastigo() {
+  aplicarGemelosCastigo(result, onCompleteCallback) {
     this.vacioCartasGemelos(() => {
       // Continuar con las animaciones después de la desintegración
       this.time.delayedCall(600, () => {
@@ -786,7 +787,7 @@ if (this.playerContext.opponent === 'samuel') {
         });
       });
     });
-    return; // Salir temprano para evitar ejecutar el resto del código
+    return;
   }
   
   animateCardsToCenter(result) {
