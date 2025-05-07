@@ -232,45 +232,72 @@ if (this.playerContext.opponent === 'helena') {
 
   // Called by the UI scene’s "Shuffle" button
   shuffleAnimation() {
-    // 🔒 No permitir barajar si hay cartas ocultas de padre seleccionadas
-    const hasHiddenpadre = this.selectedCards.some(card =>
+    const hasHiddenPadre = this.selectedCards.some(card =>
       this.hiddenpadreCards.includes(card)
     );
-    if (hasHiddenpadre) {
-      console.warn('[padre] Intento de barajar con cartas ocultas. Cancelado.');
+    if (hasHiddenPadre) {
+      console.warn('[PADRE] Intento de barajar con cartas ocultas. Cancelado.');
       return;
     }
   
     if (this.selectedCards.length === 0) return;
   
-    this.resetFishermanTimer(); // Reiniciar el timer del Pescador al hacer shuffle
-    const duration = 500;
+    this.resetFishermanTimer();
   
-    const selectedSprites = this.cardSprites.filter(sprite => 
+    const selectedSprites = this.cardSprites.filter(sprite =>
       this.selectedCards.some(card => card.key === sprite.texture.key)
     );
   
-    selectedSprites.forEach(sprite => {
-      const randX = this.cameras.main.width / 2 + (Math.random() * 200 - 100);
-      const randY = this.cameras.main.height / 2 + (Math.random() * 200 - 100);
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
   
-      // Apply multiple effects to make it more dynamic
+    selectedSprites.forEach((sprite, i) => {
+      const originalX = sprite.x;
+      const originalY = sprite.y;
+  
+      // Paso 1: salto hacia arriba con zoom
       this.tweens.add({
         targets: sprite,
-        x: randX,
-        y: randY,
-        scale: { from: 1.1, to: 1.0 },  // Slight scaling to add emphasis
-        angle: { from: 0, to: 360 },    // Add rotation
-        duration: duration,
-        ease: 'Sine.easeInOut',
-        yoyo: true,
+        y: sprite.y - 80,
+        scale: 1.3,
+        duration: 150,
+        ease: 'Quad.easeOut',
+        delay: i * 40,
+        onComplete: () => {
+          // Paso 2: desplazamiento breve con giro a posición aleatoria cercana
+          this.tweens.add({
+            targets: sprite,
+            x: centerX + Phaser.Math.Between(-60, 60),
+            y: centerY + Phaser.Math.Between(-40, 40),
+            scale: 0.9,
+            angle: Phaser.Math.Between(-180, 180),
+            duration: 180,
+            ease: 'Expo.easeOut',
+            yoyo: true,
+            onYoyo: () => {
+              // Paso 3: regreso a la posición original con rebote
+              this.tweens.add({
+                targets: sprite,
+                x: originalX,
+                y: originalY,
+                angle: 0,
+                scale: 1.0,
+                duration: 220,
+                ease: 'Back.easeOut'
+              });
+            }
+          });
+        }
       });
     });
   
-    this.time.delayedCall(duration * 2, () => {
+    // Llamar al reemplazo tras ~700ms
+    this.time.delayedCall(700, () => {
       this.replaceSelectedCards();
     });
   }
+  
+  
   
 
   /**
