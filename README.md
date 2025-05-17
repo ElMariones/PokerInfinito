@@ -1,9 +1,10 @@
 # All In: La Ultima Mano
 
+Click para ver el gameplay:
 [![Ver el gameplay](https://img.youtube.com/vi/y1gCe0Y9Iik/0.jpg)](https://youtu.be/y1gCe0Y9Iik)
 
+Click para ver el trailer:
 [![Ver el trailer](https://img.youtube.com/vi/WXuYIYHAj-8/0.jpg)](https://youtu.be/WXuYIYHAj-8)
-
 
 
 ## Historia
